@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RoundRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +28,28 @@ class Round
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $endAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Instance::class, inversedBy="rounds")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $instance;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rounds")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ScanQR::class, mappedBy="round")
+     */
+    private $scanQRs;
+
+    public function __construct()
+    {
+        $this->scanQRs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,6 +76,60 @@ class Round
     public function setEndAt(?\DateTimeImmutable $endAt): self
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getInstance(): ?Instance
+    {
+        return $this->instance;
+    }
+
+    public function setInstance(?Instance $instance): self
+    {
+        $this->instance = $instance;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ScanQR>
+     */
+    public function getScanQRs(): Collection
+    {
+        return $this->scanQRs;
+    }
+
+    public function addScanQR(ScanQR $scanQR): self
+    {
+        if (!$this->scanQRs->contains($scanQR)) {
+            $this->scanQRs[] = $scanQR;
+            $scanQR->setRound($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScanQR(ScanQR $scanQR): self
+    {
+        if ($this->scanQRs->removeElement($scanQR)) {
+            // set the owning side to null (unless already changed)
+            if ($scanQR->getRound() === $this) {
+                $scanQR->setRound(null);
+            }
+        }
 
         return $this;
     }

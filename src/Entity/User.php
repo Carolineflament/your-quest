@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -71,6 +73,28 @@ class User
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $role;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="user")
+     */
+    private $games;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Round::class, mappedBy="user")
+     */
+    private $rounds;
+
+    public function __construct()
+    {
+        $this->games = new ArrayCollection();
+        $this->rounds = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -205,6 +229,78 @@ class User
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Game>
+     */
+    public function getGames(): Collection
+    {
+        return $this->games;
+    }
+
+    public function addGame(Game $game): self
+    {
+        if (!$this->games->contains($game)) {
+            $this->games[] = $game;
+            $game->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGame(Game $game): self
+    {
+        if ($this->games->removeElement($game)) {
+            // set the owning side to null (unless already changed)
+            if ($game->getUser() === $this) {
+                $game->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Round>
+     */
+    public function getRounds(): Collection
+    {
+        return $this->rounds;
+    }
+
+    public function addRound(Round $round): self
+    {
+        if (!$this->rounds->contains($round)) {
+            $this->rounds[] = $round;
+            $round->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRound(Round $round): self
+    {
+        if ($this->rounds->removeElement($round)) {
+            // set the owning side to null (unless already changed)
+            if ($round->getUser() === $this) {
+                $round->setUser(null);
+            }
+        }
 
         return $this;
     }

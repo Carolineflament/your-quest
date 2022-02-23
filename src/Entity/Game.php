@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GameRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +68,28 @@ class Game
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="games")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Instance::class, mappedBy="game")
+     */
+    private $instances;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Checkpoint::class, mappedBy="game")
+     */
+    private $checkpoints;
+
+    public function __construct()
+    {
+        $this->instances = new ArrayCollection();
+        $this->checkpoints = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -188,6 +212,78 @@ class Game
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Instance>
+     */
+    public function getInstances(): Collection
+    {
+        return $this->instances;
+    }
+
+    public function addInstance(Instance $instance): self
+    {
+        if (!$this->instances->contains($instance)) {
+            $this->instances[] = $instance;
+            $instance->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInstance(Instance $instance): self
+    {
+        if ($this->instances->removeElement($instance)) {
+            // set the owning side to null (unless already changed)
+            if ($instance->getGame() === $this) {
+                $instance->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Checkpoint>
+     */
+    public function getCheckpoints(): Collection
+    {
+        return $this->checkpoints;
+    }
+
+    public function addCheckpoint(Checkpoint $checkpoint): self
+    {
+        if (!$this->checkpoints->contains($checkpoint)) {
+            $this->checkpoints[] = $checkpoint;
+            $checkpoint->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCheckpoint(Checkpoint $checkpoint): self
+    {
+        if ($this->checkpoints->removeElement($checkpoint)) {
+            // set the owning side to null (unless already changed)
+            if ($checkpoint->getGame() === $this) {
+                $checkpoint->setGame(null);
+            }
+        }
 
         return $this;
     }

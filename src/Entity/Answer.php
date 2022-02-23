@@ -37,6 +37,12 @@ class Answer
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Enigma::class, inversedBy="answers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $enigma;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +92,18 @@ class Answer
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getEnigma(): ?Enigma
+    {
+        return $this->enigma;
+    }
+
+    public function setEnigma(?Enigma $enigma): self
+    {
+        $this->enigma = $enigma;
 
         return $this;
     }

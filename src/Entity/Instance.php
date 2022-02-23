@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InstanceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +43,22 @@ class Instance
      * @ORM\Column(type="datetime_immutable")
      */
     private $endAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="instances")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $game;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Round::class, mappedBy="instance")
+     */
+    private $rounds;
+
+    public function __construct()
+    {
+        $this->rounds = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,6 +121,48 @@ class Instance
     public function setEndAt(\DateTimeImmutable $endAt): self
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getGame(): ?Game
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Game $game): self
+    {
+        $this->game = $game;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Round>
+     */
+    public function getRounds(): Collection
+    {
+        return $this->rounds;
+    }
+
+    public function addRound(Round $round): self
+    {
+        if (!$this->rounds->contains($round)) {
+            $this->rounds[] = $round;
+            $round->setInstance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRound(Round $round): self
+    {
+        if ($this->rounds->removeElement($round)) {
+            // set the owning side to null (unless already changed)
+            if ($round->getInstance() === $this) {
+                $round->setInstance(null);
+            }
+        }
 
         return $this;
     }

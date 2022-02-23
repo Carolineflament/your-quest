@@ -22,6 +22,18 @@ class ScanQR
      */
     private $scanAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Checkpoint::class, inversedBy="scanQRs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $checkpoint;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Round::class, inversedBy="scanQRs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $round;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +47,30 @@ class ScanQR
     public function setScanAt(\DateTimeImmutable $scanAt): self
     {
         $this->scanAt = $scanAt;
+
+        return $this;
+    }
+
+    public function getCheckpoint(): ?Checkpoint
+    {
+        return $this->checkpoint;
+    }
+
+    public function setCheckpoint(?Checkpoint $checkpoint): self
+    {
+        $this->checkpoint = $checkpoint;
+
+        return $this;
+    }
+
+    public function getRound(): ?Round
+    {
+        return $this->round;
+    }
+
+    public function setRound(?Round $round): self
+    {
+        $this->round = $round;
 
         return $this;
     }

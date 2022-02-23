@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EnigmaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,22 @@ class Enigma
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Checkpoint::class, inversedBy="enigmas")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $checkpoint;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="enigma")
+     */
+    private $answers;
+
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +104,48 @@ class Enigma
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCheckpoint(): ?Checkpoint
+    {
+        return $this->checkpoint;
+    }
+
+    public function setCheckpoint(?Checkpoint $checkpoint): self
+    {
+        $this->checkpoint = $checkpoint;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Answer>
+     */
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
+
+    public function addAnswer(Answer $answer): self
+    {
+        if (!$this->answers->contains($answer)) {
+            $this->answers[] = $answer;
+            $answer->setEnigma($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnswer(Answer $answer): self
+    {
+        if ($this->answers->removeElement($answer)) {
+            // set the owning side to null (unless already changed)
+            if ($answer->getEnigma() === $this) {
+                $answer->setEnigma(null);
+            }
+        }
 
         return $this;
     }
