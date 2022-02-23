@@ -70,12 +70,6 @@ class Game
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="games")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
-    /**
      * @ORM\OneToMany(targetEntity=Instance::class, mappedBy="game")
      */
     private $instances;
@@ -84,6 +78,12 @@ class Game
      * @ORM\OneToMany(targetEntity=Checkpoint::class, mappedBy="game")
      */
     private $checkpoints;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="games")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function __construct()
     {
@@ -216,18 +216,6 @@ class Game
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Instance>
      */
@@ -284,6 +272,18 @@ class Game
                 $checkpoint->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

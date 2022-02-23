@@ -49,6 +49,8 @@ class Role
      */
     private $users;
 
+    
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -148,4 +150,5 @@ class Role
 
         return $this;
     }
+
 }

@@ -36,15 +36,15 @@ class Round
     private $instance;
 
     /**
+     * @ORM\OneToMany(targetEntity=ScanQR::class, mappedBy="round")
+     */
+    private $scanQRs;
+
+    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rounds")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
-
-    /**
-     * @ORM\OneToMany(targetEntity=ScanQR::class, mappedBy="round")
-     */
-    private $scanQRs;
 
     public function __construct()
     {
@@ -92,18 +92,6 @@ class Round
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, ScanQR>
      */
@@ -130,6 +118,18 @@ class Round
                 $scanQR->setRound(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
