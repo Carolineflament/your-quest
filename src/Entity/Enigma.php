@@ -22,21 +22,31 @@ class Enigma
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message = "La question ne doit pas être vide")
      */
     private $question;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message = "L'ordre de la question doit être renseigné")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="La valeur {{ value }} n'est pas de type {{ type }}."
+     * )
+     * @Assert\Positive(message = "L'ordre de la question doit être un chiffre positif")
      */
     private $orderEnigma;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 

@@ -6,6 +6,7 @@ use App\Repository\InstanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=InstanceRepository::class)
@@ -21,11 +22,25 @@ class Instance
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le titre de l'instance ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Le titre de l'instance doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le titre de l'instance ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le slug de l'instance ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Le slug de l'instance doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le slug de l'instance ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $slug;
 
@@ -36,11 +51,15 @@ class Instance
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de début de l'instance doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $startAt;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de fin de l'instance doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $endAt;
 
@@ -52,6 +71,7 @@ class Instance
 
     /**
      * @ORM\OneToMany(targetEntity=Round::class, mappedBy="instance")
+     * @ORM\OrderBy({"startAt" = "ASC"})
      */
     private $rounds;
 

@@ -6,6 +6,7 @@ use App\Repository\RoleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
@@ -21,31 +22,53 @@ class Role
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le nom du rôle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Le nom du rôle doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le nom du rôle ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le slug du rôle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Le slug du rôle doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le slug du rôle ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $slug;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="role")
+     * @ORM\OrderBy({"username" = "ASC"})
      */
     private $users;
 

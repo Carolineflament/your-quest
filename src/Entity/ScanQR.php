@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ScanQRRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ScanQRRepository::class)
@@ -19,6 +20,8 @@ class ScanQR
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date du scan doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $scanAt;
 
