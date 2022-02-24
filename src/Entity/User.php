@@ -204,7 +204,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        // Get rôle contain in role table insteed of role JSON give by make:user
+        $roles = array($this->role->getSlug());
         // guarantee every user at least has ROLE_USER
         //$roles[] = 'ROLE_USER';
 
