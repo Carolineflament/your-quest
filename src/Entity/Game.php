@@ -6,9 +6,11 @@ use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Game
 {
@@ -21,26 +23,61 @@ class Game
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le titre du jeu ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Le titre du jeu doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le titre du jeu ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le slug du titre du jeu ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Le slug du titre du jeu doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le slug du titre du jeu ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $slug;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "L'adresse du jeu ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "L'adresse du jeu doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "L'adresse du jeu ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $address;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message = "Le code postal du jeu ne doit pas être vide")
+     * @Assert\Length(
+     *      min=5,
+     *      max=5,
+     *      minMessage = "Le code postal du jeu doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le code postal du jeu ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message = "La ville du jeu ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "La ville du jeu doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "La ville du jeu ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $city;
 
@@ -56,26 +93,35 @@ class Game
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création du jeu doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Instance::class, mappedBy="game")
+     * @ORM\OrderBy({"startAt" = "ASC"})
      */
     private $instances;
 
     /**
      * @ORM\OneToMany(targetEntity=Checkpoint::class, mappedBy="game")
+     * @ORM\OrderBy({"orderCheckpoint" = "ASC"})
      */
     private $checkpoints;
 
@@ -286,5 +332,21 @@ class Game
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

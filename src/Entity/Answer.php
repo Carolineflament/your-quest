@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AnswerRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Answer
 {
@@ -19,21 +21,29 @@ class Answer
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message = "La réponse ne doit pas être vide")
      */
     private $answer;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création de la réponse doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
@@ -106,5 +116,21 @@ class Answer
         $this->enigma = $enigma;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

@@ -8,9 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -23,6 +25,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message = "L\'email ne doit pas être vide")
+     * @Assert\Email(
+     *      message = "L'email {{ value }} n'est pas valide"
+     * )
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "L'email de l'utilisateur doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "L'email de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $email;
 
@@ -39,46 +51,92 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180)
+     * @Assert\NotBlank(message = "Le pseudo de l'utilisateur ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 180,
+     *      minMessage = "Le pseudo de l'utilisateur doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le pseudo de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le nom de l'utilisateur ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 180,
+     *      minMessage = "Le nom de l'utilisateur doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le nom de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le prénom de l'utilisateur ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 180,
+     *      minMessage = "Le prénom de l'utilisateur doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le prénom de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "L'adresse de l'utilisateur doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "L'adresse de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $address;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Length(
+     *      min=5,
+     *      max=5,
+     *      minMessage = "Le code postal de l'utilisateur doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le code postal de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "La ville de l'utilisateur doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "La ville de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $city;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création doit être renseignée")
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
@@ -90,11 +148,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="user")
+     * @ORM\OrderBy({"title" = "ASC"})
      */
     private $games;
 
     /**
      * @ORM\OneToMany(targetEntity=Round::class, mappedBy="user")
+     * @ORM\OrderBy({"startAt" = "ASC"})
      */
     private $rounds;
 
@@ -146,7 +206,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        //$roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -366,5 +426,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
