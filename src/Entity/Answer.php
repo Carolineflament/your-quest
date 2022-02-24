@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AnswerRepository::class)
@@ -19,16 +20,22 @@ class Answer
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message = "La réponse ne doit pas être vide")
      */
     private $answer;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création doit être renseignée")
      */
     private $createdAt;
 

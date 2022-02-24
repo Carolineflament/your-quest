@@ -6,6 +6,7 @@ use App\Repository\CheckpointRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CheckpointRepository::class)
@@ -21,21 +22,36 @@ class Checkpoint
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message = "Le titre du checkpoint ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Le titre du checkpoint doit au minimum faire {{ limit }} caractères !",
+     *      maxMessage = "Le titre du checkpoint ne doit pas éxéder {{ limit }} caractères !"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message = "Le message de succés du checkpoint ne doit pas être vide")
      */
     private $successMessage;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message = "L'ordre du checkpoint doit être renseigné")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="La valeur {{ value }} n'est pas de type {{ type }}."
+     * )
+     * @Assert\Positive(message = "L'ordre du checkpoint doit être un chiffre positif")
      */
     private $orderCheckpoint;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création doit être renseignée")
      */
     private $createdAt;
 
@@ -57,6 +73,7 @@ class Checkpoint
 
     /**
      * @ORM\OneToMany(targetEntity=Enigma::class, mappedBy="checkpoint")
+     * @ORM\OrderBy({"orderEnigma" = "ASC"})
      */
     private $enigmas;
 
