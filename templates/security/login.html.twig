@@ -3,44 +3,60 @@
 {% block title %}YourQuest - Connexion{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-6  text-center">
+        <form method="post"  class="form-inline">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
-        </div>
-    {% endif %}
+            {% if app.user %}
+                <div class="mb-3">
+                    Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+                </div>
+            {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-    <label for="inputEmail">Email : </label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Mot de passe : </label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <h2 class="h3 mb-3 font-weight-normal">Connexion</h2>
+            <p class="mb-5">Merci d'entrer votre e-mail et votre mot de passe</p>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-    <p>
-        <a href="#">Mot de passe oublié ?</a> <br />
-        Pas encore inscrit ?<br />
-        <a href="#">C'est pas ici !</a>
-    </p>
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
+            {{ include('front/_notice_message.html.twig') }}
 
-        <div class="checkbox mb-3">
+            <div class="form-outline form-white mb-4">
+                <label for="inputEmail" class="visually-hidden">Email : </label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control form-control-lg" autocomplete="email" required autofocus placeholder="Votre adresse mail">
+                
+            </div>
+
+            <div class="form-outline form-white mb-4">
+                <label for="inputPassword" class="visually-hidden">Mot de passe : </label>
+                <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" autocomplete="current-password" required placeholder="Votre mot de passe">
+            </div>
+
+            <input type="hidden" name="_csrf_token"
+            value="{{ csrf_token('authenticate') }}"
+            >
+            
+            {#
+            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+            See https://symfony.com/doc/current/security/remember_me.html
+
+            <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" name="_remember_me"> Remember me
+            <input type="checkbox" name="_remember_me"> Remember me
             </label>
-        </div>
-    #}
+            </div>
+            #}
+            <div class="d-grid gap-2 text-center pt-1 mb-5 pb-1">
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Connexion
+                </button>
+                <a class="small text-muted" href="#!">Mot de passe oublié ?</a>
+            </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Connexion
-    </button>
-</form>
+            <div class="d-flex align-items-center justify-content-center pb-4">
+                <p class="mb-5 pb-lg-2">Pas encore inscrit ? <a href="#!">C'est par ici !</a></p>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -41,10 +41,35 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Liste des jeux</a>
                                 </li>
-                                <li class="nav-item">
-                                    {# <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a> #}
-                                </li>
+                                {% if app.user is not defined %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                                    </li>
+                                {% endif %}
                             </ul>
+                            {% if app.user %}
+                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                            data-bs-toggle="dropdown">
+                                            <span>{{ app.user.username }} ({{ app.user.role.name }})</span>
+                                            <i class="bi bi-person-square"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#">Profil</a></li>
+                                            {% if is_granted("ROLE_ORGANISATEUR") %}
+                                                <li><a class="dropdown-item" href="#">Backoffice</a></li>
+                                            {% endif %}
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn me-2">Se connecter</a>
+                            {% endif %}
                         </div>
                     </div>
                 </nav>

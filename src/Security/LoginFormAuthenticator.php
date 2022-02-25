@@ -51,7 +51,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
         // For example:
         //TODO Mettre la bonne route vers le back si c'est un organisateur ou le front si c'est un user
-        return new RedirectResponse($this->urlGenerator->generate('/'));
+
+        return new RedirectResponse($this->urlGenerator->generate('front_main'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
