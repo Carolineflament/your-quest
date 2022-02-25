@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QR scanner{% endblock %}
+
+{% block body %}
+
+<script src="{{ asset('assets/js/html5-qrcode.min.js') }}"></script>
+
+<div class="row mt-5">
+    <div class="col text-center">
+        <h1>Veuillez scanner le QR code du checkpoint</h1>
+
+        {# Scanner #}        
+        <div style="width: 500px; margin: 50px auto;" id="reader"></div>     
+        {# End Scanner #}
+
+    </div>
+</div>
+
+<script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // Handle on success condition with the decoded text or result.
+            console.log(`Youpi ! Un truc de réglé en 3 lignes de code !`);
+            console.log(`Voilà l'URL décodée : ${decodedText}`, decodedResult);
+            console.log(`En plus le scanner se referme tout seul dès qu'il a décodé le QR code, c'est merveilleux !`);
+
+            // This will stop the scanner (video feed) and clear the scan area.
+            html5QrcodeScanner.clear();
+        }
+
+        function onScanError(errorMessage) {
+        // handle on error condition, with error message
+        }
+
+        var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+</script>
+
+
+{% endblock %}
