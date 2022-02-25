@@ -102,6 +102,7 @@ class Game
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank(message = "La date de création du jeu doit être renseignée")
      * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
