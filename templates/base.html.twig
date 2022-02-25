@@ -27,7 +27,7 @@
 
                 {# Navbar #}
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #C36839">
+                <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #C36839">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="{{ path('front_main') }}">YourQuest</a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
                                     <a class="nav-link" href="#">Liste des jeux</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                                    {# <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a> #}
                                 </li>
                             </ul>
                         </div>
@@ -53,44 +53,11 @@
 
                 {# Carousel #}
 
-                <div id="homeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                    {# <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div> #}
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="{{ asset('assets/images/QuestCarousel1-325px.jpg') }}" class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                        <img src="{{ asset('assets/images/QuestCarousel2-325px.jpg') }}" class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                {{ include('_homeCarousel.html.twig') }}
 
                 {# End Carousel #}
 
             </header>
-
-            {# Bloc Contenu #}
-
-            <div class="row align-items-start mt-3">
-                <div class="col">
-                    <div class="text-center" style="height: 600px; border: solid 2px #86340A;">
-                        Bloc contenu
-                    </div>
-                </div>
-            </div>
-
-            {# End Bloc Contenu #}
 
             {% block body %}{% endblock %}
 
