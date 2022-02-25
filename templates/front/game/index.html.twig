@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-xl bg-light p-5 border-top">
+
+    <div class="row mb-2">
+
+        <div class="col-12 col-lg-9">
+
+            <h2 class="text-muted fw-bold mb-4">Les jeux</h2>
+            {% for game in games %}
+                <div class="card" style="width: 18rem;">
+                    <img src="{{ asset('assets/images/QuestLogo.png') }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ game.title }}</h5>
+                        <p><small>{{ game.city }} ({{ game.postalCode }})</small></p>
+                        <p class="card-text">{{ game.summary}}</p>
+                        <a href=""{{ path('game', {'slug' : game.slug}) }}"" class="btn btn-primary">Voir ce jeu</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <nav class="col-lg-9 offset-lg-3">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link">&laquo;</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item" aria-current="page">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+</div>
+{% endblock %}
