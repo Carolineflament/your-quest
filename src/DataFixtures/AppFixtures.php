@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\DataFixtures\Provider\QuestProvider;
+use App\Entity\Answer;
 use App\Entity\Checkpoint;
 use App\Entity\Enigma;
 use App\Entity\Game;
@@ -151,7 +152,7 @@ class AppFixtures extends Fixture
 
         /*****************ENIGMA ******************/
         $enigmaEntity = [];
-        for ($i=1; $i <= 1; $i++) {
+        for ($i=1; $i <= 20; $i++) {
             $enigma = new Enigma();
             $enigma->setQuestion($questProvider->enigmes());
             $enigma->setOrderEnigma($i);
@@ -165,6 +166,20 @@ class AppFixtures extends Fixture
             $manager->persist($enigma);
         }
 
+        /*****************ANSWER ******************/
+        $answerEntity = [];
+        for ($i=1; $i <=20; $i++){
+            $answer = new Answer();
+            $answer->setAnswer($faker->words(1, true));
+            $answer->setStatus(rand(0, 1));
+            $answer->setCreatedAt(new DateTimeImmutable('now'));
+
+            $randomEnigma = $enigmaEntity[mt_rand(0, count($enigmaEntity) -1 )];
+            $answer->setEnigma($randomEnigma);
+
+            $answerEntity[] = $answer;
+            $manager->persist(($answer));
+        }
 
         $manager->flush();
     }
