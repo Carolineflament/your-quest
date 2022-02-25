@@ -23,7 +23,8 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager, RoleRepository $roleRepos): Response
     {
         $user = new User();
-        //TODO Gérer la date de création avec le assert ça fait chier
+        //TODO Gérer la date de création avec le assert ça fait chier faire un event listener presubmit avec le add event listener
+        // @link https://symfony.com/doc/current/form/events.html
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         
