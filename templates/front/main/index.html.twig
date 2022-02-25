@@ -4,6 +4,10 @@
 
 {% block body %}
 
+    {# Message d'alerte #}
+    {{ include('front/_notice_message.html.twig') }}
+    {# End message d'alerte #}
+
     {# Carousel #}
 
     {{ include('_homeCarousel.html.twig') }}

@@ -23,7 +23,7 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager, RoleRepository $roleRepos): Response
     {
         $user = new User();
-        $user->setCreatedAt(new \DateTimeImmutable('now'));
+        //TODO Gérer la date de création avec le assert ça fait chier
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         
@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
             $this->addFlash(
                 'notice-success',
-                'L\'acteur  a été ajouté !'
+                'Votre compte a été ajouté !'
             );
             //TODO mettre la route du back si c'est un organisateur et la page d'acceuil si c'est un user
             return $this->redirectToRoute('front_main', [], Response::HTTP_SEE_OTHER);

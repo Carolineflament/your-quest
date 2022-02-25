@@ -36,7 +36,6 @@ class Answer
 
     /**
      * @ORM\Column(type="datetime_immutable")
-     * @Assert\NotBlank(message = "La date de création de la réponse doit être renseignée")
      * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
