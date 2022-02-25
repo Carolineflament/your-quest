@@ -2,3 +2,15 @@ body {
     background-color: #E8D0B3;
     color: #86340A;
 }
+
+.btn-primary:hover
+{
+    background-color: #7eb5a6;
+    border-color: #7eb5a6;
+}
+
+.btn-primary
+{
+    background-color: #7eb5a6c4;
+    border-color: #7eb5a6c4;
+}

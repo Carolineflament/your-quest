@@ -57,7 +57,7 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="#">Profil</a></li>
-                                            {% if app.user.role.slug is same as "ROLE_ADMIN" or app.user.role.slug is same as "ROLE_ORGANISATEUR" %}
+                                            {% if is_granted("ROLE_ORGANISATEUR") %}
                                                 <li><a class="dropdown-item" href="#">Backoffice</a></li>
                                             {% endif %}
                                             <li>
