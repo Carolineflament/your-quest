@@ -1,44 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Game index{% endblock %}
+{% block title %}Liste de vos jeux{% endblock %}
 
 {% block body %}
-    <h1>Game index</h1>
+    <h1>Liste de vos jeux</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Slug</th>
-                <th>Address</th>
-                <th>PostalCode</th>
-                <th>City</th>
+                <th>Titre du jeu</th>
                 <th>Image</th>
-                <th>Summary</th>
-                <th>Status</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
+                <th>Statut</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for game in games %}
             <tr>
-                <td>{{ game.id }}</td>
+                
                 <td>{{ game.title }}</td>
-                <td>{{ game.slug }}</td>
-                <td>{{ game.address }}</td>
-                <td>{{ game.postalCode }}</td>
-                <td>{{ game.city }}</td>
                 <td>{{ game.image }}</td>
-                <td>{{ game.summary }}</td>
                 <td>{{ game.status ? 'Yes' : 'No' }}</td>
-                <td>{{ game.createdAt ? game.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ game.updatedAt ? game.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_backoffice_game_show', {'id': game.id}) }}">show</a>
-                    <a href="{{ path('app_backoffice_game_edit', {'id': game.id}) }}">edit</a>
+                    <button type="button" class="btn btn-info">
+                        <i class="bi bi-box-arrow-in-right" href="{{ path('app_backoffice_game_show', {'id': game.id}) }}"></i>
+                    </button>
+                    <button type="button" class="btn btn-warning" href="{{ path('app_backoffice_game_edit', {'id': game.id}) }}">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" href="{{ path('app_backoffice_game_delete', {'id': game.id})}}">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </td>
             </tr>
         {% else %}

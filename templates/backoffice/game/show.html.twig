@@ -7,56 +7,43 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ game.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ game.title }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ game.slug }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ game.address }}</td>
-            </tr>
-            <tr>
-                <th>PostalCode</th>
-                <td>{{ game.postalCode }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ game.city }}</td>
-            </tr>
+        
             <tr>
                 <th>Image</th>
                 <td>{{ game.image }}</td>
             </tr>
             <tr>
-                <th>Summary</th>
+                <th>Titre</th>
+                <td>{{ game.title }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ game.address }}</td>
+            </tr>
+            <tr>
+                <th>Code Postal</th>
+                <td>{{ game.postalCode }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ game.city }}</td>
+            </tr>
+            
+            <tr>
+                <th>Présentation</th>
                 <td>{{ game.summary }}</td>
             </tr>
             <tr>
-                <th>Status</th>
+                <th>Statut</th>
                 <td>{{ game.status ? 'Yes' : 'No' }}</td>
             </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ game.createdAt ? game.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ game.updatedAt ? game.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+            
         </tbody>
     </table>
 
-    <a href="{{ path('app_backoffice_game_index') }}">back to list</a>
+    <a href="{{ path('app_backoffice_game_index') }}">Voir tous mes jeux</a>
 
-    <a href="{{ path('app_backoffice_game_edit', {'id': game.id}) }}">edit</a>
+    <a href="{{ path('app_backoffice_game_edit', {'id': game.id}) }}">modifier</a>
 
     {{ include('backoffice/game/_delete_form.html.twig') }}
 {% endblock %}

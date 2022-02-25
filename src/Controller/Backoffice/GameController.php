@@ -5,13 +5,14 @@ namespace App\Controller\Backoffice;
 use App\Entity\Game;
 use App\Form\GameType;
 use App\Repository\GameRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/backoffice/game")
+ * @Route("/back/jeux")
  */
 class GameController extends AbstractController
 {
@@ -26,7 +27,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="app_backoffice_game_new", methods={"GET", "POST"})
+     * @Route("/nouveau", name="app_backoffice_game_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -58,7 +59,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="app_backoffice_game_edit", methods={"GET", "POST"})
+     * @Route("/{id}/modifier", name="app_backoffice_game_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Game $game, EntityManagerInterface $entityManager): Response
     {
