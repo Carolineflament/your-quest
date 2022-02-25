@@ -4,6 +4,13 @@
 
 {% block body %}
 
+    {# Carousel #}
+
+    {{ include('_homeCarousel.html.twig') }}
+
+    {# End Carousel #}
+
+    {# Presentation #}
     <div class="row align-items-start mt-3">
         <div class="col">
             <div class="d flex flex-column d-flex align-items-center d-flex justify-content-evenly" style="height: 600px; border: solid 2px #86340A;">
@@ -14,9 +21,9 @@
                 </div>
 
                 <a href="#" type="button" class="btn btn-lg fw-bold" style="background-color: #7EB5A6"> Créer votre jeu </a>
-
             </div>
         </div>
     </div>
-
+    {# Presentation #}
+    
 {% endblock %}
