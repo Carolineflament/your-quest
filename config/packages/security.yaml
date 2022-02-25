@@ -37,7 +37,7 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/back, roles: ROLE_ORGANISATEUR }
-        - { path: ^/checkpoint, roles: ROLE_USER }
+        - { path: ^/checkpoint, roles: ROLE_USER, methods: [GET,POST] }
         - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
     role_hierarchy:
