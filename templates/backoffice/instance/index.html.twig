@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Instances du jeu {{ game.title }} {% endblock %}
+
+{% block body %}
+    <h1>Liste des instances du jeu {{ game.title }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom de l'instance</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for instance in instances %}
+            <tr>             
+                <td>{{ instance.title }}</td>                
+                <td>{{ instance.startAt ? instance.startAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ instance.endAt ? instance.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_backoffice_instance_show', {'id': instance.id}) }}">détails</a>
+                    <a href="{{ path('app_backoffice_instance_edit', {'id': instance.id}) }}">modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Ce jeu n'a pas encore d'instances</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}">Créer une nouvelle instance</a>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Instance{% endblock %}
+
+{% block body %}
+    <h1>Instance</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ instance.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ instance.title }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ instance.slug }}</td>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <td>{{ instance.message }}</td>
+            </tr>
+            <tr>
+                <th>StartAt</th>
+                <td>{{ instance.startAt ? instance.startAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndAt</th>
+                <td>{{ instance.endAt ? instance.endAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_backoffice_instance_index') }}">back to list</a>
+
+    <a href="{{ path('app_backoffice_instance_edit', {'id': instance.id}) }}">edit</a>
+
+    {{ include('backoffice/instance/_delete_form.html.twig') }}
+{% endblock %}
