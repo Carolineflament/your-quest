@@ -18,8 +18,8 @@
         {% for instance in instances %}
             <tr>             
                 <td>{{ instance.title }}</td>                
-                <td>{{ instance.startAt ? instance.startAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ instance.endAt ? instance.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ instance.startAt ? instance.startAt|date('d-m-Y H:i:s') : '' }}</td>
+                <td>{{ instance.endAt ? instance.endAt|date('d-m-Y H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_backoffice_instance_show', {'id': instance.id}) }}">détails</a>
                     <a href="{{ path('app_backoffice_instance_edit', {'id': instance.id}) }}">modifier</a>

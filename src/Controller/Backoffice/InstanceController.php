@@ -64,12 +64,17 @@ class InstanceController extends AbstractController
     }
 
     /**
+     * 
      * @Route("/{id}", name="app_backoffice_instance_show", methods={"GET"})
      */
     public function show(Instance $instance): Response
     {
+        // Get parent Game
+        $game = $instance->getGame();
+
         return $this->render('backoffice/instance/show.html.twig', [
             'instance' => $instance,
+            'game' => $game,
         ]);
     }
 
@@ -78,6 +83,9 @@ class InstanceController extends AbstractController
      */
     public function edit(Request $request, Instance $instance, EntityManagerInterface $entityManager): Response
     {
+         // Get parent Game
+         $game = $instance->getGame();
+
         $form = $this->createForm(InstanceType::class, $instance);
         $form->handleRequest($request);
 
@@ -90,6 +98,7 @@ class InstanceController extends AbstractController
         return $this->renderForm('backoffice/instance/edit.html.twig', [
             'instance' => $instance,
             'form' => $form,
+            'game' => $game,
         ]);
     }
 

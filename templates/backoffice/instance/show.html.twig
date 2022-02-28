@@ -3,7 +3,7 @@
 {% block title %}Instance{% endblock %}
 
 {% block body %}
-    <h1>Instance</h1>
+    <h1>Instance {{ instance.title }} du jeu {{ game.title }}</h1>
 
     <table class="table">
         <tbody>
@@ -16,25 +16,21 @@
                 <td>{{ instance.title }}</td>
             </tr>
             <tr>
-                <th>Slug</th>
-                <td>{{ instance.slug }}</td>
-            </tr>
-            <tr>
                 <th>Message</th>
                 <td>{{ instance.message }}</td>
             </tr>
             <tr>
                 <th>StartAt</th>
-                <td>{{ instance.startAt ? instance.startAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ instance.startAt ? instance.startAt|date('d-m-Y H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>EndAt</th>
-                <td>{{ instance.endAt ? instance.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ instance.endAt ? instance.endAt|date('d-m-Y H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_backoffice_instance_index') }}">back to list</a>
+    <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}">back to list</a>
 
     <a href="{{ path('app_backoffice_instance_edit', {'id': instance.id}) }}">edit</a>
 
