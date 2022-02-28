@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste de vos jeux{% endblock %}
+
+{% block body %}
+    <h1>Liste de vos jeux</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre du jeu</th>
+                <th>Image</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for game in games %}
+            <tr>
+                
+                <td>{{ game.title }}</td>
+                <td>{{ game.image }}</td>
+                <td>{{ game.status ? 'Yes' : 'No' }}</td>
+                <td>
+                    <button class="btn btn-info" href="{{ path('app_backoffice_game_show', {'id': game.id}) }}">
+                        <span class="icon is-small">
+                        <i class="fa fa-trash"></i>
+                        </span>
+                    </button>
+                    <button type="button" class="btn btn-info" href="{{ path('app_backoffice_game_show', {'id': game.id}) }}">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-warning" href="{{ path('app_backoffice_game_edit', {'id': game.id}) }}">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" href="{{ path('app_backoffice_game_delete', {'id': game.id})}}">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_backoffice_game_new') }}">Create new</a>
+{% endblock %}
