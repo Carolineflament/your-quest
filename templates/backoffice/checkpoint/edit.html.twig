@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Checkpoint{% endblock %}
+
+{% block body %}
+    <h1>Modifier Checkpoint</h1>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+
+        <a href="{{ path('backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retouner à la liste</a>
+    </div> 
+
+    {{ include('backoffice/checkpoint/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+
+{% endblock %}
