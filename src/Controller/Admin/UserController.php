@@ -10,9 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/admin/user", name="app_admin_user_")
+ * @IsGranted("ROLE_ADMIN")
  */
 class UserController extends AbstractController
 {
@@ -54,7 +56,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(User $user): Response
     {
@@ -64,7 +66,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -89,7 +91,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="delete", methods={"POST"})
+     * @Route("/{id}", name="delete", methods={"POST"}, requirements={"id"="\d+"})
      */
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -110,6 +112,28 @@ class UserController extends AbstractController
             );
         }
 
+        return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/status/{id}",name="update_status", methods={"GET"}, requirements={"id"="\d+"})
+     *
+     * @param User $user
+     * @return void
+     */
+    public function update_status(User $user, EntityManagerInterface $entityManager)
+    {
+        if($user->getStatus())
+        {
+            //TODO mettre isTrashed en cascade
+            $user->setStatus(false);
+        }
+        else
+        {
+            $user->setStatus(true);
+        }
+
+        $entityManager->flush();
         return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -30,11 +30,6 @@ class UserType extends AbstractType
                 'label' => 'E-mail : ',
                 'attr' => ['placeholder' => 'Email']
             ])
-            ->add('status', ChoiceType::class, [
-                'required' => true,
-                'label' => 'Statut ?',
-                'choices' => ['Actif' => true, 'Inactif' => false], 
-            ])
             ->add('role', EntityType::class, [
                 'class' => Role::class,
                 'label' => 'Rôle :',
@@ -82,7 +77,8 @@ class UserType extends AbstractType
             ])
             
         ;
-
+        
+        //TODO faire un event listener car meme dans les 2 form
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
             // On récupère le form depuis l'event (pour travailler avec)
             $form = $event->getForm();
