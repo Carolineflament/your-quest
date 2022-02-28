@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-center align-items-center mt-3 mb-3">
+        <div class="col-xl-6  text-center">
+            <h1>Inscription</h1>
+
+            {{ form_start(registrationForm) }}
+                <div class="form-error mb-3">
+                    {{ form_errors(registrationForm.email) }}
+                    {{ form_errors(registrationForm.password) }}
+                    {{ form_errors(registrationForm.username) }}
+                    {{ form_errors(registrationForm.lastname) }}
+                    {{ form_errors(registrationForm.firstname) }}
+                    {{ form_errors(registrationForm.address) }}
+                    {{ form_errors(registrationForm.postal_code) }}
+                    {{ form_errors(registrationForm.city) }}
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.email) }}
+                    {{ form_label(registrationForm.email) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.password) }}
+                    {{ form_label(registrationForm.password) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.username) }}
+                    {{ form_label(registrationForm.username) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.lastname) }}
+                    {{ form_label(registrationForm.lastname) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.firstname) }}
+                    {{ form_label(registrationForm.firstname) }}
+                </div>
+
+                <div class="mb-3 text-center">
+                    {{ form_widget(registrationForm.beOrganisateur) }}
+                    {{ form_label(registrationForm.beOrganisateur) }}
+                </div>
+
+                <div id="bloc_address" class="d-none" style="display:none;">
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registrationForm.address) }}
+                        {{ form_label(registrationForm.address) }}
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registrationForm.postal_code) }}
+                        {{ form_label(registrationForm.postal_code) }}
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registrationForm.city) }}
+                        {{ form_label(registrationForm.city) }}
+                    </div>
+                </div>
+
+                <div class="mb-3 text-center">
+                    {{ form_widget(registrationForm.agreeTerms) }}
+                    {{ form_label(registrationForm.agreeTerms) }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+{% endblock %}

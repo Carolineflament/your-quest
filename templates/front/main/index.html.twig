@@ -4,6 +4,10 @@
 
 {% block body %}
 
+    {# Message d'alerte #}
+    {{ include('front/_notice_message.html.twig') }}
+    {# End message d'alerte #}
+
     {# Carousel #}
 
     {{ include('_homeCarousel.html.twig') }}
@@ -11,7 +15,7 @@
     {# End Carousel #}
 
     {# Presentation #}
-    <div class="row align-items-start mt-3">
+    <div class="align-items-start mt-3">
         <div class="col">
             <div class="container flex-column align-items-center d-flex justify-content-evenly" style="height: 600px;">
                 <h2>Bienvenue sur YourQuest! </h2>
@@ -25,6 +29,61 @@
             </div>
         </div>
     </div>
-    {# Presentation #}
+    {# End Presentation #}
+
+    {# Next Games #}
+    <div class="card-group mt-3">
+        <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">Jeux 1</h5>
+            <p class="card-text">Description</p>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">Date- ville (cp)</small>
+            </div>
+        </div>
+        <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">Jeux 2</h5>
+            <p class="card-text">Description</p>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">Date- ville (cp)</small>
+            </div>
+        </div>
+        <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">Jeux 3</h5>
+            <p class="card-text">Description</p>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">Date- ville (cp)</small>
+            </div>
+        </div>
+        <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">Jeux 4</h5>
+            <p class="card-text">Description</p>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">Date- ville (cp)</small>
+            </div>
+        </div>
+        <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">Jeux 5</h5>
+            <p class="card-text">Description</p>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">Date- ville (cp)</small>
+            </div>
+        </div>
+    </div>
+    {# End Next Games #}
     
 {% endblock %}

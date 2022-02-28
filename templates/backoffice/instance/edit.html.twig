@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier votre instance{% endblock %}
+
+{% block body %}
+    <h1>Modifier l'instance {{ instance.title }} du jeu {{ game.title }}</h1>
+
+    {{ include('backoffice/instance/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}">back to list</a>
+
+    {{ include('backoffice/instance/_delete_form.html.twig') }}
+{% endblock %}
