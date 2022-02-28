@@ -53,7 +53,7 @@ class InstanceController extends AbstractController
             $entityManager->persist($instance);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_backoffice_instance_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $gameSlug], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/instance/new.html.twig', [
@@ -92,7 +92,7 @@ class InstanceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_backoffice_instance_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/instance/edit.html.twig', [
@@ -112,6 +112,9 @@ class InstanceController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_backoffice_instance_index', [], Response::HTTP_SEE_OTHER);
+        // Get parent Game
+        $game = $instance->getGame();
+
+        return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
     }
 }

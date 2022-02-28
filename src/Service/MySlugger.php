@@ -7,12 +7,10 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class MySlugger
 {
     private $slugger;
-    private $toLower;
 
-    public function __construct(SluggerInterface $slugger, bool $toLower)
+    public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
-        $this->toLower = $toLower;
     }
 
     /**
@@ -22,14 +20,7 @@ class MySlugger
      * @return string
      */
     public function slugify(string $input): string
-    {
-        if ($this->toLower) {
-            $slug = $this->slugger->slug($input)->lower();
-        }
-        else {
-            $slug = $this->slugger->slug($input);
-        }
-        
-        return $slug;
+    {   
+        return $this->slugger->slug($input)->lower();
     }
 }

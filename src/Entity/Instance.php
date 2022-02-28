@@ -34,7 +34,6 @@ class Instance
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message = "Le slug de l'instance ne doit pas être vide")
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -52,14 +51,14 @@ class Instance
     /**
      * @ORM\Column(type="datetime_immutable")
      * @Assert\NotBlank(message = "La date de début de l'instance doit être renseignée")
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $startAt;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      * @Assert\NotBlank(message = "La date de fin de l'instance doit être renseignée")
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $endAt;
 
