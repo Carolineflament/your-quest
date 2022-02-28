@@ -8,23 +8,19 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ instance.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
+                <th>Nom de l'instance</th>
                 <td>{{ instance.title }}</td>
             </tr>
             <tr>
-                <th>Message</th>
+                <th>Description</th>
                 <td>{{ instance.message }}</td>
             </tr>
             <tr>
-                <th>StartAt</th>
+                <th>Date de début</th>
                 <td>{{ instance.startAt ? instance.startAt|date('d-m-Y H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>EndAt</th>
+                <th>Date de fin</th>
                 <td>{{ instance.endAt ? instance.endAt|date('d-m-Y H:i:s') : '' }}</td>
             </tr>
         </tbody>
