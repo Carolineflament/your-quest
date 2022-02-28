@@ -96,18 +96,12 @@ class RegistrationFormType extends AbstractType
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
-            // On récupère le form depuis l'event (pour travailler avec)
             $form = $event->getForm();
-            // On récupère le user mappé sur le form depuis l'event
             $user = $event->getData();
 
-            // On conditionne le champ "password"
-            // Si user existant, il a id non null
             if ($user->getId() !== null) {
                 // Edit
                 $form->add('password', PasswordType::class, [
-                    // Pour le form d'édition, on n'associe pas le password à l'entité
-                    // @link https://symfony.com/doc/current/reference/forms/types/form.html#mapped
                     'mapped' => false,
                     'attr' => [
                         'placeholder' => 'Laissez vide si inchangé'
@@ -116,15 +110,11 @@ class RegistrationFormType extends AbstractType
             } else {
                 // New
                 $form->add('password', PasswordType::class, [
-                    // En cas d'erreur du type
-                    // Expected argument of type "string", "null" given at property path "password".
-                    // (notamment à l'edit en cas de passage d'une valeur existante à vide)
                     'empty_data' => '',
                     'mapped' => false,
                     'label' => 'Votre mot de passe : ',
                     
                     'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Mot de passe'],
-                    // On déplace les contraintes de l'entité vers le form d'ajout
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Veuillez renseigner un mot de passe',

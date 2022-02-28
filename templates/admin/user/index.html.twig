@@ -5,6 +5,7 @@
 {% block body %}
     <div class="container-fluid mb-3">
         <h1>Liste des utilisateurs</h1>
+        {{ include('front/_notice_message.html.twig') }}
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a href="{{ path('app_admin_user_new') }}" class="btn btn-success">Ajouter un utilisateur</a>

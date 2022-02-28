@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,46 +92,32 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="delete", methods={"POST"}, requirements={"id"="\d+"})
-     */
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-
-            $this->addFlash(
-                'notice-success',
-                'L\'utilisateur '.$user->getEmail().' a été supprimé !'
-            );
-        }
-        else
-        {
-            $this->addFlash(
-                'notice-danger',
-                'Impossible de supprimer l\'utilisateur '.$user->getEmail().', token invalide !'
-            );
-        }
-
-        return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    /**
      * @Route("/status/{id}",name="update_status", methods={"GET"}, requirements={"id"="\d+"})
      *
      * @param User $user
      * @return void
      */
-    public function update_status(User $user, EntityManagerInterface $entityManager)
+    public function update_status(User $user, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
     {
         if($user->getStatus())
         {
-            //TODO mettre isTrashed en cascade
+            foreach($user->getGames() AS $game)
+            {
+                $cascadeTrashed->trashGame($game);
+            }
             $user->setStatus(false);
+            $this->addFlash(
+                'notice-success',
+                'L\'utilisateur '.$user->getEmail().' a été désactivé ! Tous ses jeux, checkpoints, questions et instances ont été mis à la poubelle !'
+            );
         }
         else
         {
             $user->setStatus(true);
+            $this->addFlash(
+                'notice-success',
+                'L\'utilisateur '.$user->getEmail().' a été activé !'
+            );
         }
 
         $entityManager->flush();
