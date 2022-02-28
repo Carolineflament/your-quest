@@ -1,0 +1,77 @@
+{{ form_start(form) }}
+    <div class="form-error mb-3">
+        {{ form_errors(form.email) }}
+        {{ form_errors(form.status) }}
+        {{ form_errors(form.role) }}
+        {{ form_errors(form.password) }}
+        {{ form_errors(form.username) }}
+        {{ form_errors(form.lastname) }}
+        {{ form_errors(form.firstname) }}
+        {{ form_errors(form.address) }}
+        {{ form_errors(form.postalCode) }}
+        {{ form_errors(form.city) }}
+    </div>
+    <div class="row g-3 align-items-center">
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.email) }}
+            {{ form_label(form.email) }}
+        </div>
+
+        <div class="col-auto form-floating mb-3">
+            {{ form_widget(form.status) }}
+            {{ form_label(form.status) }}
+        </div>
+
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.role) }}
+            {{ form_label(form.role) }}
+        </div>
+    </div>
+    <div class="row g-3 align-items-center">
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.username) }}
+            {{ form_label(form.username) }}
+        </div>
+
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.password) }}
+            {{ form_label(form.password) }}
+        </div>
+    </div>
+        
+    <div class="row g-3 align-items-center">
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.lastname) }}
+            {{ form_label(form.lastname) }}
+        </div>
+
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.firstname) }}
+            {{ form_label(form.firstname) }}
+        </div>
+    </div>
+        
+    <div class="row g-3 align-items-center">
+
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.address) }}
+            {{ form_label(form.address) }}
+        </div>
+    </div>
+        
+    <div class="row g-3 align-items-center">
+
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.postalCode) }}
+            {{ form_label(form.postalCode) }}
+        </div>
+
+        <div class="col form-floating mb-3">
+            {{ form_widget(form.city) }}
+            {{ form_label(form.city) }}
+        </div>
+    </div>  
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+{{ form_end(form) }}
