@@ -44,19 +44,26 @@
                     {{ form_label(registrationForm.firstname) }}
                 </div>
 
-                <div class="form-floating mb-3">
-                    {{ form_widget(registrationForm.address) }}
-                    {{ form_label(registrationForm.address) }}
+                <div class="mb-3 text-center">
+                    {{ form_widget(registrationForm.beOrganisateur) }}
+                    {{ form_label(registrationForm.beOrganisateur) }}
                 </div>
 
-                <div class="form-floating mb-3">
-                    {{ form_widget(registrationForm.postal_code) }}
-                    {{ form_label(registrationForm.postal_code) }}
-                </div>
+                <div id="bloc_address" class="d-none" style="display:none;">
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registrationForm.address) }}
+                        {{ form_label(registrationForm.address) }}
+                    </div>
 
-                <div class="form-floating mb-3">
-                    {{ form_widget(registrationForm.city) }}
-                    {{ form_label(registrationForm.city) }}
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registrationForm.postal_code) }}
+                        {{ form_label(registrationForm.postal_code) }}
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registrationForm.city) }}
+                        {{ form_label(registrationForm.city) }}
+                    </div>
                 </div>
 
                 <div class="mb-3 text-center">

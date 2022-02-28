@@ -25,7 +25,7 @@ class RegistrationController extends AbstractController
     {
         $user = new User();
         $user->setCreatedAt(new DateTimeImmutable('now'));
-        // @link https://symfony.com/doc/current/form/events.html
+        
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         //dd($form);
@@ -38,13 +38,21 @@ class RegistrationController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
-            
-            //TODO attention ici on met le role en dure
-            $role = $roleRepos->find(1);
+            $route_redirect = "";
+            if(($form->get('beOrganisateur')->getData()))
+            {
+                $role = $roleRepos->findOneBy(["slug" => "ROLE_ORGANISATEUR"]);
+                $route_redirect = "";
+                $route_redirect = "front_main";
+            }
+            else
+            {
+                $role = $roleRepos->findOneBy(["slug" => "ROLE_USER"]);
+                $route_redirect = "front_main";
+            }
             $user->setRole($role);
             $user->setStatus(true);
             
-
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
@@ -52,8 +60,8 @@ class RegistrationController extends AbstractController
                 'notice-success',
                 'Votre compte a été ajouté !'
             );
-            //TODO mettre la route du back si c'est un organisateur et la page d'acceuil si c'est un user
-            return $this->redirectToRoute('front_main', [], Response::HTTP_SEE_OTHER);
+            
+            return $this->redirectToRoute($route_redirect, [], Response::HTTP_SEE_OTHER);
             
         }
 

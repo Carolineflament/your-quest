@@ -64,17 +64,25 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['placeholder' => 'Prénom']
             ])
             ->add('address', TextareaType::class, [
+                'required' => false,
                 'label' => 'Votre adresse :',
                 'attr' => ['placeholder' => 'Adresse']
             ])
             ->add('postal_code', NumberType::class, [
+                'required' => false,
                 'label' => 'Code postal :',
                 'html5' => true,
                 'attr' => ['placeholder' => 'Code postal']
             ])
             ->add('city', TextType::class, [
+                'required' => false,
                 'label' => 'Votre ville :',
                 'attr' => ['placeholder' => 'Ville']
+            ])
+            ->add('beOrganisateur', CheckboxType::class, [
+                'required' => false,
+                'mapped' => false,
+                'label' => 'Vous êtes organisateur.',
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
