@@ -78,14 +78,17 @@ class CheckpointController extends AbstractController
      */
     public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager): Response
     {
+
+        $game = $checkpoint->getGame();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
-        $game = $checkpoint->getGame();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_checkpoint_index', [
+                'gameSlug' => $game->getSlug()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/checkpoint/edit.html.twig', [
