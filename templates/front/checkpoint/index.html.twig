@@ -14,22 +14,45 @@
         <div style="width: 500px; margin: 50px auto;" id="reader"></div>     
         {# End Scanner #}
 
+        {# Scanner message zone #}
+        <div style="width: 500px; margin: 50px auto;" id="message"></div>
+        {# End Scanner message zone #}
+
     </div>
 </div>
 
 <script>
         function onScanSuccess(decodedText, decodedResult) {
             // Handle on success condition with the decoded text or result.
-            console.log(`Youpi ! Un truc de réglé en 3 lignes de code !`);
-            console.log(`Voilà l'URL décodée : ${decodedText}`, decodedResult);
-            console.log(`En plus le scanner se referme tout seul dès qu'il a décodé le QR code, c'est merveilleux !`);
+            console.log(`Decoded QR code : ${decodedText}`, decodedResult);
+
+            /* A décommenter dès qu'on utilisera nos QR codes générés par l'appli
+            // TRAITEMENT APRES DECODAGE DU QR CODE (et message d'erreur si un QR code "étranger" à l'appli est scanné)
+            // On vérifie que la string retournée commence par "URL:https://yourquest.fr/checkpoint/"
+            if (decodedText.startsWith('URL:https://yourquest.fr/checkpoint/')) {
+                // Si vrai on retire "URL:" du début de la chaine de caractères
+                const checkpointUrl = decodedText.substring(4);
+                // On redirige l'utilisateur vers l'URL du checkpoint
+                window.location = checkpointUrl;
+            } else {
+                // Si faux on indique le problème
+                // On récupère l'élément div ayant l'id #message
+                const messageElement = document.getElementById('message');
+                // On écrit dans l'élément
+                messageElement.textContent = `ERREUR : le QR code que vous venez de scanner n'a pas été généré par notre application YourQuest ( le décodage du QR code indique : ${decodedText} )`;
+            }
+            */
 
             // This will stop the scanner (video feed) and clear the scan area.
             html5QrcodeScanner.clear();
         }
 
         function onScanError(errorMessage) {
-        // handle on error condition, with error message
+            // handle on error condition, with error message
+            // On récupère l'élément div ayant l'id #message
+            const messageElement = document.getElementById('message');
+            // On écrit dans l'élément
+            messageElement.textContent = `Erreur de lecture : ${errorMessage}`;
         }
 
         var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
