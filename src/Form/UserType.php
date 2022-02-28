@@ -30,6 +30,11 @@ class UserType extends AbstractType
                 'label' => 'E-mail : ',
                 'attr' => ['placeholder' => 'Email']
             ])
+            ->add('status', ChoiceType::class, [
+                'required' => true,
+                'label' => 'Statut ?',
+                'choices' => ['Actif' => true, 'Inactif' => false], 
+            ])
             ->add('role', EntityType::class, [
                 'class' => Role::class,
                 'label' => 'Rôle :',
@@ -75,11 +80,7 @@ class UserType extends AbstractType
                 'label' => 'Votre ville :',
                 'attr' => ['placeholder' => 'Ville']
             ])
-            ->add('status', ChoiceType::class, [
-                'required' => true,
-                'label' => 'Statut ?',
-                'choices' => ['Actif' => true, 'Inactif' => false], 
-            ])
+            
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
@@ -96,6 +97,7 @@ class UserType extends AbstractType
                     // Pour le form d'édition, on n'associe pas le password à l'entité
                     // @link https://symfony.com/doc/current/reference/forms/types/form.html#mapped
                     'required' => false,
+                    'label' => 'Votre mot de passe : Laissez vide si inchangé',
                     'mapped' => false,
                     'attr' => [
                         'placeholder' => 'Laissez vide si inchangé'
