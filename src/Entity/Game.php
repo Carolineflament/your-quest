@@ -131,6 +131,11 @@ class Game
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isTrashed;
+
     public function __construct()
     {
         $this->instances = new ArrayCollection();
@@ -348,5 +353,17 @@ class Game
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getIsTrashed(): ?bool
+    {
+        return $this->isTrashed;
+    }
+
+    public function setIsTrashed(bool $isTrashed): self
+    {
+        $this->isTrashed = $isTrashed;
+
+        return $this;
     }
 }
