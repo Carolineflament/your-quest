@@ -5,6 +5,11 @@
 {% block body %}
     <h1>Checkpoint</h1>
 
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+
+     <a href="{{ path('backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">back to list</a>
+    </div> 
+
     <table class="table">
         <tbody>
             <tr>
@@ -34,7 +39,6 @@
         </tbody>
     </table>
 
-     <a href="{{ path('backoffice_checkpoint_index') }}" class="btn btn-outline-secondary btn-sm">back to list</a>
 
     <a href="{{ path('backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary">Modifier</a>
 

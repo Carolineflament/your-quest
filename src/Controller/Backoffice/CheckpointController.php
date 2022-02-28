@@ -3,6 +3,7 @@
 namespace App\Controller\Backoffice;
 
 use App\Entity\Checkpoint;
+use App\Entity\Game;
 use App\Form\CheckpointType;
 use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
@@ -62,8 +63,13 @@ class CheckpointController extends AbstractController
      */
     public function show(Checkpoint $checkpoint): Response
     {
+    
+        $game = $checkpoint->getGame();
+
         return $this->render('backoffice/checkpoint/show.html.twig', [
             'checkpoint' => $checkpoint,
+            'game' => $game,
+            
         ]);
     }
 
@@ -74,6 +80,7 @@ class CheckpointController extends AbstractController
     {
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
+        $game = $checkpoint->getGame();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
@@ -84,6 +91,7 @@ class CheckpointController extends AbstractController
         return $this->renderForm('backoffice/checkpoint/edit.html.twig', [
             'checkpoint' => $checkpoint,
             'form' => $form,
+            'game' => $game,
         ]);
     }
 

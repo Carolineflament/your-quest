@@ -13,9 +13,11 @@
 
     <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
         <thead class="table-dark ">
-            <tr>                
+            <tr>      
+                <th>#</th>         
                 <th>Nom du checkpoint</th>
                 <th>Nom du jeu</th>
+                <th>Ordre du checkpoint</th>
                 <th>CreatedAt</th>
                 <th>actions</th>
             </tr>
@@ -23,9 +25,11 @@
         <tbody>
         {% for checkpoint in checkpoints %}
             <tr>
+                <td>{{ checkpoint.id }}</td>
                 <td>{{ checkpoint.title }}</td>
                 <td>{{ checkpoint.game.title }}</td>
-                <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ checkpoint.OrderCheckpoint  }}</td>
+                <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                 <div class="d-grid gap-2 justify-content-md-center">
                     <a href="{{ path('backoffice_checkpoint_show', {'id': checkpoint.id}) }}"class="btn btn-primary">Détail</a>
