@@ -89,7 +89,7 @@ class AppFixtures extends Fixture
         for ($i = 1; $i<= 50; $i++) {
             $user = new User();
             $user->setEmail($faker->email());
-            $user->setPassword($faker->password());
+            $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
             $user->setUsername($faker->userName());
             $user->setLastname($faker->lastName());
             $user->setFirstname($faker->firstName());
