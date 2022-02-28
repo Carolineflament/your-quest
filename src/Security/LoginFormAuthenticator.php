@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Routing\RouterInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -22,10 +24,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
+    private $userRepository;
+    private $router;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, RouterInterface $router)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->userRepository = $userRepository;
+        $this->router = $router;
     }
 
     public function authenticate(Request $request): Passport
@@ -34,6 +40,17 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
+        $user_test = $this->userRepository->findOneBy(['email' => $email]);
+        if(!$user_test->getStatus())
+        {
+            $request->getSession()->getFlashBag()->add(
+                'notice-danger',
+                'Votre utilisateur a été désactivé par un administrateur, vous pouvez conctacter un administrateur via le formulaire de contact'
+            );
+            
+            return new Passport(new UserBadge(''), new PasswordCredentials(''));
+        }
+            
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
@@ -48,10 +65,10 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-
+        
         // For example:
         //TODO Mettre la bonne route vers le back si c'est un organisateur ou le front si c'est un user
-
+        
         return new RedirectResponse($this->urlGenerator->generate('front_main'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
