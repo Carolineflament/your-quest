@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\RoleRepository;
 use App\Security\LoginFormAuthenticator;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +24,11 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager, RoleRepository $roleRepos): Response
     {
         $user = new User();
-        //TODO Gérer la date de création avec le assert ça fait chier faire un event listener presubmit avec le add event listener
+        $user->setCreatedAt(new DateTimeImmutable('now'));
         // @link https://symfony.com/doc/current/form/events.html
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        
+        //dd($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -37,6 +38,7 @@ class RegistrationController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+            
             //TODO attention ici on met le role en dure
             $role = $roleRepos->find(1);
             $user->setRole($role);

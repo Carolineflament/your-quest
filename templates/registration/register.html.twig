@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-center align-items-center mt-3">
@@ -8,9 +8,56 @@
             <h1>Inscription</h1>
 
             {{ form_start(registrationForm) }}
+                <div class="form-error mb-3">
+                    {{ form_errors(registrationForm) }}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.email) }}
+                    {{ form_label(registrationForm.email) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.password) }}
+                    {{ form_label(registrationForm.password) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.username) }}
+                    {{ form_label(registrationForm.username) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.lastname) }}
+                    {{ form_label(registrationForm.lastname) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.firstname) }}
+                    {{ form_label(registrationForm.firstname) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.address) }}
+                    {{ form_label(registrationForm.address) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.postal_code) }}
+                    {{ form_label(registrationForm.postal_code) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.city) }}
+                    {{ form_label(registrationForm.city) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.agreeTerms) }}
+                    {{ form_label(registrationForm.agreeTerms) }}
+                </div>
                 {{ form_widget(registrationForm) }}
 
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
             {{ form_end(registrationForm) }}
         </div>
     </div>

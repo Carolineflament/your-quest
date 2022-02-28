@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -27,7 +28,6 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'required' => true,
                 'label' => 'E-mail : ',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'attr' => ['placeholder' => 'Email']
             ])
             ->add('password', PasswordType::class, [
@@ -35,7 +35,6 @@ class RegistrationFormType extends AbstractType
                 // this is read and encoded in the controller
                 'mapped' => false,
                 'label' => 'Votre mot de passe : ',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner un mot de passe',
@@ -52,39 +51,34 @@ class RegistrationFormType extends AbstractType
             ->add('username', TextType::class, [
                 'required' => true,
                 'label' => 'Votre pseudo : ',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'attr' => ['placeholder' => 'Pseudo']
             ])
             ->add('lastname', TextType::class, [
                 'required' => true,
                 'label' => 'Votre nom : ',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'attr' => ['placeholder' => 'Nom']
             ])
             ->add('firstname', TextType::class, [
                 'required' => true,
                 'label' => 'Votre prénom : ',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'attr' => ['placeholder' => 'Prénom']
             ])
             ->add('address', TextareaType::class, [
                 'label' => 'Votre adresse :',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'attr' => ['placeholder' => 'Adresse']
             ])
             ->add('postal_code', NumberType::class, [
                 'label' => 'Code postal :',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'html5' => true,
                 'attr' => ['placeholder' => 'Code postal']
             ])
             ->add('city', TextType::class, [
                 'label' => 'Votre ville :',
-                'label_attr' => ['class' => 'visually-hidden'],
                 'attr' => ['placeholder' => 'Ville']
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'label' => 'Vous devez accepter les conditions d\'utilisation.',
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter les conditions d\'utilisation.',
@@ -120,7 +114,6 @@ class RegistrationFormType extends AbstractType
                     'empty_data' => '',
                     'mapped' => false,
                     'label' => 'Votre mot de passe : ',
-                    'label_attr' => ['class' => 'visually-hidden'],
                     
                     'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Mot de passe'],
                     // On déplace les contraintes de l'entité vers le form d'ajout
