@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle instance{% endblock %}
+
+{% block body %}
+    <h1>Créez une nouvelle instance pour le jeu {{ game.title }}</h1>
+
+    {{ include('backoffice/instance/_form.html.twig') }}
+
+    <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug})  }}">Retour à la liste des instances</a>
+{% endblock %}

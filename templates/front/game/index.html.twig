@@ -15,7 +15,7 @@
                         <h5 class="card-title">{{ game.title }}</h5>
                         <p><small>{{ game.city }} ({{ game.postalCode }})</small></p>
                         <p class="card-text">{{ game.summary}}</p>
-                        <a href=""{{ path('game', {'slug' : game.slug}) }}"" class="btn btn-primary">Voir ce jeu</a>
+                        {# <a href=""{{ path('game', {'slug' : game.slug}) }}"" class="btn btn-primary">Voir ce jeu</a> #}
                     </div>
                 </div>
             {% endfor %}

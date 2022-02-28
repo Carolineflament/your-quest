@@ -4,6 +4,10 @@
 
 {% block body %}
 
+    {# Message d'alerte #}
+    {{ include('front/_notice_message.html.twig') }}
+    {# End message d'alerte #}
+
     {# Carousel #}
 
     {{ include('_homeCarousel.html.twig') }}
@@ -11,7 +15,7 @@
     {# End Carousel #}
 
     {# Presentation #}
-    <div class="row align-items-start mt-3">
+    <div class="align-items-start mt-3">
         <div class="col">
             <div class="container flex-column align-items-center d-flex justify-content-evenly" style="height: 600px;">
                 <h2>Bienvenue sur YourQuest! </h2>
@@ -20,7 +24,7 @@
                 Entrez dans une aventure connectée en créant votre jeu de piste dans le monde réel.
                 </div>
 
-                <a href="#" type="button" class="btn btn-lg btn-primary fw-bold"> Créer votre jeu </a>
+                <a href="{{ path('app_backoffice_game_new')}}" type="button" class="btn btn-lg btn-primary fw-bold"> Créer votre jeu </a>
 
             </div>
         </div>
