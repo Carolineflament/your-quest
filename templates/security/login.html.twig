@@ -26,15 +26,14 @@
 
             {{ include('front/_notice_message.html.twig') }}
 
-            <div class="form-outline form-white mb-4">
-                <label for="inputEmail" class="visually-hidden">Email : </label>
+            <div class=" form-floating form-outline form-white mb-4">
                 <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control form-control-lg" autocomplete="email" required autofocus placeholder="Votre adresse mail">
-                
+                <label for="inputEmail">Email : </label>
             </div>
 
-            <div class="form-outline form-white mb-4">
-                <label for="inputPassword" class="visually-hidden">Mot de passe : </label>
+            <div class="form-floating form-outline form-white mb-4">
                 <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" autocomplete="current-password" required placeholder="Votre mot de passe">
+                <label for="inputPassword">Mot de passe : </label>
             </div>
 
             <input type="hidden" name="_csrf_token"
