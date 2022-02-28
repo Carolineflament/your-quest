@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+{{ form_end(form) }}

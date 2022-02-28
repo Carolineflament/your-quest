@@ -162,6 +162,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->games = new ArrayCollection();
         $this->rounds = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->status = true;
     }
 
     public function getId(): ?int
@@ -205,7 +207,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         // Get rôle contain in role table insteed of role JSON give by make:user
-        $roles = array($this->role->getSlug());
+        $roles = array();
+        if($this->role !== null)
+        {
+            $roles = array($this->role->getSlug());
+        }
         // guarantee every user at least has ROLE_USER
         //$roles[] = 'ROLE_USER';
 
