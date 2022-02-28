@@ -49,7 +49,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_game_show", methods={"GET"})
+     * @Route("/{slug}", name="app_backoffice_game_show", methods={"GET"})
      */
     public function show(Game $game): Response
     {
