@@ -23,8 +23,8 @@ class GameController extends AbstractController
     {
 
         //On vérifie que le jeu à afficher appartient au joueur
-        //find by user.ider avec user
-        //connected user = blablabla
+        //find by user.id avec user
+        //connecte user = blablabla
 
 
         return $this->render('backoffice/game/index.html.twig', [

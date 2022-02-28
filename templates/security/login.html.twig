@@ -8,11 +8,14 @@
 {{ include('_homeCarousel.html.twig') }}
 
 {# End Carousel #}
-<div class="row d-flex justify-content-center align-items-center h-100 mt-3">
-    <div class="col-12 col-md-8 col-lg-6 col-xl-6  text-center">
+<div class="d-flex justify-content-center align-items-center h-100 mt-3">
+    <div class="col-xl-6  text-center">
         <form method="post"  class="form-inline">
             {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                <div class="alert alert-danger alert-dismissible fade show">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             {% endif %}
 
             {% if app.user %}
@@ -22,19 +25,18 @@
             {% endif %}
 
             <h2 class="h3 mb-3 font-weight-normal">Connexion</h2>
-            <p class="mb-5">Merci d'entrer votre e-mail et votre mot de passe</p>
+            <p class="mb-3">Merci d'entrer votre e-mail et votre mot de passe</p>
 
             {{ include('front/_notice_message.html.twig') }}
 
-            <div class="form-outline form-white mb-4">
-                <label for="inputEmail" class="visually-hidden">Email : </label>
+            <div class=" form-floating mb-4">
                 <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control form-control-lg" autocomplete="email" required autofocus placeholder="Votre adresse mail">
-                
+                <label for="inputEmail">Email : </label>
             </div>
 
-            <div class="form-outline form-white mb-4">
-                <label for="inputPassword" class="visually-hidden">Mot de passe : </label>
+            <div class="form-floating mb-4">
                 <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" autocomplete="current-password" required placeholder="Votre mot de passe">
+                <label for="inputPassword">Mot de passe : </label>
             </div>
 
             <input type="hidden" name="_csrf_token"
@@ -59,7 +61,7 @@
             </div>
 
             <div class="d-flex align-items-center justify-content-center pb-4">
-                <p class="mb-5 pb-lg-2">Pas encore inscrit ? <a href="#!">C'est par ici !</a></p>
+                <p class="mb-5 pb-lg-2">Pas encore inscrit ? <a href="{{ path('app_register') }}">C'est par ici !</a></p>
             </div>
         </form>
     </div>
