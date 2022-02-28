@@ -24,11 +24,9 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager, RoleRepository $roleRepos): Response
     {
         $user = new User();
-        $user->setCreatedAt(new DateTimeImmutable('now'));
         
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        //dd($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -53,7 +51,6 @@ class RegistrationController extends AbstractController
                 $route_redirect = "front_main";
             }
             $user->setRole($role);
-            $user->setStatus(true);
             
             $entityManager->persist($user);
             $entityManager->flush();
