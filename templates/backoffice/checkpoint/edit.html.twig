@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Checkpoint{% endblock %}
+
+{% block body %}
+    <h1>Modifier Checkpoint</h1>
+
+    {{ include('backoffice/checkpoint/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('backoffice_checkpoint_index') }}" class="btn btn-outline-secondary btn-sm">back to list</a>
+
+    {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
+{% endblock %}
