@@ -60,6 +60,11 @@ class RegistrationController extends AbstractController
                 'notice-success',
                 'Votre compte a été ajouté !'
             );
+
+            return $userAuthenticator->authenticateUser(
+                $user, 
+                $authenticator, 
+                $request); 
             
             return $this->redirectToRoute($route_redirect, [], Response::HTTP_SEE_OTHER);
             
