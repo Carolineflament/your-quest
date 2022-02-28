@@ -16,9 +16,15 @@ use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+     }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Faker\Factory::create('fr_FR');
@@ -43,12 +49,46 @@ class AppFixtures extends Fixture
         }
 
         /*****************USER ******************/
+
+        $users = [
+            [
+                'login' => 'admin@admin.com',
+                'password' => 'admin',
+                'role' => '2'
+            ],
+            [
+                'login' => 'organisateur@organisateur.com',
+                'password' => 'organisateur',
+                'role' => '1'
+            ],
+            [
+                'login' => 'user@user.com',
+                'password' => 'user',
+                'role' => '0'
+            ]
+            ];
+
+        foreach($users AS $currentUser)
+        {
+            $user = new User();
+            $user->setEmail($currentUser['login']);
+            $user->setRole($roleEntity[$currentUser['role']]);
+            $user->setPassword($this->passwordHasher->hashPassword($user, $currentUser['password']));
+            $user->setUsername($faker->userName());
+            $user->setLastname($faker->lastName());
+            $user->setFirstname($faker->firstName());
+            $user->setAddress($faker->secondaryAddress());
+            $user->setPostalCode($faker->randomNumber(5, true));
+            $user->setCity($faker->country());
+            $user->setStatus(true);
+            $manager->persist($user);
+        }
         
         $userEntity = [];
         for ($i = 1; $i<= 50; $i++) {
             $user = new User();
             $user->setEmail($faker->email());
-            $user->setPassword($faker->password());
+            $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
             $user->setUsername($faker->userName());
             $user->setLastname($faker->lastName());
             $user->setFirstname($faker->firstName());
