@@ -62,6 +62,11 @@ class Enigma
      */
     private $answers;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isTrashed;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -176,5 +181,17 @@ class Enigma
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getIsTrashed(): ?bool
+    {
+        return $this->isTrashed;
+    }
+
+    public function setIsTrashed(bool $isTrashed): self
+    {
+        $this->isTrashed = $isTrashed;
+
+        return $this;
     }
 }

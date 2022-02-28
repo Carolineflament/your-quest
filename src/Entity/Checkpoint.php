@@ -80,6 +80,11 @@ class Checkpoint
      */
     private $enigmas;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isTrashed;
+
     public function __construct()
     {
         $this->scanQRs = new ArrayCollection();
@@ -237,5 +242,17 @@ class Checkpoint
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getIsTrashed(): ?bool
+    {
+        return $this->isTrashed;
+    }
+
+    public function setIsTrashed(bool $isTrashed): self
+    {
+        $this->isTrashed = $isTrashed;
+
+        return $this;
     }
 }

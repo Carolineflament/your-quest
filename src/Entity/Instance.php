@@ -75,6 +75,11 @@ class Instance
      */
     private $rounds;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isTrashed;
+
     public function __construct()
     {
         $this->rounds = new ArrayCollection();
@@ -183,6 +188,18 @@ class Instance
                 $round->setInstance(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsTrashed(): ?bool
+    {
+        return $this->isTrashed;
+    }
+
+    public function setIsTrashed(bool $isTrashed): self
+    {
+        $this->isTrashed = $isTrashed;
 
         return $this;
     }
