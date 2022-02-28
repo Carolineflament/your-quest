@@ -3,48 +3,31 @@
 {% block title %}Liste de vos jeux{% endblock %}
 
 {% block body %}
-    <h1>Liste de vos jeux</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Titre du jeu</th>
-                <th>Image</th>
-                <th>Statut</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for game in games %}
-            <tr>
-                
-                <td>{{ game.title }}</td>
-                <td>{{ game.image }}</td>
-                <td>{{ game.status ? 'Yes' : 'No' }}</td>
-                <td>
-                    <button class="btn btn-info" href="{{ path('app_backoffice_game_show', {'id': game.id}) }}">
-                        <span class="icon is-small">
-                        <i class="fa fa-trash"></i>
-                        </span>
-                    </button>
-                    <button type="button" class="btn btn-info" href="{{ path('app_backoffice_game_show', {'id': game.id}) }}">
-                        <i class="bi bi-box-arrow-in-right"></i>
-                    </button>
-                    <button type="button" class="btn btn-warning" href="{{ path('app_backoffice_game_edit', {'id': game.id}) }}">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                    <button type="button" class="btn btn-danger" href="{{ path('app_backoffice_game_delete', {'id': game.id})}}">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="12">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Mes jeux</h1>
+        <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary mb-3">Créer un nouveau jeu</a>
+    </div>
 
-    <a href="{{ path('app_backoffice_game_new') }}">Create new</a>
+    {# CARDS #}
+
+    {% for game in games %}
+        <div class="card mb-3" >
+            <div class="row g-0">
+                <div class="col-md-4">
+                <img src="{{ game.image }}" class="card-img-top" alt="..." >
+                </div>
+                <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ game.title }}</h5>
+                    <p class="card-text">{{ game.city }} ({{ game.postalCode }})</p>
+                    <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary">Voir le jeu</a>
+                </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {# END CARDS #}
+
 {% endblock %}

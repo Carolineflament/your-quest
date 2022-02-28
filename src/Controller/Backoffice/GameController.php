@@ -21,6 +21,12 @@ class GameController extends AbstractController
      */
     public function index(GameRepository $gameRepository): Response
     {
+
+        //On vérifie que le jeu à afficher appartient au joueur
+        //find by user.id avec user
+        //connecte user = blablabla
+
+
         return $this->render('backoffice/game/index.html.twig', [
             'games' => $gameRepository->findAll(),
         ]);
