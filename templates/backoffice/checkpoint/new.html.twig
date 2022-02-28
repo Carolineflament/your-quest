@@ -7,7 +7,7 @@
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
 
-        <a href="{{ path('backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">back to list</a>
+        <a href="{{ path('app_backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">back to list</a>
     </div> 
 
     {{ include('backoffice/checkpoint/_form.html.twig') }}

@@ -14,12 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/backoffice/checkpoint")
+ * @Route("/back/checkpoint")
  */
 class CheckpointController extends AbstractController
 {
     /**
-     * @Route("/jeu/{gameSlug}", name="backoffice_checkpoint_index", methods={"GET"})
+     * @Route("/jeu/{gameSlug}", name="app_backoffice_checkpoint_index", methods={"GET"})
      */
     public function index($gameSlug, GameRepository $gameRepository, CheckpointRepository $checkpointRepository): Response
     {
@@ -32,7 +32,7 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/jeu/{gameSlug}/nouveau", name="backoffice_checkpoint_new", methods={"GET", "POST"})
+     * @Route("/jeu/{gameSlug}/nouveau", name="app_backoffice_checkpoint_new", methods={"GET", "POST"})
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -48,7 +48,7 @@ class CheckpointController extends AbstractController
             $entityManager->persist($checkpoint);
             $entityManager->flush();
 
-            return $this->redirectToRoute('backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/checkpoint/new.html.twig', [
@@ -59,7 +59,7 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="backoffice_checkpoint_show", methods={"GET"})
+     * @Route("/{id}", name="app_backoffice_checkpoint_show", methods={"GET"})
      */
     public function show(Checkpoint $checkpoint): Response
     {
@@ -74,18 +74,21 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/modifier", name="backoffice_checkpoint_edit", methods={"GET", "POST"})
+     * @Route("/{id}/modifier", name="app_backoffice_checkpoint_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager): Response
     {
+
+        $game = $checkpoint->getGame();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
-        $game = $checkpoint->getGame();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_checkpoint_index', [
+                'gameSlug' => $game->getSlug()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/checkpoint/edit.html.twig', [
@@ -96,7 +99,7 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="backoffice_checkpoint_delete", methods={"POST"})
+     * @Route("/{id}", name="app_backoffice_checkpoint_delete", methods={"POST"})
      */
     public function delete(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager): Response
     {
@@ -105,6 +108,6 @@ class CheckpointController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -8,7 +8,7 @@
     <h1>Liste des checkpoints du jeu {{ game.title }}</h1>
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-        <a href="{{ path('backoffice_checkpoint_new', { 'gameSlug' : game.slug}) }}" class="btn btn-success">Créer un checkpoint</a>
+        <a href="{{ path('app_backoffice_checkpoint_new', { 'gameSlug' : game.slug}) }}" class="btn btn-success">Créer un checkpoint</a>
     </div>
 
     <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
@@ -32,8 +32,8 @@
                 <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                 <div class="d-grid gap-2 justify-content-md-center">
-                    <a href="{{ path('backoffice_checkpoint_show', {'id': checkpoint.id}) }}"class="btn btn-primary">Détail</a>
-                    <a href="{{ path('backoffice_checkpoint_edit', {'id': checkpoint.id}) }}"class="btn btn-primary">Modifier</a>
+                    <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}"class="btn btn-primary">Détail</a>
+                    <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}"class="btn btn-primary">Modifier</a>
                 
                 </td>
             </tr>
