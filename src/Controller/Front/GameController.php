@@ -10,7 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class GameController extends AbstractController
 {
     /**
+<<<<<<< HEAD
      * @Route("/jeux", name="front_games")
+=======
+     * @Route("/jeux", name="games")
+>>>>>>> MySlugger
      */
     public function index(GameRepository $gameRepository): Response
     {
