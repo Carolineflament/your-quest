@@ -1,7 +1,6 @@
 {{ form_start(form) }}
     <div class="form-error mb-3">
         {{ form_errors(form.email) }}
-        {{ form_errors(form.status) }}
         {{ form_errors(form.role) }}
         {{ form_errors(form.password) }}
         {{ form_errors(form.username) }}
@@ -17,12 +16,7 @@
             {{ form_label(form.email) }}
         </div>
 
-        <div class="col-auto form-floating mb-3">
-            {{ form_widget(form.status) }}
-            {{ form_label(form.status) }}
-        </div>
-
-        <div class="col form-floating mb-3">
+       <div class="col form-floating mb-3">
             {{ form_widget(form.role) }}
             {{ form_label(form.role) }}
         </div>

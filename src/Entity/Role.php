@@ -73,8 +73,6 @@ class Role
      */
     private $users;
 
-    
-
     public function __construct()
     {
         $this->users = new ArrayCollection();

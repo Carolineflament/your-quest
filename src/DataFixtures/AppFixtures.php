@@ -20,10 +20,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+
     public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->passwordHasher = $passwordHasher;
-     }
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -40,7 +41,7 @@ class AppFixtures extends Fixture
         foreach ($roleName as $roles) {
             $role =new Role();
             $role->setName($roles);
-            $role->setSlug($faker->words(2, true));
+            $role->setSlug('ROLE_'.strtoupper($roles));
             $role->setStatus(rand(0, 1));
             $role->setCreatedAt(new DateTimeImmutable('now'));
 

@@ -133,6 +133,10 @@ class Game
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $isTrashed;
 
@@ -140,6 +144,7 @@ class Game
     {
         $this->instances = new ArrayCollection();
         $this->checkpoints = new ArrayCollection();
+        $this->isTrashed = false;
     }
 
     public function getId(): ?int
