@@ -102,11 +102,11 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/{id}", name="app_backoffice_checkpoint_trash", methods={"POST"})
      */
-    public function trash(Game $slugGame, Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
+    public function trash(Game $game, Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
-        $slugGame = $checkpoint->getGame();
+        $game = $checkpoint->getGame();
 
-        $checkpoint->setGame($slugGame);
+        $checkpoint->setGame($game);
 
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
             if ($checkpoint->getIsTrashed()) {
@@ -126,9 +126,9 @@ class CheckpointController extends AbstractController
                 );
             }
             $entityManager->flush();
-
+            dd('blabla');
             return $this->redirectToRoute('app_backoffice_checkpoint_index', [
-            'gameSlug' => $slugGame->getSlug()
+            'gameSlug' => $game->getSlug()
         ], Response::HTTP_SEE_OTHER);
         }
     }
