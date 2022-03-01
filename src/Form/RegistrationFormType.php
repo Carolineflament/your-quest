@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\EventListener\FormUserSubscriber;
 use DateTimeImmutable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -95,44 +96,7 @@ class RegistrationFormType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
-            $form = $event->getForm();
-            $user = $event->getData();
-
-            if ($user->getId() !== null) {
-                // Edit
-                $form->add('password', PasswordType::class, [
-                    'mapped' => false,
-                    'attr' => [
-                        'placeholder' => 'Laissez vide si inchangé'
-                    ]
-                ]);
-            } else {
-                // New
-                $form->add('password', PasswordType::class, [
-                    'empty_data' => '',
-                    'mapped' => false,
-                    'label' => 'Votre mot de passe : ',
-                    
-                    'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Mot de passe'],
-                    'constraints' => [
-                        new NotBlank([
-                            'message' => 'Veuillez renseigner un mot de passe',
-                        ]),
-                        new Length([
-                            'min' => 6,
-                            'minMessage' => 'Le mot de passe doit faire minimum {{ limit }} caractères',
-                            // max length allowed by Symfony for security reasons
-                            'max' => 4096,
-                        ]),
-                        /*new Regex(
-                            "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/",
-                            "Le mot de passe doit contenir au minimum 8 caractères, une majuscule, un chiffre et un caractère spécial"
-                        ),*/
-                    ],
-                ]);
-            }
-        });
+        $builder->addEventSubscriber(new FormUserSubscriber());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
