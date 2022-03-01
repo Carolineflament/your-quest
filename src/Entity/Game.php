@@ -66,7 +66,7 @@ class Game
      *      minMessage = "Le code postal du jeu doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le code postal du jeu ne doit pas éxéder {{ limit }} caractères !"
      * )
-     * @Assert\Regex(pattern="/\d+/", message="Le {{ label }} doit être que des chiffres !")
+     * @Assert\Regex(pattern="/\d+/", message="Le {{ label }} ne doit être que des chiffres !")
      */
     private $postalCode;
 

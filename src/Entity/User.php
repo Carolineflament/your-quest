@@ -106,7 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "Le code postal de l'utilisateur doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le code postal de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
      * )
-     * @Assert\Regex(pattern="/\d+/", message="Le {{ label }} doit être que des chiffres !")
+     * @Assert\Regex(pattern="/\d+/", message="Le {{ label }} ne doit être que des chiffres !")
      */
     private $postalCode;
 
