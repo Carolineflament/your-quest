@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
             }
             else
             {
-                $role = $roleRepos->findOneBy(["slug" => "ROLE_USER"]);
+                $role = $roleRepos->findOneBy(["slug" => "ROLE_JOUEUR"]);
                 $route_redirect = "front_main";
             }
             $user->setRole($role);

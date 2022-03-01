@@ -64,12 +64,17 @@ class Enigma
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $isTrashed;
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+        $this->isTrashed = false;
     }
 
     public function getId(): ?int
