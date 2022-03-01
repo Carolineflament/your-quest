@@ -5,6 +5,7 @@ namespace App\Controller\Backoffice;
 use App\Entity\Game;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,6 +95,36 @@ class GameController extends AbstractController
             $entityManager->flush();
         }
 
+        return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/status/{id}",name="app_backoffice_update_status", methods={"GET"}, requirements={"id"="\d+"})
+     *
+     * @param Game $game
+     * @return void
+     */
+    public function update_status(Game $game, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
+    {
+        if($game->getStatus())
+        {
+            $cascadeTrashed->trashGame($game);
+            $game->setStatus(false);
+            $this->addFlash(
+                'notice-success',
+                'Le jeu '.$game->getTitle().' a été supprimé ! Tous ses jeux, checkpoints, questions et instances ont été mis à la poubelle !'
+            );
+        }
+        else
+        {
+            $game->setStatus(true);
+            $this->addFlash(
+                'notice-success',
+                'Le jeu '.$game->getTitle().' a été activé !'
+            );
+        }
+
+        $entityManager->flush();
         return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
     }
 }

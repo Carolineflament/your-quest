@@ -3,30 +3,34 @@
 {% block title %}Liste de vos jeux{% endblock %}
 
 {% block body %}
+    <div class="container-fluid mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Mes jeux</h1>
+            <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary mb-3">Créer un nouveau jeu</a>
+        </div>
 
-    <div class="d-flex justify-content-between align-items-center">
-        <h1>Mes jeux</h1>
-        <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary mb-3">Créer un nouveau jeu</a>
-    </div>
-
-    {# CARDS #}
+        {# CARDS #}
 
     {% for game in games %}
-        <div class="card mb-3" >
-            <div class="row g-0">
-                <div class="col-md-4">
-                <img src="{{ game.image }}" class="card-img-top" alt="..." >
-                </div>
-                <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">{{ game.title }}</h5>
-                    <p class="card-text">{{ game.city }} ({{ game.postalCode }})</p>
-                    <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary">Voir le jeu</a>
-                </div>
-                </div>
+    <div class="card mb-3" >
+        <div class="row g-0">
+            <div class="col-md-4">
+            <img src="{{ game.image }}" class="card-img-top" alt="..." >
+            </div>
+            <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ game.title }}</h5>
+                <p class="card-text">{{ game.city }} ({{ game.postalCode }})</p>
+                <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary">Voir le jeu</a>
+            </div>
             </div>
         </div>
+    </div>
+    {% else %}
+        <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
+
     {% endfor %}
+        </div>
 
     {# END CARDS #}
 
