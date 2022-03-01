@@ -9,8 +9,8 @@
 
             <h2 class="text-muted fw-bold mb-4">Les jeux</h2>
             {% for game in games %}
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ asset('assets/images/QuestLogo.png') }}" class="card-img-top" alt="...">
+                <div class="card mb-3" style="max-width: 540px;">
+                    <img src="{{ asset('assets/images/QuestLogo.png') }}" class="card-img-top" alt="game.title">
                     <div class="card-body">
                         <h5 class="card-title">{{ game.title }}</h5>
                         <p><small>{{ game.city }} ({{ game.postalCode }})</small></p>
