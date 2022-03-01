@@ -99,13 +99,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $address;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=5, nullable=true)
      * @Assert\Length(
      *      min=5,
      *      max=5,
      *      minMessage = "Le code postal de l'utilisateur doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le code postal de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
      * )
+     * @Assert\Regex(pattern="/\d+/", message="Le {{ label }} doit être que des chiffres !")
      */
     private $postalCode;
 
@@ -305,12 +306,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPostalCode(): ?int
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
-    public function setPostalCode(?int $postalCode): self
+    public function setPostalCode(?string $postalCode): self
     {
         $this->postalCode = $postalCode;
 

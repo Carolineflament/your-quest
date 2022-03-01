@@ -81,10 +81,9 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Votre adresse :',
                 'attr' => ['placeholder' => 'Adresse']
             ])
-            ->add('postalCode', NumberType::class, [
+            ->add('postalCode', TextType::class, [
                 'required' => false,
                 'label' => 'Code postal :',
-                'html5' => true,
                 'attr' => ['placeholder' => 'Code postal']
             ])
             ->add('city', TextType::class, [

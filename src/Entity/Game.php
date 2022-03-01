@@ -58,7 +58,7 @@ class Game
     private $address;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=5)
      * @Assert\NotBlank(message = "Le code postal du jeu ne doit pas être vide")
      * @Assert\Length(
      *      min=5,
@@ -66,6 +66,7 @@ class Game
      *      minMessage = "Le code postal du jeu doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le code postal du jeu ne doit pas éxéder {{ limit }} caractères !"
      * )
+     * @Assert\Regex(pattern="/\d+/", message="Le {{ label }} doit être que des chiffres !")
      */
     private $postalCode;
 
@@ -188,12 +189,12 @@ class Game
         return $this;
     }
 
-    public function getPostalCode(): ?int
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
-    public function setPostalCode(int $postalCode): self
+    public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = $postalCode;
 
