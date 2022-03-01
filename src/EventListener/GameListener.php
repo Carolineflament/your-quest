@@ -20,6 +20,5 @@ class GameListener
         $slug = $this->slugger->slugify($game->getTitle());
         // update slug in the entity
         $game->setSlug($slug);
-
     }
 }
