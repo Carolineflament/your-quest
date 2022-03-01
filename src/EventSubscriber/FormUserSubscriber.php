@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -37,7 +37,7 @@ class FormUserSubscriber implements EventSubscriberInterface
             // New
             $form->add('password', PasswordType::class, [
                 'empty_data' => '',
-                'mapped' => false,
+                'mapped' => true,
                 'label' => 'Votre mot de passe : ',
                 
                 'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Mot de passe'],

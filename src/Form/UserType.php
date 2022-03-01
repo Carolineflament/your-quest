@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Role;
 use App\Entity\User;
-use App\EventListener\FormUserSubscriber;
+use App\EventSubscriber\FormUserSubscriber;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -65,10 +65,9 @@ class UserType extends AbstractType
                 'label' => 'Votre adresse :',
                 'attr' => ['placeholder' => 'Adresse']
             ])
-            ->add('postalCode', NumberType::class, [
+            ->add('postalCode', TextType::class, [
                 'required' => false,
                 'label' => 'Code postal :',
-                'html5' => true,
                 'attr' => ['placeholder' => 'Code postal']
             ])
             ->add('city', TextType::class, [
