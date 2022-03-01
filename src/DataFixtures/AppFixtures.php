@@ -82,11 +82,12 @@ class AppFixtures extends Fixture
             $user->setPostalCode($faker->randomNumber(5, true));
             $user->setCity($faker->country());
             $user->setStatus(true);
+            $userEntity[]= $user;
             $manager->persist($user);
         }
         
-        $userEntity = [];
-        for ($i = 1; $i<= 50; $i++) {
+        /*$userEntity = [];
+        for ($i = 1; $i<= 10; $i++) {
             $user = new User();
             $user->setEmail($faker->email());
             $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
@@ -103,7 +104,7 @@ class AppFixtures extends Fixture
 
             $userEntity[]= $user;
             $manager->persist($user);
-        }
+        }*/
 
         /*****************GAME ******************/
 
@@ -111,7 +112,6 @@ class AppFixtures extends Fixture
         for ($i=0; $i < 10; $i++) {
             $game = new Game();
             $game->setTitle($faker->words(2, true));
-            $game->setSlug($faker->words(2, true));
             $game->setAddress($faker->address());
             $game->setPostalCode($faker->randomNumber(5, true));
             $game->setCity($faker->country());
@@ -119,18 +119,42 @@ class AppFixtures extends Fixture
             $game->setSummary($faker->text(30));
             $game->setStatus(rand(0, 1));
             $game->setIsTrashed(rand(0, 1));
-            $game->setCreatedAt(new DateTimeImmutable('now'));
 
+            $int_game= mt_rand(1262055681,1646147483);
+            $time = (new DateTimeImmutable)->setTimestamp($int_game);
+            $game->setCreatedAt($time);
             $randomUser = $userEntity[mt_rand(0, count($userEntity) - 1)];
             $game->setUser($randomUser);
 
             $gameEntity[] = $game;
             $manager->persist($game);
-        }
 
+
+            /*****************INSTANCE ******************/
+            for ($j=0; $j < random_int(0, 5); $j++) {
+                $newInstance = new Instance();
+                $newInstance->setTitle($faker->words(2, true));
+                $newInstance->setMessage($faker->text(100));
+
+                $int= mt_rand(500000,500000000);
+                $time_begin_instance = (new DateTimeImmutable)->setTimestamp($int_game+$int);
+                $newInstance->setStartAt($time_begin_instance);
+                $time_end_instance = (new DateTimeImmutable)->setTimestamp($int_game+$int*2);
+                $newInstance->setEndAt($time_end_instance);
+                $newInstance->setIsTrashed(rand(0, 1));
+    
+                $randomGame = $gameEntity[mt_rand(0, count($gameEntity) - 1)];
+                $newInstance->setGame($randomGame);
+    
+    
+                $instanceEntity[] = $newInstance;
+                $manager->persist($newInstance);
+            }
+        }
+        
         /*****************INSTANCE ******************/
 
-        $instanceEntity = [];
+        /*$instanceEntity = [];
         for ($i=0; $i < 10; $i++) {
             $newInstance = new Instance();
             $newInstance->setTitle($faker->words(2, true));
@@ -146,17 +170,17 @@ class AppFixtures extends Fixture
 
             $instanceEntity[] = $newInstance;
             $manager->persist($newInstance);
-        }
+        }*/
                 
         /*****************ROUND ******************/ 
 
-        $roundEntity = [];
+        /*$roundEntity = [];
         for ($i=0; $i <= 6; $i++) {
             $newRound = new Round();
             $newRound->setStartAt(new DateTimeImmutable('now'));
         
             /* This is a random choice of a user from the array of users. */
-            $randomUser = $userEntity[mt_rand(0, count($userEntity) -1)];
+        /*    $randomUser = $userEntity[mt_rand(0, count($userEntity) -1)];
             $newRound->setUser($randomUser);
 
             $randomInstance = $instanceEntity[mt_rand(0, count($instanceEntity) -1)];
@@ -165,11 +189,11 @@ class AppFixtures extends Fixture
             $roundEntity[] = $newRound;
             $manager->persist($newRound);
 
-            }
+            }*/
 
         /*****************CHECKPOINT ******************/
 
-        $checkpointEntity = [];
+        /*$checkpointEntity = [];
         for ($i=1; $i <= 10; $i++) {
             $checkpoint = new Checkpoint();
             $checkpoint->setTitle($faker->words(2, true));
@@ -179,15 +203,15 @@ class AppFixtures extends Fixture
             $checkpoint->setCreatedAt(new DateTimeImmutable('now'));
 
             /* This is a random choice of a game from the array of games. */
-            $randomGame = $gameEntity[mt_rand(0, count($gameEntity) -1)];
+        /*    $randomGame = $gameEntity[mt_rand(0, count($gameEntity) -1)];
             $checkpoint->setGame($randomGame);
 
             $checkpointEntity[] = $checkpoint;
             $manager->persist($checkpoint);
-        }
+        }*/
 
         /*****************ENIGMA ******************/
-        $enigmaEntity = [];
+        /*$enigmaEntity = [];
         for ($i=1; $i <= 20; $i++) {
             $enigma = new Enigma();
             $enigma->setQuestion($questProvider->enigmes());
@@ -213,10 +237,10 @@ class AppFixtures extends Fixture
 
             $enigmaEntity[] = $enigma;
             $manager->persist($enigma);
-        }
+        }*/
 
         /*****************SCANQR ******************/
-        $scanqrEntity = [];
+        /*$scanqrEntity = [];
         for ($i = 0; $i < 5; $i++) {
             $scanQr = new ScanQR();
         
@@ -230,7 +254,7 @@ class AppFixtures extends Fixture
 
             $scanqrEntity[] =$scanQr;
             $manager->persist($scanQr);
-        }
+        }*/
 
         $manager->flush();
     }

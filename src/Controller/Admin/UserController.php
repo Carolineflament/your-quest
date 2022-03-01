@@ -97,7 +97,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/status/{id}",name="update_status", methods={"GET", "POST"}, requirements={"id"="\d+"})
+     * @Route("/status/{id}",name="update_status", methods={"POST"}, requirements={"id"="\d+"})
      *
      * @param User $user
      * @return void
