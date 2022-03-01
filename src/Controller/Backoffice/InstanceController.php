@@ -27,8 +27,10 @@ class InstanceController extends AbstractController
         // Get parent Game
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
 
+        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
+
         return $this->render('backoffice/instance/index.html.twig', [
-            'instances' => $instanceRepository->findBy(['game' => $game]),
+            'instances' => $instanceRepository->findBy(['game' => $game, 'isTrashed' => false]),
             'game' => $game,
         ]);
     }
@@ -39,12 +41,14 @@ class InstanceController extends AbstractController
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Get parent Game
+        $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
+
+        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
+
         $instance = new Instance();
         $form = $this->createForm(InstanceType::class, $instance);
         $form->handleRequest($request);
-
-        // Get parent Game
-        $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
 
         // Set Instance game property
         $instance->setGame($game);
@@ -72,6 +76,9 @@ class InstanceController extends AbstractController
         // Get parent Game
         $game = $instance->getGame();
 
+
+        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
+
         return $this->render('backoffice/instance/show.html.twig', [
             'instance' => $instance,
             'game' => $game,
@@ -85,6 +92,8 @@ class InstanceController extends AbstractController
     {
          // Get parent Game
          $game = $instance->getGame();
+
+         // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
 
         $form = $this->createForm(InstanceType::class, $instance);
         $form->handleRequest($request);
@@ -103,17 +112,20 @@ class InstanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_instance_delete", methods={"POST"})
+     * @Route("/{id}", name="app_backoffice_instance_trash", methods={"POST"})
      */
     public function delete(Request $request, Instance $instance, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$instance->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($instance);
+            $instance->setIsTrashed(true);
             $entityManager->flush();
         }
 
         // Get parent Game
         $game = $instance->getGame();
+
+
+        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
 
         return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
     }
