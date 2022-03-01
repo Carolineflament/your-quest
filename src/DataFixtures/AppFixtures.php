@@ -86,8 +86,8 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
         
-        /*$userEntity = [];
-        for ($i = 1; $i<= 10; $i++) {
+        $userEntity = [];
+        for ($i = 1; $i<= 50; $i++) {
             $user = new User();
             $user->setEmail($faker->email());
             $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
@@ -104,7 +104,7 @@ class AppFixtures extends Fixture
 
             $userEntity[]= $user;
             $manager->persist($user);
-        }*/
+        }
 
         /*****************GAME ******************/
 
