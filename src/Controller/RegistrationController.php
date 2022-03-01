@@ -42,8 +42,7 @@ class RegistrationController extends AbstractController
                 $role = $roleRepos->findOneBy(["slug" => "ROLE_ORGANISATEUR"]);
                 $route_redirect = "";
 
-                //TODO change route to game list in backoffice
-                $route_redirect = "front_main";
+                $route_redirect = "app_backoffice_game_index";
             }
             else
             {

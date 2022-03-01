@@ -64,10 +64,18 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
         
-        // For example:
-        //TODO Mettre la bonne route vers le back si c'est un organisateur ou le front si c'est un user
-        
-        return new RedirectResponse($this->urlGenerator->generate('front_main'));
+        if ($token->getUser()->getRole()->getSlug() === "ROLE_ADMIN")
+        {
+            return new RedirectResponse($this->urlGenerator->generate('app_admin_user_index'));
+        }
+        elseif($token->getUser()->getRole()->getSlug() === "ROLE_ORGANISATEUR")
+        {
+            return new RedirectResponse($this->urlGenerator->generate('app_backoffice_game_index'));
+        }
+        else
+        {
+            return new RedirectResponse($this->urlGenerator->generate('front_main'));
+        }
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
