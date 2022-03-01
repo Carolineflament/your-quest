@@ -13,25 +13,23 @@
 
     <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
         <thead class="table-dark ">
-            <tr>      
-                <th>#</th>         
+            <tr>             
                 <th>Nom du checkpoint</th>
                 <th>Ordre du checkpoint</th>
-                <th>Status</th>
                 <th>Crée le</th>
                 <th>Mise à jour le</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for checkpoint in checkpoints %}
             <tr scope="row">
-                <td>{{ checkpoint.id }}</td>
                 <td>{{ checkpoint.title }}</td>
                 <td>{{ checkpoint.OrderCheckpoint  }}</td>
-                <td>{{ checkpoint.isTrashed ? 'Actif' : 'Inactif' }}</td>
                 <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ checkpoint.isTrashed ? 'Actif' : 'Inactif' }}</td>
                 <td>
                     <div class="d-grid gap-2 justify-content-md-center">
                         <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}"class="btn btn-primary">Modifier</a>

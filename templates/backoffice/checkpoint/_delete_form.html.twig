@@ -1,5 +1,5 @@
 <form method="post" action="{{ path('app_backoffice_checkpoint_trash', {'id': checkpoint.id}) }}" {% if checkpoint.isTrashed is same as true %} onsubmit="return confirm('Êtes-vous sûr de vouloir désactiver le checkpoint {{checkpoint.title}} ?\nSes / checkpoints / enigmes seront mis à la poubelle !');"{% endif %}>
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ checkpoint.id) }}">
-        <button class="btn {% if checkpoint.isTrashed is same as true %}btn-danger{% else %}btn-success{% endif %}">{% if checkpoint.isTrashed is same as false %} Activer {% else %} Désactiver {% endif %}</button>
+        <button class="btn btn-danger">Désactiver</button>
 
 </form>

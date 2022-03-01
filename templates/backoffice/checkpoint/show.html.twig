@@ -3,46 +3,45 @@
 {% block title %}Checkpoint{% endblock %}
 
 {% block body %}
-    <h1>Checkpoint</h1>
+    <div class="container-fluid mb-3">
 
-    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <h1>Checkpoint {{ checkpoint.title }} du jeu {{ game.title }}</h1>
 
-     <a href="{{ path('app_backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">back to list</a>
-    </div> 
+        <div class="d-grid gap-2 my-5 d-md-flex justify-content-md-start">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ checkpoint.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ checkpoint.title }}</td>
-            </tr>
-            <tr>
-                <th>SuccessMessage</th>
-                <td>{{ checkpoint.successMessage }}</td>
-            </tr>
-            <tr>
-                <th>OrderCheckpoint</th>
-                <td>{{ checkpoint.orderCheckpoint }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+            <a href="{{ path('app_backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+        </div> 
 
-        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-            <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-success">Modifier</a>
+        <table class="table">
+            <tbody>
+
+                <tr>
+                    <th>Nom du checkpoint</th>
+                    <td>{{ checkpoint.title }}</td>
+                </tr>
+                <tr>
+                    <th>Message de localisation du prochain checkpoint</th>
+                    <td>{{ checkpoint.successMessage }}</td>
+                </tr>
+                <tr>
+                    <th>Ordre du checkpoint</th>
+                    <td>{{ checkpoint.orderCheckpoint }}</td>
+                </tr>
+                <tr>
+                    <th>Créé le</th>
+                    <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Modifié le</th>
+                    <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+            <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary">Modifier</a>
           
 
         {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
-        </div> 
+    </div>
+ 
 {% endblock %}

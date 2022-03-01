@@ -27,7 +27,7 @@ class CheckpointController extends AbstractController
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
 
         return $this->render('backoffice/checkpoint/index.html.twig', [
-            'checkpoints' => $checkpointRepository->findBy(['game' => $game]),
+            'checkpoints' => $checkpointRepository->findBy(['game' => $game,'isTrashed' => true]),
             'game' =>$game,
         ]);
     }
@@ -102,7 +102,7 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/{id}", name="app_backoffice_checkpoint_trash", methods={"POST"})
      */
-    public function trash(Game $game, Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
+    public function trash(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
         $game = $checkpoint->getGame();
 
@@ -118,15 +118,8 @@ class CheckpointController extends AbstractController
                     'notice-success',
                     'Le checkpoint '.$checkpoint->getTitle().' a été supprimé ! Le checkpoint et ses énigmes ont été mis à la poubelle !'
                 );
-            } else {
-                $checkpoint->setIsTrashed(true);
-                $this->addFlash(
-                    'notice-success',
-                    'Le checkpoint '.$checkpoint->getTitle().' a été activé !'
-                );
             }
             $entityManager->flush();
-            dd('blabla');
             return $this->redirectToRoute('app_backoffice_checkpoint_index', [
             'gameSlug' => $game->getSlug()
         ], Response::HTTP_SEE_OTHER);
