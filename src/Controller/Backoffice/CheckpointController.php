@@ -7,6 +7,7 @@ use App\Entity\Game;
 use App\Form\CheckpointType;
 use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
+use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,7 +66,6 @@ class CheckpointController extends AbstractController
      */
     public function show(Checkpoint $checkpoint): Response
     {
-    
         $game = $checkpoint->getGame();
 
         return $this->render('backoffice/checkpoint/show.html.twig', [
@@ -80,7 +80,6 @@ class CheckpointController extends AbstractController
      */
     public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager): Response
     {
-
         $game = $checkpoint->getGame();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
@@ -101,22 +100,35 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_checkpoint_delete", methods={"POST"})
+     * @Route("/{id}", name="app_backoffice_checkpoint_trash", methods={"POST"})
      */
-    public function delete(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager): Response
+    public function trash(Game $slugGame, Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
+        $slugGame = $checkpoint->getGame();
 
-        $game = $checkpoint->getGame();
-
-        $checkpoint->setGame($game);
+        $checkpoint->setGame($slugGame);
 
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($checkpoint);
-            $entityManager->flush();
-        }
+            if ($checkpoint->getIsTrashed()) {
 
-        return $this->redirectToRoute('app_backoffice_checkpoint_index', [
-            'gameSlug' => $game->getSlug()
+                    $cascadeTrashed->trashCheckpoint($checkpoint);
+                }
+                $checkpoint->setIsTrashed(false);
+                $this->addFlash(
+                    'notice-success',
+                    'Le checkpoint '.$checkpoint->getTitle().' a été supprimé ! Le checkpoint et ses énigmes ont été mis à la poubelle !'
+                );
+            } else {
+                $checkpoint->setIsTrashed(true);
+                $this->addFlash(
+                    'notice-success',
+                    'Le checkpoint '.$checkpoint->getTitle().' a été activé !'
+                );
+            }
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_backoffice_checkpoint_index', [
+            'gameSlug' => $slugGame->getSlug()
         ], Response::HTTP_SEE_OTHER);
+        }
     }
-}
