@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ instance.title }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid mb-3">
+    <h1>Instance {{ instance.title }} du jeu {{ game.title }}</h1>
+</div>
+{% endblock %}
