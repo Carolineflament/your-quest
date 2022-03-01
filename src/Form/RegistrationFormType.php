@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -23,15 +24,25 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
+        $current_user = $this->security->getUser();
+        
+        if ($current_user === null) {
+            $builder
             ->add('email', EmailType::class, [
                 'required' => true,
                 'label' => 'E-mail : ',
                 'attr' => ['placeholder' => 'Email']
-            ])
-            ->add('password', PasswordType::class, [
+            ]);
+        }
+            $builder->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
@@ -63,13 +74,14 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Votre prénom : ',
                 'attr' => ['placeholder' => 'Prénom']
-            ])
-            ->add('address', TextareaType::class, [
+            ]);
+        if ($current_user !== null && $this->security->isGranted('ROLE_ORGANISATEUR')) {
+            $builder->add('address', TextareaType::class, [
                 'required' => false,
                 'label' => 'Votre adresse :',
                 'attr' => ['placeholder' => 'Adresse']
             ])
-            ->add('postal_code', NumberType::class, [
+            ->add('postalCode', NumberType::class, [
                 'required' => false,
                 'label' => 'Code postal :',
                 'html5' => true,
@@ -79,8 +91,11 @@ class RegistrationFormType extends AbstractType
                 'required' => false,
                 'label' => 'Votre ville :',
                 'attr' => ['placeholder' => 'Ville']
-            ])
-            ->add('beOrganisateur', CheckboxType::class, [
+            ]);
+        }
+        
+        if ($current_user === null) {
+            $builder->add('beOrganisateur', CheckboxType::class, [
                 'required' => false,
                 'mapped' => false,
                 'label' => 'Vous êtes organisateur.',
@@ -93,8 +108,8 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Vous devez accepter les conditions d\'utilisation.',
                     ]),
                 ],
-            ])
-        ;
+            ]);
+        }
 
         $builder->addEventSubscriber(new FormUserSubscriber());
     }

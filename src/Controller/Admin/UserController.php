@@ -97,35 +97,40 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/status/{id}",name="update_status", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/status/{id}",name="update_status", methods={"GET", "POST"}, requirements={"id"="\d+"})
      *
      * @param User $user
      * @return void
      */
-    public function update_status(User $user, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
+    public function update_status(Request $request, User $user, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
     {
-        if($user->getStatus())
-        {
-            foreach($user->getGames() AS $game)
-            {
-                $cascadeTrashed->trashGame($game);
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            if ($user->getStatus()) {
+                foreach ($user->getGames() as $game) {
+                    $cascadeTrashed->trashGame($game);
+                }
+                $user->setStatus(false);
+                $this->addFlash(
+                    'notice-success',
+                    'L\'utilisateur '.$user->getEmail().' a été désactivé ! Tous ses jeux, checkpoints, questions et instances ont été mis à la poubelle !'
+                );
+            } else {
+                $user->setStatus(true);
+                $this->addFlash(
+                    'notice-success',
+                    'L\'utilisateur '.$user->getEmail().' a été activé !'
+                );
             }
-            $user->setStatus(false);
-            $this->addFlash(
-                'notice-success',
-                'L\'utilisateur '.$user->getEmail().' a été désactivé ! Tous ses jeux, checkpoints, questions et instances ont été mis à la poubelle !'
-            );
+
+            $entityManager->flush();
         }
         else
         {
-            $user->setStatus(true);
             $this->addFlash(
-                'notice-success',
-                'L\'utilisateur '.$user->getEmail().' a été activé !'
+                'notice-danger',
+                'Impossible de désactiver l\'utilisateur '.$user->getEmail().', token invalide !'
             );
         }
-
-        $entityManager->flush();
         return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

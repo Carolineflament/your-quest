@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\UserType;
 use App\Repository\RoleRepository;
 use App\Security\LoginFormAuthenticator;
 use DateTimeImmutable;
@@ -59,7 +60,7 @@ class RegistrationController extends AbstractController
                 'Votre compte a été ajouté !'
             );
 
-            return $userAuthenticator->authenticateUser(
+            $userAuthenticator->authenticateUser(
                 $user, 
                 $authenticator, 
                 $request); 
