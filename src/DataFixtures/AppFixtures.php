@@ -86,8 +86,8 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
         
-        /*$userEntity = [];
-        for ($i = 1; $i<= 10; $i++) {
+        $userEntity = [];
+        for ($i = 1; $i<= 50; $i++) {
             $user = new User();
             $user->setEmail($faker->email());
             $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
@@ -104,11 +104,12 @@ class AppFixtures extends Fixture
 
             $userEntity[]= $user;
             $manager->persist($user);
-        }*/
+        }
 
         /*****************GAME ******************/
 
         $gameEntity = [];
+        
         for ($i=0; $i < 10; $i++) {
             $game = new Game();
             $game->setTitle($faker->words(2, true));
@@ -129,6 +130,49 @@ class AppFixtures extends Fixture
             $gameEntity[] = $game;
             $manager->persist($game);
 
+            $checkpointEntity = [];
+            for ($i=1; $i <= random_int(1, 8); $i++) {
+                $checkpoint = new Checkpoint();
+                $checkpoint->setTitle($faker->words(2, true));
+                $checkpoint->setSuccessMessage($faker->text(5));
+                $checkpoint->setOrderCheckpoint($i);
+                $checkpoint->setIsTrashed(rand(0, 1));
+                $int= mt_rand(0, 20000);
+                $checkpoint->setCreatedAt((new DateTimeImmutable)->setTimestamp($int_game+$int));
+    
+                /* This is a random choice of a game from the array of games. */
+                $checkpoint->setGame($game);
+    
+                $checkpointEntity[] = $checkpoint;
+                $manager->persist($checkpoint);
+
+                for ($i=1; $i <= random_int(1, 8); $i++) {
+                    $enigma = new Enigma();
+                    $enigma->setQuestion($questProvider->enigmes());
+                    $enigma->setOrderEnigma($i);
+                    $enigma->setIsTrashed(rand(0, 1));
+                    $int= mt_rand(20000, 40000);
+                    $enigma->setCreatedAt((new DateTimeImmutable)->setTimestamp($int_game+$int));
+                    
+                    // ajout de answer dans enigma
+                    $nbAnswer = 3;
+                    for ($a=1; $a <= $nbAnswer; $a++) {
+                        $answer = new Answer();
+                        $answer->setAnswer($faker->words(1, true));
+                        $answer->setStatus(rand(0, 1));
+                        $int= mt_rand(40000, 50000);
+                        $answer->setCreatedAt((new DateTimeImmutable)->setTimestamp($int_game+$int));
+        
+                        $manager->persist($answer);
+                        $enigma->addAnswer($answer);
+                    }
+        
+                    $enigma->setCheckpoint($checkpoint);
+        
+                    $enigmaEntity[] = $enigma;
+                    $manager->persist($enigma);
+                }
+            }
 
             /*****************INSTANCE ******************/
             for ($j=0; $j < random_int(0, 5); $j++) {
@@ -136,19 +180,53 @@ class AppFixtures extends Fixture
                 $newInstance->setTitle($faker->words(2, true));
                 $newInstance->setMessage($faker->text(100));
 
-                $int= mt_rand(500000,500000000);
-                $time_begin_instance = (new DateTimeImmutable)->setTimestamp($int_game+$int);
+                $int_instance= mt_rand(50000,5000000);
+                $timestamp_instance_begin = $int_game+$int_instance;
+                $time_begin_instance = (new DateTimeImmutable)->setTimestamp($timestamp_instance_begin);
                 $newInstance->setStartAt($time_begin_instance);
-                $time_end_instance = (new DateTimeImmutable)->setTimestamp($int_game+$int*2);
+                $timestamp_instance_end = $int_game+$int_instance*2;
+                $time_end_instance = (new DateTimeImmutable)->setTimestamp($timestamp_instance_end);
                 $newInstance->setEndAt($time_end_instance);
                 $newInstance->setIsTrashed(rand(0, 1));
     
-                $randomGame = $gameEntity[mt_rand(0, count($gameEntity) - 1)];
-                $newInstance->setGame($randomGame);
+                $newInstance->setGame($game);
     
     
                 $instanceEntity[] = $newInstance;
                 $manager->persist($newInstance);
+
+                for ($k=0; $k <= random_int(0, 3); $k++) {
+                    $newRound = new Round();
+                    $int_round= mt_rand($timestamp_instance_begin,$timestamp_instance_end);
+                    $timestamp_round_begin= $int_round;
+                    $newRound->setStartAt((new DateTimeImmutable)->setTimestamp($timestamp_round_begin));
+                    $timestamp_round_end = mt_rand($timestamp_round_begin,$timestamp_instance_end);;
+                    $newRound->setEndAt((new DateTimeImmutable)->setTimestamp($timestamp_round_end));
+                
+                    /* This is a random choice of a user from the array of users. */
+                    $randomUser = $userEntity[mt_rand(0, count($userEntity) -1)];
+                    $newRound->setUser($randomUser);
+        
+                    $newRound->setInstance($newInstance);
+                
+                    $roundEntity[] = $newRound;
+                    $manager->persist($newRound);
+
+                    for ($l = 0; $l < 5; $l++) {
+                        $scanQr = new ScanQR();
+                        $int_scan= mt_rand($timestamp_round_begin,$timestamp_round_end);
+                        $scanQr->setScanAt((new DateTimeImmutable)->setTimestamp($int_scan));
+                        $randomCheckpoint = $checkpointEntity[mt_rand(0, count($checkpointEntity) - 1)];
+                        $scanQr->setCheckpoint($randomCheckpoint);
+            
+                        $scanQr->setRound($newRound);
+            
+            
+                        $scanqrEntity[] =$scanQr;
+                        $manager->persist($scanQr);
+                    }
+        
+                }
             }
         }
         
