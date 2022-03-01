@@ -3,6 +3,7 @@
 namespace App\Controller\Backoffice;
 
 use App\Entity\Game;
+use App\Entity\User;
 use App\Form\GameType;
 use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
@@ -58,10 +59,11 @@ class GameController extends AbstractController
     /**
      * @Route("/{slug}", name="app_backoffice_game_show", methods={"GET"})
      */
-    public function show(Game $game): Response
+    public function show(Game $game, User $user): Response
     {
         return $this->render('backoffice/game/show.html.twig', [
             'game' => $game,
+            'user' => $user,
         ]);
     }
 
