@@ -68,7 +68,6 @@ class InstanceController extends AbstractController
     }
 
     /**
-     * 
      * @Route("/{id}", name="app_backoffice_instance_show", methods={"GET"})
      */
     public function show(Instance $instance): Response
