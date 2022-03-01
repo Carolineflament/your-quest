@@ -3,10 +3,13 @@
 {% block title %}Modifier le jeu{% endblock %}
 
 {% block body %}
-    <h1>Modifier le jeu</h1>
+    <div class="d-flex justify-content-between align-items-center">
+         <h1>Modifier le jeu</h1>
+        <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary mb-3">Créer un nouveau jeu</a>
+    </div>
 
     {{ include('backoffice/game/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_backoffice_game_index') }}" class="btn btn-primary">Mes jeux</a>
+    
 
 {% endblock %}
