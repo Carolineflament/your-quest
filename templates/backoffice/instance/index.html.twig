@@ -3,35 +3,42 @@
 {% block title %}Instances du jeu {{ game.title }} {% endblock %}
 
 {% block body %}
-    <h1>Liste des instances du jeu {{ game.title }}</h1>
+    <div class="container-fluid mb-3">
+        <h1>Liste des instances du jeu {{ game.title }}</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nom de l'instance</th>
-                <th>Date de début</th>
-                <th>Date de fin</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for instance in instances %}
-            <tr>             
-                <td>{{ instance.title }}</td>                
-                <td>{{ instance.startAt ? instance.startAt|date('d-m-Y H:i:s') : '' }}</td>
-                <td>{{ instance.endAt ? instance.endAt|date('d-m-Y H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_backoffice_instance_show', {'id': instance.id}) }}">détails</a>
-                    <a href="{{ path('app_backoffice_instance_edit', {'id': instance.id}) }}">modifier</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">Ce jeu n'a pas encore d'instances</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}" class="btn btn-success">Créer une nouvelle instance</a>
+        </div>
 
-    <a href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}">Créer une nouvelle instance</a>
+        <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nom de l'instance</th>
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for instance in instances %}
+                <tr>             
+                    <td><a href="{{ path('app_backoffice_instance_show', {'id': instance.id}) }}">{{ instance.title }}</a></td>                
+                    <td>{{ instance.startAt ? instance.startAt|date('d-m-Y H:i:s') : '' }}</td>
+                    <td>{{ instance.endAt ? instance.endAt|date('d-m-Y H:i:s') : '' }}</td>
+                    <td>
+                        <div class="d-grid gap-2 justify-content-md-center">
+                            <a href="{{ path('app_backoffice_instance_edit', {'id': instance.id}) }}" class="btn btn-primary">modifier</a>
+                            {{ include('backoffice/instance/_delete_form.html.twig') }}
+                        </div>   
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">Ce jeu n'a pas encore d'instances</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
 {% endblock %}

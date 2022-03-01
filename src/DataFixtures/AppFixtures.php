@@ -20,10 +20,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+
     public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->passwordHasher = $passwordHasher;
-     }
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -40,7 +41,7 @@ class AppFixtures extends Fixture
         foreach ($roleName as $roles) {
             $role =new Role();
             $role->setName($roles);
-            $role->setSlug($faker->words(2, true));
+            $role->setSlug('ROLE_'.strtoupper($roles));
             $role->setStatus(rand(0, 1));
             $role->setCreatedAt(new DateTimeImmutable('now'));
 
@@ -117,6 +118,7 @@ class AppFixtures extends Fixture
             $game->setImage('https://picsum.photos/id/'.mt_rand(1, 20).'/828/315');
             $game->setSummary($faker->text(30));
             $game->setStatus(rand(0, 1));
+            $game->setIsTrashed(rand(0, 1));
             $game->setCreatedAt(new DateTimeImmutable('now'));
 
             $randomUser = $userEntity[mt_rand(0, count($userEntity) - 1)];
@@ -136,6 +138,7 @@ class AppFixtures extends Fixture
             $newInstance->setMessage($faker->text(100));
             $newInstance->setStartAt(new DateTimeImmutable('now'));
             $newInstance->setEndAt(new DateTimeImmutable('now'));
+            $newInstance->setIsTrashed(rand(0, 1));
 
             $randomGame = $gameEntity[mt_rand(0, count($gameEntity) - 1)];
             $newInstance->setGame($randomGame);
@@ -172,6 +175,7 @@ class AppFixtures extends Fixture
             $checkpoint->setTitle($faker->words(2, true));
             $checkpoint->setSuccessMessage($faker->text(5));
             $checkpoint->setOrderCheckpoint($i);
+            $checkpoint->setIsTrashed(rand(0, 1));
             $checkpoint->setCreatedAt(new DateTimeImmutable('now'));
 
             /* This is a random choice of a game from the array of games. */
@@ -188,6 +192,7 @@ class AppFixtures extends Fixture
             $enigma = new Enigma();
             $enigma->setQuestion($questProvider->enigmes());
             $enigma->setOrderEnigma($i);
+            $enigma->setIsTrashed(rand(0, 1));
             $enigma->setCreatedAt(new DateTimeImmutable('now'));
             
             // ajout de answer dans enigma

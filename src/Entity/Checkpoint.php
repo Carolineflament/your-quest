@@ -84,6 +84,10 @@ class Checkpoint
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
      */
     private $isTrashed;
 
@@ -91,6 +95,7 @@ class Checkpoint
     {
         $this->scanQRs = new ArrayCollection();
         $this->enigmas = new ArrayCollection();
+        $this->isTrashed = false;
     }
 
     public function getId(): ?int

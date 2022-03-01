@@ -48,7 +48,9 @@ class CheckpointController extends AbstractController
             $entityManager->persist($checkpoint);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_checkpoint_index', [
+                'gameSlug' => $game->getSlug()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/checkpoint/new.html.twig', [
@@ -103,11 +105,18 @@ class CheckpointController extends AbstractController
      */
     public function delete(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager): Response
     {
+
+        $game = $checkpoint->getGame();
+
+        $checkpoint->setGame($game);
+
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
             $entityManager->remove($checkpoint);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_backoffice_checkpoint_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_backoffice_checkpoint_index', [
+            'gameSlug' => $game->getSlug()
+        ], Response::HTTP_SEE_OTHER);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\EventSubscriber\FormUserSubscriber;
 use DateTimeImmutable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -95,54 +96,7 @@ class RegistrationFormType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
-            // On récupère le form depuis l'event (pour travailler avec)
-            $form = $event->getForm();
-            // On récupère le user mappé sur le form depuis l'event
-            $user = $event->getData();
-
-            // On conditionne le champ "password"
-            // Si user existant, il a id non null
-            if ($user->getId() !== null) {
-                // Edit
-                $form->add('password', PasswordType::class, [
-                    // Pour le form d'édition, on n'associe pas le password à l'entité
-                    // @link https://symfony.com/doc/current/reference/forms/types/form.html#mapped
-                    'mapped' => false,
-                    'attr' => [
-                        'placeholder' => 'Laissez vide si inchangé'
-                    ]
-                ]);
-            } else {
-                // New
-                $form->add('password', PasswordType::class, [
-                    // En cas d'erreur du type
-                    // Expected argument of type "string", "null" given at property path "password".
-                    // (notamment à l'edit en cas de passage d'une valeur existante à vide)
-                    'empty_data' => '',
-                    'mapped' => false,
-                    'label' => 'Votre mot de passe : ',
-                    
-                    'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Mot de passe'],
-                    // On déplace les contraintes de l'entité vers le form d'ajout
-                    'constraints' => [
-                        new NotBlank([
-                            'message' => 'Veuillez renseigner un mot de passe',
-                        ]),
-                        new Length([
-                            'min' => 6,
-                            'minMessage' => 'Le mot de passe doit faire minimum {{ limit }} caractères',
-                            // max length allowed by Symfony for security reasons
-                            'max' => 4096,
-                        ]),
-                        /*new Regex(
-                            "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/",
-                            "Le mot de passe doit contenir au minimum 8 caractères, une majuscule, un chiffre et un caractère spécial"
-                        ),*/
-                    ],
-                ]);
-            }
-        });
+        $builder->addEventSubscriber(new FormUserSubscriber());
     }
 
     public function configureOptions(OptionsResolver $resolver): void

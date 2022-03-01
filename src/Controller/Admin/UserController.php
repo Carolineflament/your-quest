@@ -5,14 +5,18 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("/admin/user", name="app_admin_user_")
+ * @IsGranted("ROLE_ADMIN")
  */
 class UserController extends AbstractController
 {
@@ -29,13 +33,14 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -54,7 +59,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(User $user): Response
     {
@@ -64,14 +69,17 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('password')->getData() !== null) {
+                $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
+            }
             $entityManager->flush();
 
             $this->addFlash(
@@ -89,27 +97,35 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="delete", methods={"POST"})
+     * @Route("/status/{id}",name="update_status", methods={"GET"}, requirements={"id"="\d+"})
+     *
+     * @param User $user
+     * @return void
      */
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function update_status(User $user, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-
+        if($user->getStatus())
+        {
+            foreach($user->getGames() AS $game)
+            {
+                $cascadeTrashed->trashGame($game);
+            }
+            $user->setStatus(false);
             $this->addFlash(
                 'notice-success',
-                'L\'utilisateur '.$user->getEmail().' a été supprimé !'
+                'L\'utilisateur '.$user->getEmail().' a été désactivé ! Tous ses jeux, checkpoints, questions et instances ont été mis à la poubelle !'
             );
         }
         else
         {
+            $user->setStatus(true);
             $this->addFlash(
-                'notice-danger',
-                'Impossible de supprimer l\'utilisateur '.$user->getEmail().', token invalide !'
+                'notice-success',
+                'L\'utilisateur '.$user->getEmail().' a été activé !'
             );
         }
 
+        $entityManager->flush();
         return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

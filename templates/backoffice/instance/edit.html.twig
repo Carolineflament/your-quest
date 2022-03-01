@@ -3,11 +3,15 @@
 {% block title %}Modifier votre instance{% endblock %}
 
 {% block body %}
-    <h1>Modifier l'instance {{ instance.title }} du jeu {{ game.title }}</h1>
+    <div class="container-fluid mb-3">
 
-    {{ include('backoffice/instance/_form.html.twig', {'button_label': 'Update'}) }}
+        <h1>Modifier l'instance {{ instance.title }} du jeu {{ game.title }}</h1>
 
-    <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}">back to list</a>
+         <div class="d-grid gap-2 my-5 d-md-flex justify-content-md-start">
+            <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}"  class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+        </div>
 
-    {{ include('backoffice/instance/_delete_form.html.twig') }}
+        {{ include('backoffice/instance/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    </div>
 {% endblock %}
