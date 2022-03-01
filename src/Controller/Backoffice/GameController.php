@@ -5,6 +5,7 @@ namespace App\Controller\Backoffice;
 use App\Entity\Game;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,14 +104,11 @@ class GameController extends AbstractController
      * @param Game $game
      * @return void
      */
-    public function update_status(Game $game, EntityManagerInterface $entityManager, cascadeTrashed $cascadeTrashed)
+    public function update_status(Game $game, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
     {
         if($game->getStatus())
         {
-            foreach($game->getTitle() AS $game)
-            {
-                $cascadeTrashed->trashGame($game);
-            }
+            $cascadeTrashed->trashGame($game);
             $game->setStatus(false);
             $this->addFlash(
                 'notice-success',
