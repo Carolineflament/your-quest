@@ -21,7 +21,7 @@ class GameType extends AbstractType
                 'label' => 'Nom du jeu :',
                 'attr' => ['placeholder' => 'Dans la peau de Louis Pasteur']
             ])
-            ->add('address', TextareaType::class, [
+            ->add('address', TextType::class, [
                 'label' => 'Adresse du jeu :',
                 'attr' => ['placeholder' => '11 rue des camélias']
             ])
@@ -37,7 +37,7 @@ class GameType extends AbstractType
             ->add('image', FileType::class, [
                 'required' => false,
             ])
-            ->add('summary', TextType::class, [
+            ->add('summary', TextareaType::class, [
                 'required' => false,
                 'label' => 'Description du jeu :',
             ])
