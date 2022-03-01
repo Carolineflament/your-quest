@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_backoffice_instance_delete', {'id': instance.id}) }}" onsubmit="return confirm('Etes-vous bien sûr de vouloir supprimer cette instance ?');">
+<form method="post" action="{{ path('app_backoffice_instance_trash', {'id': instance.id}) }}" onsubmit="return confirm('Etes-vous bien sûr de vouloir supprimer cette instance ?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ instance.id) }}">
     <button class="btn btn-danger">Supprimer</button>
 </form>

@@ -19,6 +19,7 @@ class CheckpointType extends AbstractType
             ->add('orderCheckpoint')
             ->add('createdAt')
             ->add('updatedAt')
+            ->add('isTrashed')
             ->add('game', EntityType::class, [
                 'class' => Game::class,
                 'choice_label' => 'slug',
