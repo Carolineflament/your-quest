@@ -21,7 +21,6 @@ class GameController extends AbstractController
      */
     public function index(GameRepository $gameRepository, Request $request): Response
     {
-        $locale = $request->getLocale();
         $current_page = $request->query->get('page') ? $request->query->get('page') : 1;
         
         $games = $gameRepository->findBy(['isTrashed' => 0, 'status' => 1], ['createdAt' => 'ASC'], self::LIMIT_GAMES_PER_PAGE, ($current_page-1)*self::LIMIT_GAMES_PER_PAGE);
