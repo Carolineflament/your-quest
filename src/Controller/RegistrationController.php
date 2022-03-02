@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\UserType;
 use App\Repository\RoleRepository;
 use App\Security\LoginFormAuthenticator;
 use DateTimeImmutable;
@@ -42,8 +43,7 @@ class RegistrationController extends AbstractController
                 $role = $roleRepos->findOneBy(["slug" => "ROLE_ORGANISATEUR"]);
                 $route_redirect = "";
 
-                //TODO change route to game list in backoffice
-                $route_redirect = "front_main";
+                $route_redirect = "app_backoffice_game_index";
             }
             else
             {
@@ -60,7 +60,7 @@ class RegistrationController extends AbstractController
                 'Votre compte a été ajouté !'
             );
 
-            return $userAuthenticator->authenticateUser(
+            $userAuthenticator->authenticateUser(
                 $user, 
                 $authenticator, 
                 $request); 

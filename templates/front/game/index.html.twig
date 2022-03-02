@@ -3,14 +3,15 @@
 {% block body %}
 <div class="container-xl bg-light p-5 border-top">
 
-    <div class="row mb-2">
+    <h2 class="text-muted fw-bold mb-4">Les jeux</h2>
+        <div class="card-group vgr-cards">
 
-        <div class="col-12 col-lg-9">
-
-            <h2 class="text-muted fw-bold mb-4">Les jeux</h2>
+            
             {% for game in games %}
-                <div class="card" style="width: 18rem;">
-                    <img src="{{ asset('assets/images/QuestLogo.png') }}" class="card-img-top" alt="...">
+                <div class="card mb-3">
+                    <div class="card-img-body">
+                        <img class="card-img" src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="game.title">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ game.title }}</h5>
                         <p><small>{{ game.city }} ({{ game.postalCode }})</small></p>
@@ -37,7 +38,6 @@
             </ul>
         </nav>
 
-    </div>
-
+   
 </div>
 {% endblock %}

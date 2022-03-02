@@ -12,18 +12,25 @@ use App\Entity\Role;
 use App\Entity\Round;
 use App\Entity\ScanQR;
 use App\Entity\User;
+use App\Service\MySlugger;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AppFixtures extends Fixture
 {
+    private $connection;
+    private $passwordHasher;
+    private $slugger;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    public function __construct(HttpClientInterface $client, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger)
     {
         $this->passwordHasher = $passwordHasher;
+        $this->client = $client;
+        $this->slugger = $slugger;
     }
 
     public function load(ObjectManager $manager): void
@@ -82,11 +89,12 @@ class AppFixtures extends Fixture
             $user->setPostalCode($faker->randomNumber(5, true));
             $user->setCity($faker->country());
             $user->setStatus(true);
+            $userEntity[]= $user;
             $manager->persist($user);
         }
         
         $userEntity = [];
-        for ($i = 1; $i<= 50; $i++) {
+        for ($i = 1; $i<= 10; $i++) {
             $user = new User();
             $user->setEmail($faker->email());
             $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
@@ -108,29 +116,135 @@ class AppFixtures extends Fixture
         /*****************GAME ******************/
 
         $gameEntity = [];
+        
         for ($i=0; $i < 10; $i++) {
             $game = new Game();
-            $game->setTitle($faker->words(2, true));
-            $game->setSlug($faker->words(2, true));
+            $title = $faker->words(2, true);
+            $game->setTitle($title);
+            $game->setSlug($this->slugger->slugify($title));
             $game->setAddress($faker->address());
             $game->setPostalCode($faker->randomNumber(5, true));
             $game->setCity($faker->country());
-            $game->setImage('https://picsum.photos/id/'.mt_rand(1, 20).'/828/315');
+            $image = "https://picsum.photos/id/".mt_rand(1, 20)."/828/315";
+            $response = $this->client->request('GET', $image);
+            file_put_contents('./public/assets/images/games/'.$this->slugger->slugify($title).'.jpg', $response->getContent());
+            $game->setImage($this->slugger->slugify($title).'.jpg');
             $game->setSummary($faker->text(30));
             $game->setStatus(rand(0, 1));
             $game->setIsTrashed(rand(0, 1));
-            $game->setCreatedAt(new DateTimeImmutable('now'));
 
+            $int_game= mt_rand(1262055681,1646147483);
+            $time = (new DateTimeImmutable)->setTimestamp($int_game);
+            $game->setCreatedAt($time);
             $randomUser = $userEntity[mt_rand(0, count($userEntity) - 1)];
             $game->setUser($randomUser);
 
             $gameEntity[] = $game;
             $manager->persist($game);
-        }
 
+            $checkpointEntity = [];
+            for ($i=1; $i <= random_int(1, 8); $i++) {
+                $checkpoint = new Checkpoint();
+                $checkpoint->setTitle($faker->words(2, true));
+                $checkpoint->setSuccessMessage($faker->text(5));
+                $checkpoint->setOrderCheckpoint($i);
+                $checkpoint->setIsTrashed(rand(0, 1));
+                $int= mt_rand(0, 20000);
+                $checkpoint->setCreatedAt((new DateTimeImmutable)->setTimestamp($int_game+$int));
+    
+                /* This is a random choice of a game from the array of games. */
+                $checkpoint->setGame($game);
+    
+                $checkpointEntity[] = $checkpoint;
+                $manager->persist($checkpoint);
+
+                for ($i=1; $i <= random_int(1, 8); $i++) {
+                    $enigma = new Enigma();
+                    $enigma->setQuestion($questProvider->enigmes());
+                    $enigma->setOrderEnigma($i);
+                    $enigma->setIsTrashed(rand(0, 1));
+                    $int= mt_rand(20000, 40000);
+                    $enigma->setCreatedAt((new DateTimeImmutable)->setTimestamp($int_game+$int));
+                    
+                    // ajout de answer dans enigma
+                    $nbAnswer = 3;
+                    for ($a=1; $a <= $nbAnswer; $a++) {
+                        $answer = new Answer();
+                        $answer->setAnswer($faker->words(1, true));
+                        $answer->setStatus(rand(0, 1));
+                        $int= mt_rand(40000, 50000);
+                        $answer->setCreatedAt((new DateTimeImmutable)->setTimestamp($int_game+$int));
+        
+                        $manager->persist($answer);
+                        $enigma->addAnswer($answer);
+                    }
+        
+                    $enigma->setCheckpoint($checkpoint);
+        
+                    $enigmaEntity[] = $enigma;
+                    $manager->persist($enigma);
+                }
+            }
+
+            /*****************INSTANCE ******************/
+            for ($j=0; $j < random_int(0, 5); $j++) {
+                $newInstance = new Instance();
+                $newInstance->setTitle($faker->words(2, true));
+                $newInstance->setMessage($faker->text(100));
+
+                $int_instance= mt_rand(50000,5000000);
+                $timestamp_instance_begin = $int_game+$int_instance;
+                $time_begin_instance = (new DateTimeImmutable)->setTimestamp($timestamp_instance_begin);
+                $newInstance->setStartAt($time_begin_instance);
+                $timestamp_instance_end = $int_game+$int_instance*2;
+                $time_end_instance = (new DateTimeImmutable)->setTimestamp($timestamp_instance_end);
+                $newInstance->setEndAt($time_end_instance);
+                $newInstance->setIsTrashed(rand(0, 1));
+    
+                $newInstance->setGame($game);
+    
+    
+                $instanceEntity[] = $newInstance;
+                $manager->persist($newInstance);
+
+                for ($k=0; $k <= random_int(0, 3); $k++) {
+                    $newRound = new Round();
+                    $int_round= mt_rand($timestamp_instance_begin,$timestamp_instance_end);
+                    $timestamp_round_begin= $int_round;
+                    $newRound->setStartAt((new DateTimeImmutable)->setTimestamp($timestamp_round_begin));
+                    $timestamp_round_end = mt_rand($timestamp_round_begin,$timestamp_instance_end);;
+                    $newRound->setEndAt((new DateTimeImmutable)->setTimestamp($timestamp_round_end));
+                
+                    /* This is a random choice of a user from the array of users. */
+                    $randomUser = $userEntity[mt_rand(0, count($userEntity) -1)];
+                    $newRound->setUser($randomUser);
+        
+                    $newRound->setInstance($newInstance);
+                
+                    $roundEntity[] = $newRound;
+                    $manager->persist($newRound);
+
+                    for ($l = 0; $l < 5; $l++) {
+                        $scanQr = new ScanQR();
+                        $int_scan= mt_rand($timestamp_round_begin,$timestamp_round_end);
+                        $scanQr->setScanAt((new DateTimeImmutable)->setTimestamp($int_scan));
+                        $randomCheckpoint = $checkpointEntity[mt_rand(0, count($checkpointEntity) - 1)];
+                        $scanQr->setCheckpoint($randomCheckpoint);
+            
+                        $scanQr->setRound($newRound);
+            
+            
+                        $scanqrEntity[] =$scanQr;
+                        $manager->persist($scanQr);
+                    }
+        
+                }
+            }
+        }
+        
         /*****************INSTANCE ******************/
 
-        $instanceEntity = [];
+        /*$instanceEntity = [];
         for ($i=0; $i < 10; $i++) {
             $newInstance = new Instance();
             $newInstance->setTitle($faker->words(2, true));
@@ -146,17 +260,17 @@ class AppFixtures extends Fixture
 
             $instanceEntity[] = $newInstance;
             $manager->persist($newInstance);
-        }
+        }*/
                 
         /*****************ROUND ******************/ 
 
-        $roundEntity = [];
+        /*$roundEntity = [];
         for ($i=0; $i <= 6; $i++) {
             $newRound = new Round();
             $newRound->setStartAt(new DateTimeImmutable('now'));
         
             /* This is a random choice of a user from the array of users. */
-            $randomUser = $userEntity[mt_rand(0, count($userEntity) -1)];
+        /*    $randomUser = $userEntity[mt_rand(0, count($userEntity) -1)];
             $newRound->setUser($randomUser);
 
             $randomInstance = $instanceEntity[mt_rand(0, count($instanceEntity) -1)];
@@ -165,11 +279,11 @@ class AppFixtures extends Fixture
             $roundEntity[] = $newRound;
             $manager->persist($newRound);
 
-            }
+            }*/
 
         /*****************CHECKPOINT ******************/
 
-        $checkpointEntity = [];
+        /*$checkpointEntity = [];
         for ($i=1; $i <= 10; $i++) {
             $checkpoint = new Checkpoint();
             $checkpoint->setTitle($faker->words(2, true));
@@ -179,15 +293,15 @@ class AppFixtures extends Fixture
             $checkpoint->setCreatedAt(new DateTimeImmutable('now'));
 
             /* This is a random choice of a game from the array of games. */
-            $randomGame = $gameEntity[mt_rand(0, count($gameEntity) -1)];
+        /*    $randomGame = $gameEntity[mt_rand(0, count($gameEntity) -1)];
             $checkpoint->setGame($randomGame);
 
             $checkpointEntity[] = $checkpoint;
             $manager->persist($checkpoint);
-        }
+        }*/
 
         /*****************ENIGMA ******************/
-        $enigmaEntity = [];
+        /*$enigmaEntity = [];
         for ($i=1; $i <= 20; $i++) {
             $enigma = new Enigma();
             $enigma->setQuestion($questProvider->enigmes());
@@ -213,10 +327,10 @@ class AppFixtures extends Fixture
 
             $enigmaEntity[] = $enigma;
             $manager->persist($enigma);
-        }
+        }*/
 
         /*****************SCANQR ******************/
-        $scanqrEntity = [];
+        /*$scanqrEntity = [];
         for ($i = 0; $i < 5; $i++) {
             $scanQr = new ScanQR();
         
@@ -230,7 +344,7 @@ class AppFixtures extends Fixture
 
             $scanqrEntity[] =$scanQr;
             $manager->persist($scanQr);
-        }
+        }*/
 
         $manager->flush();
     }

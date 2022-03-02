@@ -1,15 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Checkpoint{% endblock %}
+{% block title %}Nouveau Checkpoint{% endblock %}
 
 {% block body %}
-    <h1>Create new Checkpoint</h1>
+<div class="container-fluid mb-3">
+    <h1>Créer un nouveau checkpoint pour le jeu {{ game.title }}</h1>
 
-    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+    <div class="d-grid gap-2 my-5 d-md-flex justify-content-md-start">
 
-        <a href="{{ path('app_backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">back to list</a>
+        <a href="{{ path('app_backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retourner à liste</a>
     </div> 
 
     {{ include('backoffice/checkpoint/_form.html.twig') }}
+</div>    
 
 {% endblock %}
