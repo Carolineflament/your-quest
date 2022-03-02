@@ -45,3 +45,25 @@ services:
                 entity: App\Entity\Instance
                 # Method (optional)
                 method: updateSlug
+
+    # paramétrage de GameListener
+    App\EventListener\GameListener:
+        tags:
+            -
+                # Event type
+                name: doctrine.orm.entity_listener
+                # Event
+                event: preUpdate
+                # Entity
+                entity: App\Entity\Game
+                # Method (optional)
+                method: updateSlug
+            -
+                # Event type
+                name: doctrine.orm.entity_listener
+                # Event
+                event: prePersist
+                # Entity
+                entity: App\Entity\Game
+                # Method (optional)
+                method: updateSlug
