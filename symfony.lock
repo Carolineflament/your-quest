@@ -1,4 +1,10 @@
 {
+    "bacon/bacon-qr-code": {
+        "version": "2.0.6"
+    },
+    "dasprid/enum": {
+        "version": "1.0.3"
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -94,6 +100,9 @@
     },
     "egulias/email-validator": {
         "version": "3.1.2"
+    },
+    "endroid/qr-code": {
+        "version": "4.4.7"
     },
     "fakerphp/faker": {
         "version": "v1.19.0"

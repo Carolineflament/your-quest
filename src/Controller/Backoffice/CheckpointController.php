@@ -8,6 +8,7 @@ use App\Form\CheckpointType;
 use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
+use App\Service\QrcodeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,8 +36,10 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/jeu/{gameSlug}/nouveau", name="app_backoffice_checkpoint_new", methods={"GET", "POST"})
      */
-    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager,QrcodeService $qrcodeService): Response
     {
+
+
         $checkpoint = new Checkpoint();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
@@ -46,6 +49,7 @@ class CheckpointController extends AbstractController
         $checkpoint->setGame($game);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $qrcodeService->qrcode($checkpoint);
             $entityManager->persist($checkpoint);
             $entityManager->flush();
 
@@ -57,16 +61,18 @@ class CheckpointController extends AbstractController
         return $this->renderForm('backoffice/checkpoint/new.html.twig', [
             'checkpoint' => $checkpoint,
             'form' => $form,
-            'game' => $game,
+            'game' => $game
         ]);
     }
 
     /**
      * @Route("/{id}", name="app_backoffice_checkpoint_show", methods={"GET"})
      */
-    public function show(Checkpoint $checkpoint): Response
+    public function show(Checkpoint $checkpoint, QrcodeService $qrcodeService): Response
     {
         $game = $checkpoint->getGame();
+
+        $qrcodeService->qrcode($checkpoint);
 
         return $this->render('backoffice/checkpoint/show.html.twig', [
             'checkpoint' => $checkpoint,

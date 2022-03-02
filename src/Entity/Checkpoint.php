@@ -95,6 +95,7 @@ class Checkpoint
     {
         $this->scanQRs = new ArrayCollection();
         $this->enigmas = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
         $this->isTrashed = false;
     }
 
