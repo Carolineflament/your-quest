@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Checkpoints du jeu {{ game.title }}{% endblock %}
+{% block title %}Checkpoints du jeu {{game.title }}{% endblock %}
 
 {% block body %}
 
@@ -18,7 +18,6 @@
                 <th>Ordre du checkpoint</th>
                 <th>Crée le</th>
                 <th>Mise à jour le</th>
-                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -29,7 +28,6 @@
                 <td>{{ checkpoint.OrderCheckpoint  }}</td>
                 <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ checkpoint.isTrashed ? 'Actif' : 'Inactif' }}</td>
                 <td>
                     <div class="d-grid gap-2 justify-content-md-center">
                         <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}"class="btn btn-primary">Modifier</a>

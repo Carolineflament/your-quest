@@ -27,7 +27,7 @@ class CheckpointController extends AbstractController
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
 
         return $this->render('backoffice/checkpoint/index.html.twig', [
-            'checkpoints' => $checkpointRepository->findBy(['game' => $game,'isTrashed' => true]),
+            'checkpoints' => $checkpointRepository->findBy(['game' => $game,'isTrashed' => false]),
             'game' =>$game,
         ]);
     }
@@ -113,7 +113,7 @@ class CheckpointController extends AbstractController
 
                     $cascadeTrashed->trashCheckpoint($checkpoint);
                 }
-                $checkpoint->setIsTrashed(false);
+                $checkpoint->setIsTrashed(true);
                 $this->addFlash(
                     'notice-success',
                     'Le checkpoint '.$checkpoint->getTitle().' a été supprimé ! Le checkpoint et ses énigmes ont été mis à la poubelle !'
