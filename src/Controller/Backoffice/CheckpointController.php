@@ -35,8 +35,10 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/jeu/{gameSlug}/nouveau", name="app_backoffice_checkpoint_new", methods={"GET", "POST"})
      */
-    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager,QrcodeService $qrcodeService): Response
     {
+
+
         $checkpoint = new Checkpoint();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
@@ -46,6 +48,7 @@ class CheckpointController extends AbstractController
         $checkpoint->setGame($game);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $qrcodeService->qrcode($checkpoint);
             $entityManager->persist($checkpoint);
             $entityManager->flush();
 
@@ -57,7 +60,7 @@ class CheckpointController extends AbstractController
         return $this->renderForm('backoffice/checkpoint/new.html.twig', [
             'checkpoint' => $checkpoint,
             'form' => $form,
-            'game' => $game,
+            'game' => $game
         ]);
     }
 
