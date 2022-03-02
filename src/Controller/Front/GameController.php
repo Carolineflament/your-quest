@@ -23,6 +23,10 @@ class GameController extends AbstractController
     {
         $locale = $request->getLocale();
         $current_page = $request->query->get('page');
+        if($current_page == "")
+        {
+            $current_page = 1;
+        }
         $games = $gameRepository->findBy(['isTrashed' => 0, 'status' => 1], ['createdAt' => 'ASC'], self::LIMIT_GAMES_PER_PAGE, ($current_page-1)*self::LIMIT_GAMES_PER_PAGE);
 
         return $this->render('front/game/index.html.twig', [
