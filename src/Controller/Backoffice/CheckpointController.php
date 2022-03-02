@@ -110,16 +110,18 @@ class CheckpointController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
             if ($checkpoint->getIsTrashed()) {
-
-                    $cascadeTrashed->trashCheckpoint($checkpoint);
-                }
-                $checkpoint->setIsTrashed(true);
-                $this->addFlash(
-                    'notice-success',
-                    'Le checkpoint '.$checkpoint->getTitle().' a été supprimé ! Le checkpoint et ses énigmes ont été mis à la poubelle !'
-                );
+                $cascadeTrashed->trashCheckpoint($checkpoint);
             }
+            $checkpoint->setIsTrashed(true);
+            $this->addFlash(
+                'notice-success',
+                'Le checkpoint '.$checkpoint->getTitle().' a été supprimé ! Le checkpoint et ses énigmes ont été mis à la poubelle !'
+            );
+        }
+            
             $entityManager->flush();
+            
+        
             return $this->redirectToRoute('app_backoffice_checkpoint_index', [
             'gameSlug' => $game->getSlug()
         ], Response::HTTP_SEE_OTHER);

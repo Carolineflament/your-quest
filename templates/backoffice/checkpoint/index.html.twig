@@ -6,6 +6,7 @@
 
 <div class="container-fluid mb-3">
     <h1>Liste des checkpoints du jeu {{ game.title }}</h1>
+    {{ include('front/_notice_message.html.twig') }}
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a href="{{ path('app_backoffice_checkpoint_new', { 'gameSlug' : game.slug}) }}" class="btn btn-success">Créer un checkpoint</a>
