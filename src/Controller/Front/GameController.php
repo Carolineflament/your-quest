@@ -38,10 +38,12 @@ class GameController extends AbstractController
      */
     public function show(Game $game, InstanceRepository $instanceRepository): Response
     {
-        $instances_next = $instanceRepository->findNextInstance();
+        $next_instances = $instanceRepository->findNextInstance($game->getId());
+        $previous_instances = $instanceRepository->findPreviousInstance($game->getId());
         return $this->render('front/game/show.html.twig', [
             'game' => $game,
-
+            'next_instances' => $next_instances,
+            'previous_instances' => $previous_instances
         ]);
     }
 }

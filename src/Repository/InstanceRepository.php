@@ -19,9 +19,28 @@ class InstanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Instance::class);
     }
 
-    public function findNextInstance()
+    public function findNextInstance(int $game_id)
     {
-        
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.endAt > :date AND i.isTrashed != :trash AND i.game = :game')
+            ->setParameter('date', new \DateTimeImmutable())
+            ->setParameter('trash', 1)
+            ->setParameter('game', $game_id)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findPreviousInstance(int $game_id)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.endAt <= :date AND i.isTrashed != :trash AND i.game = :game')
+            ->setParameter('date', new \DateTimeImmutable())
+            ->setParameter('trash', 1)
+            ->setParameter('game', $game_id)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**
