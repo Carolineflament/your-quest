@@ -75,7 +75,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Votre prénom : ',
                 'attr' => ['placeholder' => 'Prénom']
             ]);
-        if ($current_user !== null && $this->security->isGranted('ROLE_ORGANISATEUR')) {
+        if (($current_user !== null && $this->security->isGranted('ROLE_ORGANISATEUR')) || $current_user === null) {
             $builder->add('address', TextareaType::class, [
                 'required' => false,
                 'label' => 'Votre adresse :',
