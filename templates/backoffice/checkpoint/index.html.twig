@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Checkpoints du jeu {{ game.title }}{% endblock %}
+{% block title %}Checkpoints du jeu {{game.title }}{% endblock %}
 
 {% block body %}
 
 <div class="container-fluid mb-3">
     <h1>Liste des checkpoints du jeu {{ game.title }}</h1>
+    {{ include('front/_notice_message.html.twig') }}
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a href="{{ path('app_backoffice_checkpoint_new', { 'gameSlug' : game.slug}) }}" class="btn btn-success">Créer un checkpoint</a>
@@ -13,10 +14,8 @@
 
     <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
         <thead class="table-dark ">
-            <tr>      
-                <th>#</th>         
+            <tr>             
                 <th>Nom du checkpoint</th>
-                <th>Nom du jeu</th>
                 <th>Ordre du checkpoint</th>
                 <th>Crée le</th>
                 <th>Mise à jour le</th>
@@ -26,16 +25,14 @@
         <tbody>
         {% for checkpoint in checkpoints %}
             <tr scope="row">
-                <td>{{ checkpoint.id }}</td>
                 <td>{{ checkpoint.title }}</td>
-                <td>{{ checkpoint.game.title }}</td>
                 <td>{{ checkpoint.OrderCheckpoint  }}</td>
                 <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <div class="d-grid gap-2 justify-content-md-center">
-                        <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}"class="btn btn-primary">Détail</a>
                         <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}"class="btn btn-primary">Modifier</a>
+                       {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
                     </div>
                 </td>
             </tr>

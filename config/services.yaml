@@ -46,7 +46,6 @@ services:
                 # Method (optional)
                 method: updateSlug
 
-    # paramétrage de GameListener
     App\EventListener\GameListener:
         tags:
             -

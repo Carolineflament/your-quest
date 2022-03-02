@@ -45,7 +45,7 @@
                                             <i class="bi bi-person-square"></i>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Profil</a></li>
+                                            <li><a class="dropdown-item" href="{{ path('app_front_user_profile') }}">Profil</a></li>
                                             {% if is_granted("ROLE_ORGANISATEUR") %}
                                                 <li><a class="dropdown-item" href="#">Backoffice</a></li>
                                             {% endif %}
