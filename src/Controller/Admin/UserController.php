@@ -20,13 +20,19 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class UserController extends AbstractController
 {
+    private const LIMIT_USERS_PER_PAGE = 5;
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, Request $request): Response
     {
+        $current_page = $request->query->get('page') ? $request->query->get('page') : 1;
+        
+        $users = $userRepository->findBy([], ['email' => 'ASC'], self::LIMIT_USERS_PER_PAGE, ($current_page-1)*self::LIMIT_USERS_PER_PAGE);
+
         return $this->render('admin/user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
+            "pages" => ceil(count($userRepository->findAll())/self::LIMIT_USERS_PER_PAGE)
         ]);
     }
 
