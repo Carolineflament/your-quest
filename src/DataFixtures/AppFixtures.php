@@ -12,18 +12,25 @@ use App\Entity\Role;
 use App\Entity\Round;
 use App\Entity\ScanQR;
 use App\Entity\User;
+use App\Service\MySlugger;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AppFixtures extends Fixture
 {
+    private $connection;
+    private $passwordHasher;
+    private $slugger;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    public function __construct(HttpClientInterface $client, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger)
     {
         $this->passwordHasher = $passwordHasher;
+        $this->client = $client;
+        $this->slugger = $slugger;
     }
 
     public function load(ObjectManager $manager): void
@@ -87,7 +94,7 @@ class AppFixtures extends Fixture
         }
         
         $userEntity = [];
-        for ($i = 1; $i<= 50; $i++) {
+        for ($i = 1; $i<= 10; $i++) {
             $user = new User();
             $user->setEmail($faker->email());
             $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
@@ -112,11 +119,16 @@ class AppFixtures extends Fixture
         
         for ($i=0; $i < 10; $i++) {
             $game = new Game();
-            $game->setTitle($faker->words(2, true));
+            $title = $faker->words(2, true);
+            $game->setTitle($title);
+            $game->setSlug($this->slugger->slugify($title));
             $game->setAddress($faker->address());
             $game->setPostalCode($faker->randomNumber(5, true));
             $game->setCity($faker->country());
-            $game->setImage('https://picsum.photos/id/'.mt_rand(1, 20).'/828/315');
+            $image = "https://picsum.photos/id/".mt_rand(1, 20)."/828/315";
+            $response = $this->client->request('GET', $image);
+            file_put_contents('./public/assets/images/games/'.$this->slugger->slugify($title).'.jpg', $response->getContent());
+            $game->setImage($this->slugger->slugify($title).'.jpg');
             $game->setSummary($faker->text(30));
             $game->setStatus(rand(0, 1));
             $game->setIsTrashed(rand(0, 1));
