@@ -1,4 +1,4 @@
 <form method="post" action="{{ path('app_backoffice_update_status', {'id': game.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir désactiver le jeu {{game.title}} ?\nSes checkpoints / questions seront mis à la poubelle !');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-    <button class="btn {% if user.status is same as true %}btn-danger{% else %}btn-success{% endif %}">{% if user.status is same as false %} Activer {% else %} Désactiver {% endif %}</button>
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ game.id) }}">
+    <button class="btn {% if game.status is same as true %}btn-danger{% else %}btn-success{% endif %}">{% if game.status is same as false %} Activer {% else %} Désactiver {% endif %}</button>
 </form>
