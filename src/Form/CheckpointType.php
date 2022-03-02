@@ -25,11 +25,6 @@ class CheckpointType extends AbstractType
             ->add('orderCheckpoint', TextType::class, [
                 'label' => 'Ordre du checkpoint :',
             ])
-            ->add('createdAt', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Ce checkpoint est créé le :',
-                'input' => 'datetime_immutable',
-            ])
             ->add('game', EntityType::class, [
                 'class' => Game::class,
                 'label' => 'Nom du jeu',
