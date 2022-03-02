@@ -18,12 +18,6 @@ use Endroid\QrCode\Writer\PngWriter;
 
 class QrcodeService
 {
-    private $builder;
-
-    public function __construct(BuilderInterface $builder)
-    {
-        $this->builder = $builder;
-    }
 
 
     public function qrcode(Checkpoint $checkpoint)
