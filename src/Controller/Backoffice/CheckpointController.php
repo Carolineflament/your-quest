@@ -8,6 +8,7 @@ use App\Form\CheckpointType;
 use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
+use App\Service\QrcodeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,9 +68,11 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/{id}", name="app_backoffice_checkpoint_show", methods={"GET"})
      */
-    public function show(Checkpoint $checkpoint): Response
+    public function show(Checkpoint $checkpoint, QrcodeService $qrcodeService): Response
     {
         $game = $checkpoint->getGame();
+
+        $qrcodeService->qrcode($checkpoint);
 
         return $this->render('backoffice/checkpoint/show.html.twig', [
             'checkpoint' => $checkpoint,

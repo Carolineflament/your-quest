@@ -37,6 +37,9 @@
                 </tr>
             </tbody>
         </table>
+                <div class="text-center">
+                    <img src="{{ asset('assets/Qrcode/'~checkpoint.id~'qrcode.png') }}" alt="QR code">
+                </div>
 
             <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary">Modifier</a>
           

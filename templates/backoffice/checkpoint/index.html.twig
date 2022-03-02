@@ -25,7 +25,7 @@
         <tbody>
         {% for checkpoint in checkpoints %}
             <tr scope="row">
-                <td>{{ checkpoint.title }}</td>
+                <td><a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}">{{ checkpoint.title }}</a></td>
                 <td>{{ checkpoint.OrderCheckpoint  }}</td>
                 <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
