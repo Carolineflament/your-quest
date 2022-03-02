@@ -5,7 +5,7 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/public/assets/images/games/
+/public/assets/images/games/*
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
