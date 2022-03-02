@@ -19,25 +19,6 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-    /**
-     * Récupère les jeux qui sont pas dans la poubelle et qui sont acitfs en fonction d'une limit et d'un first
-     *
-     * @param integer $limit
-     * @param integer $first
-     * @return void
-     */
-    public function findAllWithLimit(int $limit, int $first = 0)
-    {
-        $restulats = $this->createQueryBuilder('g')
-            ->andWhere('g.is_trashed = 0 AND g.status = 1')
-            ->orderBy('g.created_at', 'ASC')
-            ->setFirstResult($first)
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-        return $restulats;
-    }
-
     // /**
     //  * @return Game[] Returns an array of Game objects
     //  */

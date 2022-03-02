@@ -2,7 +2,9 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Game;
 use App\Repository\GameRepository;
+use App\Repository\InstanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +17,11 @@ class GameController extends AbstractController
 {
     private const LIMIT_GAMES_PER_PAGE = 5;
     /**
-     * @Route("/", name="games")
+     * @Route("/", name="games", methods={"GET"})
      */
     public function index(GameRepository $gameRepository, Request $request): Response
     {
+        $locale = $request->getLocale();
         $current_page = $request->query->get('page');
         $games = $gameRepository->findBy(['isTrashed' => 0, 'status' => 1], ['createdAt' => 'ASC'], self::LIMIT_GAMES_PER_PAGE, ($current_page-1)*self::LIMIT_GAMES_PER_PAGE);
 
@@ -33,9 +36,12 @@ class GameController extends AbstractController
      *
      * @return Response
      */
-    public function show(): Response
+    public function show(Game $game, InstanceRepository $instanceRepository): Response
     {
+        $instances_next = $instanceRepository->findNextInstance();
         return $this->render('front/game/show.html.twig', [
+            'game' => $game,
+
         ]);
     }
 }

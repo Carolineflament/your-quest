@@ -19,6 +19,11 @@ class InstanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Instance::class);
     }
 
+    public function findNextInstance()
+    {
+        
+    }
+
     // /**
     //  * @return Instance[] Returns an array of Instance objects
     //  */

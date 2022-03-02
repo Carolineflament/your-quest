@@ -344,3 +344,46 @@ a, a:hover {
 		);
 	}
 }
+
+
+/* CARD PAGE GAME  */
+
+.card-task .card-meta{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.card-task .card-title{
+	margin: 0;
+}
+.card-task .card-body, .card-task .card-meta{
+	display: flex;
+	align-items: center;
+}
+.card-task .card-body{
+	justify-content: space-between;
+}
+.card-task .card-options{
+	position: relative;
+	top: 0;
+	right: 0;
+}
+
+.card-list {
+	margin-bottom: 0.75rem;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	background: #dee2e6;
+}
+
+.card-list .card {
+	border: none;
+}
+.card-list .card {
+	box-shadow: 0 0.1875rem 0.375rem rgb(33 37 41 / 5%);
+}
+.card-list .card {
+	margin-bottom: 0.75rem;
+}
+

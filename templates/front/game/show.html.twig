@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-xl p-5">
+    <div class="row">
+        <h1 class="text-muted fw-bold mb-4 text-center h1">{{game.title}}</h1>
+        
+        <small>
+            Créé le : 
+            <time datetime="{{game.createdAt|date('c')}}">
+                {{game.createdAt|format_datetime(pattern="dd LLLL Y", locale='{{app_default_local}}')}}
+            </time>
+        </small>
+    </div>
+
+    <div class="row">
+        <img src="{{ asset(app_games_images_directory~game.image) }}" alt="{{game.slug}}" />
+    </div>
+
+    <div class="row mt-2">
+        <p>
+            {{game.summary}}
+        </p>
+    </div>
+
+    <div class="row mt-2">
+        <div class="card-list">
+            <div class="card-list-head">
+                <h3 class="text-muted fw-bold mb-4 text-center h3">Prochaines instances de jeu</h3>
+            </div>
+            <div class="card-list-body">
+                {% for instance in game.instances %}
+                        <div class="card card-task">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h6><a href="#">{{instance.title}}</a></h6>
+                                    <span class="small">De {{instance.startAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} à {{instance.endAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} : {{ game.address~' '~game.postalCode~' '~game.city }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <h3 class="text-muted fw-bold mb-4 text-center h3">Anciennes instances de jeu</h3>
+        {% for instance in game.instances %}
+            {{instance.title}}
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
