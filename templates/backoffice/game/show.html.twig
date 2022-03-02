@@ -39,7 +39,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            Du {{instance.startAt|date('format_datetime('full', 'full', locale='fr')')}} au {{ instance.endAt|date('d-m-Y H:i')}}, à {{game.city}}
+                        Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}}
                         </button>
                         </h2>
                         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
