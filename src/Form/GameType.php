@@ -27,7 +27,6 @@ class GameType extends AbstractType
             ])
             ->add('postalCode', TextType::class, [
                 'label' => 'Code postal :',
-                'html5' => true,
                 'attr' => ['placeholder' => '59000']
             ])
             ->add('city', TextType::class, [

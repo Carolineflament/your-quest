@@ -4,40 +4,53 @@
 <div class="container-xl bg-light p-5 border-top">
 
     <h2 class="text-muted fw-bold mb-4">Les jeux</h2>
-        <div class="card-group vgr-cards">
+    <!--<div class="card-group vgr-cards">-->
+    <div>
 
-            
-            {% for game in games %}
-                <div class="card mb-3">
-                    <div class="card-img-body">
-                        <img class="card-img" src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="game.title">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ game.title }}</h5>
-                        <p><small>{{ game.city }} ({{ game.postalCode }})</small></p>
-                        <p class="card-text">{{ game.summary}}</p>
-                        {# <a href=""{{ path('game', {'slug' : game.slug}) }}"" class="btn btn-primary">Voir ce jeu</a> #}
-                    </div>
+        {% set colors = ['blue', 'red', 'green', 'yellow'] %}
+        {% for game in games %}
+            {% set counter = ( counter | default(-1) ) + 1 %}
+            {% if counter == 4 %}
+                {% set counter = 0 %}
+            {% endif %}
+            <!--<div class="card mb-3">
+                <div class="card-img-body">
+                    <img class="card-img" src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="game.title">
                 </div>
-            {% endfor %}
-        </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ game.title }}</h5>
+                    <p><small>{{ game.city }} ({{ game.postalCode }})</small></p>
+                    <p class="card-text">{{ game.summary}}</p>
+                    <a href="{{ path('front_games_show', {'slug' : game.slug}) }}" class="btn btn-outline-primary">Voir ce jeu</a>
+                </div>
+            </div>-->
+            
+            <article class="postcard light {{colors[counter]}} t-dark">
+                <a class="postcard__img_link" href="{{ path('front_games_show', {'slug' : game.slug}) }}">
+                    <img class="postcard__img" src="{{ asset(app_games_images_directory~game.image) }}" alt="{{game.slug}}" />
+                </a>
+                <div class="postcard__text">
+                    <h1 class="postcard__title {{colors[counter]}}"><a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a></h1>
+                    <div class="postcard__subtitle small">
+                        <address class="mb-0">
+                            <i class="bi bi-house-fill me-2"></i>{{ game.address }} {{ game.postalCode }} {{ game.city }}
+                        </address>
+                    </div>
+                    <div class="postcard__bar"></div>
+                    <div class="postcard__preview-txt">{{ game.summary}}</div>
+                    <!--<ul class="postcard__tagbox">
+                    <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
+                    <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
+                    <li class="tag__item play blue">
+                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
+                    </li>
+                    </ul>-->
+                </div>
+            </article>
+        {% endfor %}
+    </div>
 
-        <nav class="col-lg-9 offset-lg-3">
-            <ul class="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link">&laquo;</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item" aria-current="page">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">&raquo;</a>
-                </li>
-            </ul>
-        </nav>
+    {{ include('front/_paginate.html.twig') }}
 
-   
 </div>
 {% endblock %}

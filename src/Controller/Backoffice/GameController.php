@@ -22,12 +22,13 @@ class GameController extends AbstractController
      */
     public function index(GameRepository $gameRepository): Response
     {
+        //TODO Does the game belong to the organizer?
+        // $gameUser = $this->getUser();
+        // if ($gameUser !== $game->getUser()) {
+        //     throw $this->createAccessDeniedException('Non autorisé.');
+        // }
 
-        //On vérifie que le jeu à afficher appartient au joueur
-        //find by user.id avec user
-        //connecte user = blablabla
-
-
+        
         return $this->render('backoffice/game/index.html.twig', [
             'games' => $gameRepository->findAll(),
         ]);
@@ -66,7 +67,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/modifier", name="app_backoffice_game_edit", methods={"GET", "POST"})
+     * @Route("/{slug}/modifier", name="app_backoffice_game_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Game $game, EntityManagerInterface $entityManager): Response
     {
@@ -99,7 +100,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/status/{id}",name="app_backoffice_update_status", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/status/{id}",name="app_backoffice_update_status", methods={"POST"}, requirements={"id"="\d+"})
      *
      * @param Game $game
      * @return void

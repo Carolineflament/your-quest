@@ -99,7 +99,7 @@ label.required:after {
 {
   width: 100%;
   height: auto;
-  position: absolute;
+  /*position: absolute;*/
   margin-left: 50%;
   transform: translateX(-50%);
 }
