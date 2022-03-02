@@ -74,8 +74,6 @@ class InstanceController extends AbstractController
             $checkpointsArray[$lastCheckpoint->getId()] = $round->getUser();
         }
 
-        dd($checkpointsArray);
-
         return $this->render('front/instance/realtime.html.twig', [
             'instance' => $instance,
             'game' => $game,
