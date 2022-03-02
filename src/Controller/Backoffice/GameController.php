@@ -3,7 +3,6 @@
 namespace App\Controller\Backoffice;
 
 use App\Entity\Game;
-use App\Entity\User;
 use App\Form\GameType;
 use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;

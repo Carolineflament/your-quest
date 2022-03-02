@@ -65,7 +65,7 @@ class InstanceController extends AbstractController
 
     /**
      * 
-     * @Route("/{id}", name="app_backoffice_instance_show", methods={"GET"})
+     * @Route("/{slug}", name="app_backoffice_instance_show", methods={"GET"})
      */
     public function show(Instance $instance): Response
     {
@@ -79,7 +79,7 @@ class InstanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/modifier", name="app_backoffice_instance_edit", methods={"GET", "POST"})
+     * @Route("/{slug}/modifier", name="app_backoffice_instance_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Instance $instance, EntityManagerInterface $entityManager): Response
     {
@@ -103,7 +103,7 @@ class InstanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_instance_delete", methods={"POST"})
+     * @Route("/{slug}", name="app_backoffice_instance_delete", methods={"POST"})
      */
     public function delete(Request $request, Instance $instance, EntityManagerInterface $entityManager): Response
     {
