@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
@@ -20,20 +21,26 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class UserController extends AbstractController
 {
-    //TODO Récup la limit dans le fichier environnement
-    private const LIMIT_USERS_PER_PAGE = 5;
+    private $paramBag;
+
+    public function __construct(ParameterBagInterface $paramBag)
+    {
+        $this->paramBag = $paramBag;
+    }
+
     /**
      * @Route("/", name="index", methods={"GET"})
      */
     public function index(UserRepository $userRepository, Request $request): Response
     {
+        $limit_user_per_page = $this->paramBag->get('app.limit_users_per_page');
         $current_page = $request->query->get('page') ? $request->query->get('page') : 1;
         
-        $users = $userRepository->findBy([], ['email' => 'ASC'], self::LIMIT_USERS_PER_PAGE, ($current_page-1)*self::LIMIT_USERS_PER_PAGE);
+        $users = $userRepository->findBy([], ['email' => 'ASC'], $limit_user_per_page, ($current_page-1)*$limit_user_per_page);
 
         return $this->render('admin/user/index.html.twig', [
             'users' => $users,
-            "pages" => ceil(count($userRepository->findAll())/self::LIMIT_USERS_PER_PAGE)
+            "pages" => ceil(count($userRepository->findAll())/$limit_user_per_page)
         ]);
     }
 
