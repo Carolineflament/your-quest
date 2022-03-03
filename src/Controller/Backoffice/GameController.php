@@ -67,18 +67,15 @@ class GameController extends AbstractController
      */
     public function show(Game $game): Response
     {
-        $instances = $game->getInstances();
+        $instances = $game->getInstances()->getValues();
         $date = new DateTime();
         $date = $date->getTimestamp();
         foreach($instances AS $key=> $instance)
         {
-            
             if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
             {
                 unset($instances[$key]);
-                //dd($key);
-                array_unshift((array)$instances, $instance);
-
+                array_unshift($instances, $instance);
             }
         }
         return $this->render('backoffice/game/show.html.twig', [
