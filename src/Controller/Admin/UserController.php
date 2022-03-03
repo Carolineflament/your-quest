@@ -20,6 +20,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class UserController extends AbstractController
 {
+    //TODO Récup la limit dans le fichier environnement
     private const LIMIT_USERS_PER_PAGE = 5;
     /**
      * @Route("/", name="index", methods={"GET"})
