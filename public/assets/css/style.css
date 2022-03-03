@@ -15,7 +15,19 @@ body {
 	border-color: #7eb5a6c4;
 }
 
+.container
+{
+	background-color: #E8D0B3;
+	border-radius:35px;
+	box-shadow: 0px 15px 50px 0px rgb(0 0 0 / 10%);
+}
 
+label.required:after {
+	content: "*";
+	color:red;
+}
+
+/* Barre de navigation */
 .nav-link {
 	cursor: pointer;
 	position: relative;
@@ -63,18 +75,7 @@ body {
 	background-color: #7eb5a6;
 }
 
-.container
-{
-	background-color: #E8D0B3;
-	border-radius:35px;
-	box-shadow: 0px 15px 50px 0px rgb(0 0 0 / 10%);
-}
-
-label.required:after {
-	content: "*";
-	color:red;
-}
-
+/* Carte pour la liste des jeux */
 .vgr-cards .card
 {
 	display: flex;
@@ -141,5 +142,39 @@ label.required:after {
 	.vgr-cards .card-body {
 		padding: 0;
 	}
-
 }
+
+@media (max-width: 767px) {
+    .carousel-inner .carousel-item > div {
+        display: none;
+    }
+    .carousel-inner .carousel-item > div:first-child {
+        display: block;
+    }
+}
+
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+    display: flex;
+}
+
+/* medium and up screens */
+@media (min-width: 768px) {
+    
+    .carousel-inner .carousel-item-end.active,
+    .carousel-inner .carousel-item-next {
+      transform: translateX(25%);
+    }
+    
+    .carousel-inner .carousel-item-start.active, 
+    .carousel-inner .carousel-item-prev {
+      transform: translateX(-25%);
+    }
+}
+
+.carousel-inner .carousel-item-end,
+.carousel-inner .carousel-item-start { 
+  transform: translateX(0);
+}
+
