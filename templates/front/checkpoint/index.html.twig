@@ -11,11 +11,11 @@
         <h1>Veuillez scanner le QR code du checkpoint</h1>
 
         {# Scanner #}        
-        <div style="width: 500px; margin: 50px auto;" id="reader"></div>     
+        <div style="width: 300px; margin: 50px auto;" id="reader"></div>     
         {# End Scanner #}
 
         {# Scanner message zone #}
-        <div style="width: 500px; margin: 50px auto;" id="message"></div>
+        <div style="margin: 0px auto 50px auto;" id="message"></div>
         {# End Scanner message zone #}
 
     </div>
@@ -55,7 +55,7 @@
             messageElement.textContent = `Erreur de lecture : ${errorMessage}`;
         }
 
-        var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 200 });
         html5QrcodeScanner.render(onScanSuccess);
 </script>
 
