@@ -6,6 +6,7 @@ use App\Entity\Game;
 use App\Form\GameType;
 use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,8 +67,23 @@ class GameController extends AbstractController
      */
     public function show(Game $game): Response
     {
+        $instances = $game->getInstances();
+        $date = new DateTime();
+        $date = $date->getTimestamp();
+        foreach($instances AS $key=> $instance)
+        {
+            
+            if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
+            {
+                unset($instances[$key]);
+                //dd($key);
+                array_unshift((array)$instances, $instance);
+
+            }
+        }
         return $this->render('backoffice/game/show.html.twig', [
             'game' => $game,
+            'instances' => $instances
         ]);
     }
 

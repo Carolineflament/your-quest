@@ -116,7 +116,7 @@ class Game
 
     /**
      * @ORM\OneToMany(targetEntity=Instance::class, mappedBy="game")
-     * @ORM\OrderBy({"startAt" = "ASC"})
+     * @ORM\OrderBy({"startAt" = "DESC"})
      */
     private $instances;
 
