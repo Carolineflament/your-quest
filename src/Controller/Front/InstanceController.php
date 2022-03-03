@@ -44,16 +44,18 @@ class InstanceController extends AbstractController
 
         /***** Avancée des joueurs en temps réél *****/
 
-        // Je crée un tableau des checkpoints, et chaque checkpoint contiendra un tableau de joueurs étant localisés à ce checkpoint
+        // Je crée un tableau associatif vide pour les checkpoints du jeu, et chaque checkpoint contiendra un tableau des joueurs ayant comme dernière position ce checkpoint
+        // key = checkpoint.title
+        // value = array des joueurs
         $checkpointsArray = [];
 
         // Je récupére la liste des checkpoints du jeu (not trashed, et dans l'ordre défini par l'organisateur)
         $checkpointsList = $checkpointRepository->findBy(['game' => $game,'isTrashed' => false], ['orderCheckpoint' => 'ASC']);
         
 
-        // Je crée un sous tableau pour chaque checkpoint, et je l'insère dans le le tableau général
+        // Je crée un sous tableau vide pour chaque checkpoint, et je l'insère dans le le tableau général
         foreach ($checkpointsList as $checkpoint) {
-            $checkpointsArray[$checkpoint->getId()] = [];
+            $checkpointsArray[$checkpoint->getTitle()] = [];
         }
         
         // Je récupère tous les rounds de l'instance
@@ -72,7 +74,7 @@ class InstanceController extends AbstractController
             $lastCheckpoint = $lastScanQR->getCheckpoint();
 
             // Au tableau général, j'inscris le joueur du round dans le tableau de joueur de ce checkpoint
-            $checkpointsArray[$lastCheckpoint->getId()][] = $round->getUser();
+            $checkpointsArray[$lastCheckpoint->getTitle()][] = $round->getUser();
         }
         
         return $this->render('front/instance/realtime.html.twig', [
