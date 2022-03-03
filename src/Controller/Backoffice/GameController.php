@@ -29,23 +29,8 @@ class GameController extends AbstractController
         // }
 
         return $this->render('backoffice/game/index.html.twig', [
-            'games' => $gameRepository->findBy(['status' => 1]),
-        ]);
-    }
-
-     /**
-     * @Route("/archive", name="app_backoffice_game_index_inactive", methods={"GET"})
-     */
-    public function index_inactive(GameRepository $gameRepository): Response
-    {
-        //TODO Does the game belong to the organizer?
-        // $gameUser = $this->getUser();
-        // if ($gameUser !== $game->getUser()) {
-        //     throw $this->createAccessDeniedException('Non autorisé.');
-        // }
-
-        return $this->render('backoffice/game/index_archive.html.twig', [
-            'games' => $gameRepository->findBy(['status' => 0]),
+            'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0]),
+            'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0]),
         ]);
     }
 
@@ -61,6 +46,11 @@ class GameController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($game);
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice-success',
+                'Le jeu '.$game->getTitle().' a été créé !'
+            );
 
             return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -92,6 +82,11 @@ class GameController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash(
+                'notice-success',
+                'Le jeu '.$game->getTitle().' a été modifié !'
+            );
+
             return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -102,13 +97,24 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_game_delete", methods={"POST"})
+     * @Route("/{id}", name="app_backoffice_game_delete", methods={"POST"}, requirements={"id"="\d+"})
      */
-    public function delete(Request $request, Game $game, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Game $game, CascadeTrashed $cascadeTrashed): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$game->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($game);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$game->getId(), $request->request->get('_token')))
+        {
+            $cascadeTrashed->trashGame($game);
+            $this->addFlash(
+                'notice-success',
+                'Le jeu '.$game->getTitle().' a été supprimé ! Tous ses checkpoints, questions et instances ont été mis à la poubelle !'
+            );
+        } 
+        else
+        {
+            $this->addFlash(
+                'notice-danger',
+                'Impossible de supprimer le jeu '.$game->getTitle().', token invalide !'
+            );
         }
 
         return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
@@ -120,27 +126,36 @@ class GameController extends AbstractController
      * @param Game $game
      * @return void
      */
-    public function update_status(Game $game, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
+    public function update_status(Request $request, Game $game, EntityManagerInterface $entityManager)
     {
-        if($game->getStatus())
+        if ($this->isCsrfTokenValid('trash'.$game->getId(), $request->request->get('_token')))
         {
-            $cascadeTrashed->trashGame($game);
-            $game->setStatus(false);
-            $this->addFlash(
-                'notice-success',
-                'Le jeu '.$game->getTitle().' a été supprimé ! Tous ses jeux, checkpoints, questions et instances ont été mis à la poubelle !'
-            );
-        }
+            if($game->getStatus())
+            {
+                $game->setStatus(false);
+                $this->addFlash(
+                    'notice-success',
+                    'Le jeu '.$game->getTitle().' a été désactivé !'
+                );
+            }
+            else
+            {
+                $game->setStatus(true);
+                $this->addFlash(
+                    'notice-success',
+                    'Le jeu '.$game->getTitle().' a été activé !'
+                );
+            }
+
+            $entityManager->flush();
+        } 
         else
         {
-            $game->setStatus(true);
             $this->addFlash(
-                'notice-success',
-                'Le jeu '.$game->getTitle().' a été activé !'
+                'notice-danger',
+                'Impossible de désactiver le jeu '.$game->getTitle().', token invalide !'
             );
         }
-
-        $entityManager->flush();
         return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
     }
 }
