@@ -3,31 +3,47 @@
 {% block title %}{{ instance.title }}{% endblock %}
 
 {% block body %}
-<div class="container-fluid mb-3">
-    <h1>Position des joueurs dans l'instance {{ instance.title }}</h1>
-</div>
 
-{# Boucle sur les checkpoints du jeu #}
+    <div class="container-fluid mb-3">
+        <h1>Instance {{ instance.title }}</h1>
+        <h2>Dernière position des joueurs</h2>
 
-{% for key, value in checkpointsDatas %}
-
-    <div class="row">
-        <div class="col">
-            <h2>{{ key }}</h2>
-        </div>            
-        <div class="col">
-            <ul>
-                
-                {% if value %}
-
-                <li>test</li>
-                <li>{{ value.username }}</li>
-
-                {% endif %}
-                
-            </ul>
+        <div class="row">
+            <div class="col">
+                <h3>Checkpoint</h3>
+            </div>
+            <div class="col">
+                <h3>Joueurs</h3>
+            </div>
         </div>
+
+        {# Boucle sur les checkpoints du jeu #}
+
+        {% for key, value in checkpointsDatas %}
+
+            <div class="row">
+                <div class="col">
+                    <h4>N° {{ loop.index }} - {{ key }}</h4>
+                </div>            
+                <div class="col">
+                    <ul>
+                        
+                        {% if value %}
+
+                            {% for player in value %}
+
+                                <li>{{ player.username }}</li>
+
+                            {% endfor %}
+
+                        {% endif %}
+                        
+                    </ul>
+                </div>
+            </div>
+
+        {% endfor %}
+
     </div>
-{% endfor %}
 
 {% endblock %}

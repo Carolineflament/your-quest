@@ -6,6 +6,8 @@
     <div class="container-fluid mb-3">
         <h1>Instance {{ instance.title }} du jeu {{ game.title }}</h1>
 
+        <a href="{{ path('app_front_instance_realtime', {'gameSlug': game.slug, 'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-2">Voir la position des joueurs</a>        
+
         <div class="d-grid gap-2 my-5 d-md-flex justify-content-md-start">
             <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}"  class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
         </div>
