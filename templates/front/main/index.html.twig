@@ -32,58 +32,40 @@
     {# End Presentation #}
 
     {# Next Games #}
-    <div class="card-group mt-3">
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Jeux 1</h5>
-            <p class="card-text">Description</p>
-            </div>
-            <div class="card-footer">
-            <small class="text-muted">Date- ville (cp)</small>
-            </div>
-        </div>
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Jeux 2</h5>
-            <p class="card-text">Description</p>
-            </div>
-            <div class="card-footer">
-            <small class="text-muted">Date- ville (cp)</small>
-            </div>
-        </div>
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Jeux 3</h5>
-            <p class="card-text">Description</p>
-            </div>
-            <div class="card-footer">
-            <small class="text-muted">Date- ville (cp)</small>
-            </div>
-        </div>
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Jeux 4</h5>
-            <p class="card-text">Description</p>
-            </div>
-            <div class="card-footer">
-            <small class="text-muted">Date- ville (cp)</small>
-            </div>
-        </div>
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Jeux 5</h5>
-            <p class="card-text">Description</p>
-            </div>
-            <div class="card-footer">
-            <small class="text-muted">Date- ville (cp)</small>
+
+    <div class="container-xl mt-3 mb-3">
+        <div class="row mx-auto my-auto justify-content-center">
+            <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner carousel-inner-multiple" role="listbox">
+                    {% for game in games %}
+                        <div class="carousel-item">
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-img">
+                                        <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a></h5>
+                                        <p class="card-text">{{ game.summary }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">{{ game.createdAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!--<a class="carousel-control-prev bg-transparent" href="#recipeCarousel" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </a>
+                <a class="carousel-control-next bg-transparent" href="#recipeCarousel" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </a>-->
             </div>
         </div>
     </div>
+
     {# End Next Games #}
     
 {% endblock %}

@@ -28,9 +28,24 @@ class GameController extends AbstractController
         //     throw $this->createAccessDeniedException('Non autorisé.');
         // }
 
-        
         return $this->render('backoffice/game/index.html.twig', [
-            'games' => $gameRepository->findAll(),
+            'games' => $gameRepository->findBy(['status' => 1]),
+        ]);
+    }
+
+     /**
+     * @Route("/archive", name="app_backoffice_game_index_inactive", methods={"GET"})
+     */
+    public function index_inactive(GameRepository $gameRepository): Response
+    {
+        //TODO Does the game belong to the organizer?
+        // $gameUser = $this->getUser();
+        // if ($gameUser !== $game->getUser()) {
+        //     throw $this->createAccessDeniedException('Non autorisé.');
+        // }
+
+        return $this->render('backoffice/game/index_archive.html.twig', [
+            'games' => $gameRepository->findBy(['status' => 0]),
         ]);
     }
 
