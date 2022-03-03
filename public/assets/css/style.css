@@ -27,6 +27,11 @@ label.required:after {
 	color:red;
 }
 
+#reader__dashboard
+{
+	display:none;
+}
+
 /* Barre de navigation */
 .nav-link {
 	cursor: pointer;
