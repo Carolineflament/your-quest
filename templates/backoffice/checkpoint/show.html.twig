@@ -41,7 +41,7 @@
                     <img src="{{ asset('assets/Qrcode/'~checkpoint.id~'qrcode.png') }}" alt="QR code">
                 </div>
 
-            <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary">Modifier</a>
+        <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary mb-2">Modifier</a>
           
 
         {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
