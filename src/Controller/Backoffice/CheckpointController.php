@@ -49,9 +49,16 @@ class CheckpointController extends AbstractController
         $checkpoint->setGame($game);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $qrcodeService->qrcode($checkpoint);
+
             $entityManager->persist($checkpoint);
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice-success',
+                'Le checkpoint '.$checkpoint->getTitle().' a été ajouté !'
+            );
+
+            $qrcodeService->qrcode($checkpoint);
 
             return $this->redirectToRoute('app_backoffice_checkpoint_index', [
                 'gameSlug' => $game->getSlug()
@@ -68,11 +75,10 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/{id}", name="app_backoffice_checkpoint_show", methods={"GET"})
      */
-    public function show(Checkpoint $checkpoint, QrcodeService $qrcodeService): Response
+    public function show(Checkpoint $checkpoint): Response
     {
-        $game = $checkpoint->getGame();
 
-        $qrcodeService->qrcode($checkpoint);
+        $game = $checkpoint->getGame();
 
         return $this->render('backoffice/checkpoint/show.html.twig', [
             'checkpoint' => $checkpoint,
@@ -92,6 +98,11 @@ class CheckpointController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice-success',
+                'Le checkpoint '.$checkpoint->getTitle().' a été modifié !'
+            );
 
             return $this->redirectToRoute('app_backoffice_checkpoint_index', [
                 'gameSlug' => $game->getSlug()
