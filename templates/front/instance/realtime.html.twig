@@ -9,19 +9,22 @@
 
 {# Boucle sur les checkpoints du jeu #}
 
-{% for checkpoint in checkpointsDatas %}
+{% for key, value in checkpointsDatas %}
 
     <div class="row">
         <div class="col">
-            <h2>Nom du checkpoint</h2>
+            <h2>{{ key }}</h2>
         </div>            
         <div class="col">
             <ul>
-                {% for player in checkpoint %}
+                
+                {% if value %}
 
-                <li>{{ player.username }}</li>
+                <li>test</li>
+                <li>{{ value.username }}</li>
 
-                {% endfor %}
+                {% endif %}
+                
             </ul>
         </div>
     </div>
