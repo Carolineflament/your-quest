@@ -2,6 +2,7 @@
 
 namespace App\Controller\Front;
 
+use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
 use App\Repository\InstanceRepository;
 use App\Repository\RoundRepository;
@@ -33,7 +34,7 @@ class InstanceController extends AbstractController
     /**
      * @Route("/jeu/{gameSlug}/instance/{instanceSlug}/realtime", name="app_front_instance_realtime", methods={"GET"})
      */
-    public function realtime($gameSlug, $instanceSlug, InstanceRepository $instanceRepository, RoundRepository $roundRepository, ScanQRRepository $scanQRRepository): Response
+    public function realtime($gameSlug, $instanceSlug, InstanceRepository $instanceRepository, CheckpointRepository $checkpointRepository, RoundRepository $roundRepository, ScanQRRepository $scanQRRepository): Response
     {
         // Get Instance from slug
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
@@ -46,8 +47,8 @@ class InstanceController extends AbstractController
         // Je crée un tableau des checkpoints, et chaque checkpoint contiendra un tableau de joueurs étant localisés à ce checkpoint
         $checkpointsArray = [];
 
-        // Je récupére la liste des checkpoints du jeu (dans l'ordre)
-        $checkpointsList = $game->getCheckpoints();
+        // Je récupére la liste des checkpoints du jeu (not trashed, et dans l'ordre défini par l'organisateur)
+        $checkpointsList = $checkpointRepository->findBy(['game' => $game,'isTrashed' => false], ['orderCheckpoint' => 'ASC']);
         
 
         // Je crée un sous tableau pour chaque checkpoint, et je l'insère dans le le tableau général
@@ -71,9 +72,9 @@ class InstanceController extends AbstractController
             $lastCheckpoint = $lastScanQR->getCheckpoint();
 
             // Au tableau général, j'inscris le joueur du round dans le tableau de joueur de ce checkpoint
-            $checkpointsArray[$lastCheckpoint->getId()] = $round->getUser();
+            $checkpointsArray[$lastCheckpoint->getId()][] = $round->getUser();
         }
-
+        
         return $this->render('front/instance/realtime.html.twig', [
             'instance' => $instance,
             'game' => $game,
