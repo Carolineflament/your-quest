@@ -1,15 +1,15 @@
 <div class="card mb-3" >
     <div class="row g-0">
         <div class="col-md-4">
-        <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="..." >
+            <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="..." >
         </div>
         <div class="col-md-8">
             <div class="card-body">
                 <h5 class="card-title">{{ game.title }}</h5>
                 <p class="card-text">{{ game.city }} ({{ game.postalCode }})</p>
                 <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
-                {{ include('backoffice/game/_status_form.html.twig') }}
-                {{ include('backoffice/game/_delete_form.html.twig') }}
+                {{ include('backoffice/game/_status_form.html.twig', {"method": ''}) }}
+                {{ include('backoffice/game/_delete_form.html.twig', {"method": ''}) }}
             </div>
         </div>
     </div>
