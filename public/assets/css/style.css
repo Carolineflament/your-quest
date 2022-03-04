@@ -183,3 +183,14 @@ label.required:after {
   transform: translateX(0);
 }
 
+/* show game page */ 
+#games-cards-ic
+{
+	flex-direction: row;
+}
+
+@media (max-width: 800px) {
+	#games-cards-ic {
+	  flex-direction: column;
+	}
+  }

@@ -31,9 +31,12 @@
 
         {# CARD CHECKPOINTS #}
         
-        <div class="d-flex justify-content-center ">
-            <div class="card mb-3" style="width: 100%;">
-                <h2>Les instances</h2>
+        <div id="games-cards-ic" class="d-flex bd-highlight">
+            <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <h2 class="p-2 align-self-center flex-grow-1">Les instances</h2>
+                    <a class="btn btn-primary m-3" href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}">Créer une instance</a>
+                </div>
                 <div class="accordion" id="ac-instances">
                     {% for instance in instances %}
                         
@@ -72,8 +75,11 @@
                 </div>
             </div>
 
-            <div class="card mb-3" style="width: 100%;">
-                <h2>Les checkpoints</h2>
+            <div class="card mb-3 flex-grow-1"  style="flex-basis:min-content;">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <h2 class="p-2 align-self-center flex-grow-1">Les checkpoints</h2>
+                    <a class="btn btn-primary m-3" href="{{ path('app_backoffice_checkpoint_new', { 'gameSlug' : game.slug}) }}">Créer un checkpoint</a>
+                </div>
                 <div class="accordion" id="ac-checkpoints">
                     {% for checkpoint in game.unTrashedCheckpoints %}
                         <div class="accordion-item">
