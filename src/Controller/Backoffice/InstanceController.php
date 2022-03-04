@@ -56,6 +56,12 @@ class InstanceController extends AbstractController
             $entityManager->persist($instance);
             $entityManager->flush();
 
+            // Message
+            $this->addFlash(
+                'notice-success',
+                'L\'instance '.$instance->getTitle().' a bien été créée !'
+            );
+
             return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $gameSlug], Response::HTTP_SEE_OTHER);
         }
 
@@ -106,6 +112,12 @@ class InstanceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            // Message
+            $this->addFlash(
+                'notice-success',
+                'L\'instance '.$instance->getTitle().' a bien été éditée !'
+            );
+
             return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
@@ -124,6 +136,12 @@ class InstanceController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$instance->getId(), $request->request->get('_token'))) {
             $instance->setIsTrashed(true);
             $entityManager->flush();
+
+            // Message
+            $this->addFlash(
+                'notice-success',
+                'L\'instance '.$instance->getTitle().' a bien été supprimée !'
+            );
         }
 
         // Get parent Game
