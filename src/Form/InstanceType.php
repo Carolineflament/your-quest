@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Instance;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -19,7 +20,7 @@ class InstanceType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Nom de votre instance :',
             ])
-            ->add('message', TextType::class, [
+            ->add('message', TextareaType::class, [
                 'label' => 'Description de votre instance :',
             ])
             ->add('startAt', DateTimeType::class, [
