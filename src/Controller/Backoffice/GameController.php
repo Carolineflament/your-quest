@@ -20,13 +20,10 @@ class GameController extends AbstractController
     /**
      * @Route("/", name="app_backoffice_game_index", methods={"GET"})
      */
-    public function index(GameRepository $gameRepository): Response
+    public function index(GameRepository $gameRepository, Game $game): Response
     {
         //TODO Does the game belong to the organizer?
-        // $gameUser = $this->getUser();
-        // if ($gameUser !== $game->getUser()) {
-        //     throw $this->createAccessDeniedException('Non autorisé.');
-        // }
+        $this->denyAccessUnlessGranted('VIEW', $game);
 
         return $this->render('backoffice/game/index.html.twig', [
             'games' => $gameRepository->findBy(['status' => 1]),
