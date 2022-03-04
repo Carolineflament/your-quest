@@ -143,9 +143,17 @@ class ResetPasswordController extends AbstractController
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
+
+        if($user === null)
+        {
+            $this->addFlash('reset_password_error', sprintf(
+                'L\'email n\'existe pas'
+            ));
+            return $this->redirectToRoute('app_forgot_password_request');
+        }
         
         // Do not reveal whether a user account was found or not.
-        if (!$user && $user !== null) {
+        if (!$user) {
             return $this->redirectToRoute('app_check_email');
         }
         
@@ -162,12 +170,6 @@ class ResetPasswordController extends AbstractController
                  $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
              ));
 
-            return $this->redirectToRoute('app_forgot_password_request');
-        } catch (Exception $e)
-        {
-            $this->addFlash('reset_password_error', sprintf(
-                'L\'email n\'existe pas'
-            ));
             return $this->redirectToRoute('app_forgot_password_request');
         }
 
