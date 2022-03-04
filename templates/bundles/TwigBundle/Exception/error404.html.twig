@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page non trouvée{% endblock %}
+
+{% block body %} 
+    <div class="text-center">
+        <h1>Oups, vous êtes perdu ?</h1>
+        <div>
+            <img src="{{ asset('assets/images/Lost.jpg') }}" alt="..." style="width:40rem;">
+            <p>
+            un indice, pour retrouver votre chemin c'est par ici !
+            <a href="{{ path('front_main') }}"><img src="{{ asset('assets/images/favicon.ico') }}" alt="..." ></a>
+            </p>
+            
+        </div>
+    </div>
+{% endblock %}
