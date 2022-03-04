@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -281,6 +282,16 @@ class Game
         return $this->instances;
     }
 
+    /**
+     * @return Collection<int, Instance>
+     */
+    public function getUnTrashedInstances(): Collection
+    {
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->eq('isTrashed', false));
+        return $this->instances->matching($criteria);
+    }
+
     public function addInstance(Instance $instance): self
     {
         if (!$this->instances->contains($instance)) {
@@ -309,6 +320,16 @@ class Game
     public function getCheckpoints(): Collection
     {
         return $this->checkpoints;
+    }
+
+    /**
+     * @return Collection<int, Checkpoint>
+     */
+    public function getUnTrashedCheckpoints(): Collection
+    {
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->eq('isTrashed', false));
+        return $this->checkpoints->matching($criteria);
     }
 
     public function addCheckpoint(Checkpoint $checkpoint): self

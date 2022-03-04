@@ -39,7 +39,7 @@
                         
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="instance-head-{{loop.index}}">
-                                <button class="accordion-button text-white
+                                <button class="accordion-button text-white bg-gradient
                                 {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') > instance.endAt|date('c') %} 
                                     bg-secondary  
                                 {% elseif "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') < instance.endAt|date('c') %} 
@@ -47,18 +47,16 @@
                                 {% else %}
                                     bg-primary
                                 {% endif %}
-                                {% if not loop.first %}collapsed{% endif %}" 
+                                collapsed" 
                                 
                                 type="button" data-bs-toggle="collapse" data-bs-target="#instances-{{loop.index}}" 
-                                {% if not loop.first %} 
+                                 
                                     aria-expanded="false" 
-                                {% else %} 
-                                    aria-expanded="true" 
-                                {% endif %} aria-controls="instances-{{loop.index}}">
-                                    Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}}
+                                 aria-controls="instances-{{loop.index}}">
+                                    Instace en cours : Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}} <a href="#">test</a>
                                 </button>
                             </h2>
-                            <div id="instances-{{loop.index}}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}" aria-labelledby="instance-head-{{loop.index}}" data-bs-parent="#ac-instances">
+                            <div id="instances-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="instance-head-{{loop.index}}" data-bs-parent="#ac-instances">
                                 <div class="accordion-body">
                                     <div class="">
                                         <strong>{{instance.message}}</strong>
@@ -66,6 +64,35 @@
                                     <div class="d-grid gap-2 ">
                                         <a href="{{ path('app_backoffice_instance_edit',{'slug': instance.slug}) }}" class="btn btn-primary mb-3">Modifier</a>
                                         <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}" class="btn btn-primary mb-3">Voir</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   {% endfor %}
+                </div>
+            </div>
+
+            <div class="card mb-3" style="width: 100%;">
+                <h2>Les checkpoints</h2>
+                <div class="accordion" id="ac-checkpoints">
+                    {% for checkpoint in game.unTrashedCheckpoints %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="checkpoint-head-{{loop.index}}">
+                                <button class="accordion-button text-black bg-gradient collapsed"                                 
+                                type="button" data-bs-toggle="collapse" data-bs-target="#checkpoints-{{loop.index}}" 
+                                aria-expanded="false" 
+                                aria-controls="checkpoints-{{loop.index}}">
+                                    {{checkpoint.title}}
+                                </button>
+                            </h2>
+                            <div id="checkpoints-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="checkpoint-head-{{loop.index}}" data-bs-parent="#ac-checkpoints">
+                                <div class="accordion-body">
+                                    <div class="">
+                                        <strong>{{checkpoint.successMessage}}</strong>
+                                    </div>
+                                    <div class="d-grid gap-2 ">
+                                        <a href="{{ path('app_backoffice_checkpoint_edit',{'id': checkpoint.id}) }}" class="btn btn-primary mb-3">Modifier</a>
+                                        <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-primary mb-3">Voir</a>
                                     </div>
                                 </div>
                             </div>

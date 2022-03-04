@@ -23,13 +23,13 @@ body {
 }
 
 label.required:after {
-	content: "*";
+	content: " *";
 	color:red;
 }
 
 #reader__dashboard
 {
-	display:none;
+	/*display:none;*/
 }
 
 /* Barre de navigation */
