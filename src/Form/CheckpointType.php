@@ -25,11 +25,6 @@ class CheckpointType extends AbstractType
             ->add('orderCheckpoint', TextType::class, [
                 'label' => 'Ordre du checkpoint :',
             ])
-            ->add('game', EntityType::class, [
-                'class' => Game::class,
-                'label' => 'Nom du jeu',
-                'choice_label' => 'slug',
-            ])
         ;
     }
 

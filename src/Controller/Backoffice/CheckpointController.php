@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CheckpointController extends AbstractController
 {
     /**
-     * @Route("/jeu/{gameSlug}", name="app_backoffice_checkpoint_index", methods={"GET"})
+     * @Route("/jeux/{gameSlug}", name="app_backoffice_checkpoint_index", methods={"GET"})
      */
     public function index($gameSlug, GameRepository $gameRepository, CheckpointRepository $checkpointRepository): Response
     {
@@ -34,7 +34,7 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/jeu/{gameSlug}/nouveau", name="app_backoffice_checkpoint_new", methods={"GET", "POST"})
+     * @Route("/jeux/{gameSlug}/nouveau", name="app_backoffice_checkpoint_new", methods={"GET", "POST"})
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager,QrcodeService $qrcodeService): Response
     {
@@ -53,12 +53,12 @@ class CheckpointController extends AbstractController
             $entityManager->persist($checkpoint);
             $entityManager->flush();
 
+            $qrcodeService->qrcode($checkpoint);
+
             $this->addFlash(
                 'notice-success',
                 'Le checkpoint '.$checkpoint->getTitle().' a été ajouté !'
             );
-
-            $qrcodeService->qrcode($checkpoint);
 
             return $this->redirectToRoute('app_backoffice_checkpoint_index', [
                 'gameSlug' => $game->getSlug()
@@ -90,7 +90,7 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/{id}/modifier", name="app_backoffice_checkpoint_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, QrcodeService $qrcodeService): Response
     {
         $game = $checkpoint->getGame();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
@@ -98,6 +98,8 @@ class CheckpointController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $qrcodeService->qrcode($checkpoint);
 
             $this->addFlash(
                 'notice-success',
