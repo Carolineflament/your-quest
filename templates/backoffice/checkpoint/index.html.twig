@@ -27,8 +27,8 @@
             <tr scope="row">
                 <td><a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}">{{ checkpoint.title }}</a></td>
                 <td>{{ checkpoint.OrderCheckpoint  }}</td>
-                <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('d-m-Y à H:i:s') : '' }}</td>
+                <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('d-m-Y à H:i:s') : '' }}</td>
                 <td>
                     <div class="d-grid gap-2 justify-content-md-center">
                         <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}"class="btn btn-primary">Modifier</a>

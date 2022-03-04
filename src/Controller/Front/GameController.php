@@ -3,6 +3,7 @@
 namespace App\Controller\Front;
 
 use App\Entity\Game;
+use App\Entity\Instance;
 use App\Repository\GameRepository;
 use App\Repository\InstanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,10 +44,21 @@ class GameController extends AbstractController
      *
      * @return Response
      */
-    public function show(Game $game, InstanceRepository $instanceRepository): Response
+    public function show(Game $game): Response
     {
-        $next_instances = $instanceRepository->findNextInstance($game->getId());
-        $previous_instances = $instanceRepository->findPreviousInstance($game->getId());
+        /* This is a method of the Game entity that returns all the instances of the game that are not
+        trashed. */
+        $instances = $game->getUnTrashedInstances();
+        /* This is a method of the Instance entity that returns all the instances that are not trashed
+        and that are not finished. */
+        $next_instances = $instances->filter(function(Instance $instance){
+            return $instance->getEndAt() > new \DateTimeImmutable();
+        });
+        /* This is a method of the Instance entity that returns all the instances that are not trashed
+        and that are finished. */
+        $previous_instances = $instances->filter(function(Instance $instance){
+            return $instance->getEndAt() <= new \DateTimeImmutable();
+        });
         return $this->render('front/game/show.html.twig', [
             'game' => $game,
             'next_instances' => $next_instances,
