@@ -2,7 +2,6 @@
 
 namespace App\Controller\Backoffice;
 
-use App\Entity\Game;
 use App\Entity\Instance;
 use App\Form\InstanceType;
 use App\Repository\GameRepository;
@@ -14,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/back/instance")
+ * @Route("/back/instances")
  */
 class InstanceController extends AbstractController
 {
@@ -69,13 +68,16 @@ class InstanceController extends AbstractController
 
     /**
      * 
-     * @Route("/{id}", name="app_backoffice_instance_show", methods={"GET"})
+     * @Route("/{instanceSlug}", name="app_backoffice_instance_show", methods={"GET"})
      */
-    public function show(Instance $instance): Response
+    public function show($instanceSlug, InstanceRepository $instanceRepository): Response
     {
+        // Get Instance from slug
+        $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
+
         // Get parent Game
         $game = $instance->getGame();
-
+       
 
         // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
 
@@ -86,14 +88,17 @@ class InstanceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/modifier", name="app_backoffice_instance_edit", methods={"GET", "POST"})
+     * @Route("/{instanceSlug}/modifier", name="app_backoffice_instance_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Instance $instance, EntityManagerInterface $entityManager): Response
+    public function edit($instanceSlug, Request $request, InstanceRepository $instanceRepository, EntityManagerInterface $entityManager): Response
     {
-         // Get parent Game
+        // Get Instance from slug
+        $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
+
+        // Get parent Game
          $game = $instance->getGame();
 
-         // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
+        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
 
         $form = $this->createForm(InstanceType::class, $instance);
         $form->handleRequest($request);
