@@ -36,7 +36,6 @@ class Game
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message = "Le slug du titre du jeu ne doit pas être vide")
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -105,13 +104,13 @@ class Game
     /**
      * @ORM\Column(type="datetime_immutable")
      * @Assert\NotBlank(message = "La date de création du jeu doit être renseignée")
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
@@ -147,6 +146,8 @@ class Game
         $this->instances = new ArrayCollection();
         $this->checkpoints = new ArrayCollection();
         $this->isTrashed = false;
+        $this->status = true;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

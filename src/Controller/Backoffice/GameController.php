@@ -6,18 +6,26 @@ use App\Entity\Game;
 use App\Form\GameType;
 use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
+use App\Service\MySlugger;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @Route("/back/jeux")
  */
 class GameController extends AbstractController
 {
+    private $paramBag;
+
+    public function __construct(ParameterBagInterface $paramBag)
+    {
+        $this->paramBag = $paramBag;
+    }
     /**
      * @Route("/", name="app_backoffice_game_index", methods={"GET"})
      */
@@ -38,13 +46,21 @@ class GameController extends AbstractController
     /**
      * @Route("/nouveau", name="app_backoffice_game_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, MySlugger $mySlugger): Response
     {
         $game = new Game();
         $form = $this->createForm(GameType::class, $game);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $mySlugger->slugify($game->getTitle());
+            $game->setSlug($slug);
+            $game->setUser($this->getUser());
+            
+            $file = $form['image']->getData();
+            $filename = $slug.'.'.$file->guessExtension();
+            $file->move($this->paramBag->get('app.game_images_directory'), $filename);
+            $game->setImage($filename);
             $entityManager->persist($game);
             $entityManager->flush();
 
@@ -67,7 +83,7 @@ class GameController extends AbstractController
      */
     public function show(Game $game): Response
     {
-        $instances = $game->getInstances()->getValues();
+        $instances = $game->getUnTrashedInstances()->getValues();
         $date = new DateTime();
         $date = $date->getTimestamp();
         foreach($instances AS $key=> $instance)

@@ -18,18 +18,22 @@ class GameType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
+                'required' => true,
                 'label' => 'Nom du jeu :',
                 'attr' => ['placeholder' => 'Dans la peau de Louis Pasteur']
             ])
             ->add('address', TextareaType::class, [
+                'required' => true,
                 'label' => 'Adresse du jeu :',
                 'attr' => ['placeholder' => '11 rue des camélias']
             ])
             ->add('postalCode', TextType::class, [
+                'required' => true,
                 'label' => 'Code postal :',
                 'attr' => ['placeholder' => '59000']
             ])
             ->add('city', TextType::class, [
+                'required' => true,
                 'label' => 'Ville :',
                 'attr' => ['placeholder' => 'Lille']
             ])
@@ -39,15 +43,6 @@ class GameType extends AbstractType
             ->add('summary', TextareaType::class, [
                 'required' => false,
                 'label' => 'Description du jeu :',
-            ])
-            ->add('status',  ChoiceType::class,[
-                'label' => 'Etat du jeu',
-                'choices' => [
-                    'Actif' => 1,
-                    'Inactif' => 2,
-                ],
-                // 'placeholder' => 'Statut du jeu',
-                // 'label' => false,
             ])
         ;
     }
