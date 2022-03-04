@@ -13,15 +13,15 @@
 
         <div class="d-flex justify-content-center ">
             <div class="card mb-3">
-                <img src="{{ game.image }}" class="card-img-top" alt="...">
+                <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="{{game.slug}}" style="max-width:600px">
                 <div class="card-body">
                     <h5 class="card-title">{{ game.title }}</h5>
                     <p class="card-text">{{ game.summary }}</p>
                     <p class="card-text"><small class="text-muted">Lieu: {{ game.address }} - {{ game.postalCode }} {{ game.city }}</small></p>
                     <div class="d-grid gap-2">
                         <a href="{{ path('app_backoffice_game_edit',{'slug': game.slug}) }}" class="btn btn-primary mb-3">Modifier</a>
-                        <a href="{{ path('app_backoffice_game_index') }}" class="btn btn-primary mb-3">Mes jeux</a>
-                        {{ include('backoffice/game/_delete_form.html.twig') }}
+                        {{ include('backoffice/game/_status_form.html.twig', {"method": 'show'}) }}
+                        {{ include('backoffice/game/_delete_form.html.twig', {"method": 'show'}) }}
                     </div>
                 </div>
             </div>
@@ -31,32 +31,80 @@
 
         {# CARD CHECKPOINTS #}
         
-        <div class="d-flex justify-content-center ">
-            <div class="card mb-3" style="width: 100%;">
-                <h2>Prochaines sessions du jeu</h2>
-                {% for instance in game.instances %}
-                <div class="accordion">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                        Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}}
-                        </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                                <div class="">
-                                    <strong>{{instance.message}}
-                                </div>
-                                <div class="d-grid gap-2 ">
-                                    <a href="{{ path('app_backoffice_instance_edit',{'slug': instance.slug}) }}" class="btn btn-primary mb-3">Modifier</a>
-                                    <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}" class="btn btn-primary mb-3">Voir</a>
-                                    {{ include('backoffice/game/_delete_form.html.twig') }}
+        <div id="games-cards-ic" class="d-flex bd-highlight">
+            <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <h2 class="p-2 align-self-center flex-grow-1">Les instances</h2>
+                    <a class="btn btn-primary m-3" href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}">Créer une instance</a>
+                </div>
+                <div class="accordion" id="ac-instances">
+                    {% for instance in instances %}
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="instance-head-{{loop.index}}">
+                                <button class="accordion-button text-white bg-gradient
+                                {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') > instance.endAt|date('c') %} 
+                                    bg-secondary  
+                                {% elseif "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') < instance.endAt|date('c') %} 
+                                    bg-success  
+                                {% else %}
+                                    bg-primary
+                                {% endif %}
+                                collapsed" 
+                                
+                                type="button" data-bs-toggle="collapse" data-bs-target="#instances-{{loop.index}}" 
+                                 
+                                    aria-expanded="false" 
+                                 aria-controls="instances-{{loop.index}}">
+                                    Instace en cours : Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}} <a href="#">test</a>
+                                </button>
+                            </h2>
+                            <div id="instances-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="instance-head-{{loop.index}}" data-bs-parent="#ac-instances">
+                                <div class="accordion-body">
+                                    <div class="">
+                                        <strong>{{instance.message}}</strong>
+                                    </div>
+                                    <div class="d-grid gap-2 ">
+                                        <a href="{{ path('app_backoffice_instance_edit',{'slug': instance.slug}) }}" class="btn btn-primary mb-3">Modifier</a>
+                                        <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}" class="btn btn-primary mb-3">Voir</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                   {% endfor %}
                 </div>
-                {% endfor %}
+            </div>
+
+            <div class="card mb-3 flex-grow-1"  style="flex-basis:min-content;">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <h2 class="p-2 align-self-center flex-grow-1">Les checkpoints</h2>
+                    <a class="btn btn-primary m-3" href="{{ path('app_backoffice_checkpoint_new', { 'gameSlug' : game.slug}) }}">Créer un checkpoint</a>
+                </div>
+                <div class="accordion" id="ac-checkpoints">
+                    {% for checkpoint in game.unTrashedCheckpoints %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="checkpoint-head-{{loop.index}}">
+                                <button class="accordion-button text-white bg-gradient collapsed bg-dark"                                 
+                                type="button" data-bs-toggle="collapse" data-bs-target="#checkpoints-{{loop.index}}" 
+                                aria-expanded="false" 
+                                aria-controls="checkpoints-{{loop.index}}">
+                                    {{checkpoint.title}}
+                                </button>
+                            </h2>
+                            <div id="checkpoints-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="checkpoint-head-{{loop.index}}" data-bs-parent="#ac-checkpoints">
+                                <div class="accordion-body">
+                                    <div class="">
+                                        <strong>{{checkpoint.successMessage}}</strong>
+                                    </div>
+                                    <div class="d-grid gap-2 ">
+                                        <a href="{{ path('app_backoffice_checkpoint_edit',{'id': checkpoint.id}) }}" class="btn btn-primary mb-3">Modifier</a>
+                                        <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-primary mb-3">Voir</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   {% endfor %}
+                </div>
             </div>
         </div>
 
