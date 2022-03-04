@@ -97,6 +97,7 @@ class CheckpointController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $entityManager->flush();
 
             $qrcodeService->qrcode($checkpoint);
