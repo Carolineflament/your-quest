@@ -13,7 +13,7 @@
 
         <div class="d-flex justify-content-center ">
             <div class="card mb-3">
-                <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="...">
+                <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="{{game.slug}}" style="max-width:600px">
                 <div class="card-body">
                     <h5 class="card-title">{{ game.title }}</h5>
                     <p class="card-text">{{ game.summary }}</p>
