@@ -24,7 +24,7 @@
     {# END NAV BACKOFFICE #}
 
     {# CARDS #}
-
+    {% if is_granted('ROLE_ADMIN') %}
     {% for game in games %}
         {% if game.status is same as true %}
         <div class="card mb-3" >
@@ -47,6 +47,7 @@
     {% else %}
     <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
     {% endfor %}
+    {% endif %}
 
 </div>
 
