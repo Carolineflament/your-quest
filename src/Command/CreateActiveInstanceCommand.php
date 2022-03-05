@@ -80,92 +80,38 @@ class CreateActiveInstanceCommand extends Command
         $organisatorRole = $this->roleRepository->findOneBy(['slug' => 'ROLE_ORGANISATEUR']);
         $playerRole = $this->roleRepository->findOneBy(['slug' => 'ROLE_JOUEUR']);
 
-        // Set players datas array
-        $players = [
-            [
-                'login' => 'joueur1@joueur.com',
-                'password' => 'joueur1',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur2@joueur.com',
-                'password' => 'joueur2',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur3@joueur.com',
-                'password' => 'joueur3',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur4@joueur.com',
-                'password' => 'joueur4',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur5@joueur.com',
-                'password' => 'joueur5',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur6@joueur.com',
-                'password' => 'joueur6',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur7@joueur.com',
-                'password' => 'joueur7',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur8@joueur.com',
-                'password' => 'joueur8',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur9@joueur.com',
-                'password' => 'joueur9',
-                'role' => '0'
-            ],
-            [
-                'login' => 'joueur10@joueur.com',
-                'password' => 'joueur10',
-                'role' => '0'
-            ]
-            ];
-
-        // New organisator
+        
+        // One new organisator
         $organisator = new User();
         $organisator->setEmail('organisateur1@organisateur.com');
         $organisator->setRole($organisatorRole);
         $organisator->setPassword($this->passwordHasher->hashPassword($organisator, 'organisateur1'));
         $organisator->setUsername('organisateur1');
-        $organisator->setLastname('Organisateur');
-        $organisator->setFirstname('Numéro-Un');
+        $organisator->setLastname('Numéro1');
+        $organisator->setFirstname('Orga');
         $organisator->setStatus(true);
 
         $userObjects[] = $organisator;
 
         $this->entityManager->persist($organisator);
 
-        // New players
-        // $playersObjectsArray = [];
-        // foreach($players as $currentUser)
-        // {
-        //     $user = new User();
-        //     $user->setEmail($currentUser['login']);
-        //     $user->setRole($roleEntity[$currentUser['role']]);
-        //     $user->setPassword($this->passwordHasher->hashPassword($user, $currentUser['password']));
-        //     $user->setUsername($faker->userName());
-        //     $user->setLastname($faker->lastName());
-        //     $user->setFirstname($faker->firstName());
-        //     $user->setAddress($faker->secondaryAddress());
-        //     $user->setPostalCode($faker->randomNumber(5, true));
-        //     $user->setCity($faker->country());
-        //     $user->setStatus(true);
-        //     $userEntity[]= $user;
-        //     $manager->persist($user);
-        // }
+        // Ten new players
+        for ($i = 1; $i<= 10; $i++) {
+            $player = new User();
+            $player->setEmail("joueur$i@joueur.com");
+            $player->setRole($playerRole);
+            $player->setPassword($this->passwordHasher->hashPassword($player, "joueur$i"));
+            $player->setUsername("joueur$i");
+            $player->setLastname("Numéro$i");
+            $player->setFirstname('Joueur');
+            $player->setStatus(true);
+
+            $userObjects[] = $player;
+
+            $this->entityManager->persist($player);
+        }
+        
+        
 
         $this->entityManager->flush();
         
