@@ -117,8 +117,8 @@ class CreateActiveInstanceCommand extends Command
         // substract 1h to set the start hour of the instance
         $start = $now->sub(new DateInterval('PT1H'));
         $instance->setStartAt($start);
-        // add 1h to set the start hour of the instance
-        $end = $now->add(new DateInterval('PT2H'));
+        // add 1h to set the end hour of the instance
+        $end = $now->add(new DateInterval('PT1H'));
         $instance->setEndAt($end);
         $instance->setGame($game);
         
