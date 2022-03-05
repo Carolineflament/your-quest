@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Game;
 use App\Entity\User;
 use App\Repository\AnswerRepository;
 use App\Repository\CheckpointRepository;
@@ -111,6 +112,16 @@ class CreateActiveInstanceCommand extends Command
             $this->entityManager->persist($player);
         }
         
+        /********** GAME **********/
+
+        $game = new Game();
+        $game->setTitle('Jeu de test créé par une commande');
+        $game->setAddress('Adresse de test');
+        $game->setPostalCode('66666');
+        $game->setCity('Testville');
+        $game->setUser($organisator);
+
+        $this->entityManager->persist($game);
         
 
         $this->entityManager->flush();
