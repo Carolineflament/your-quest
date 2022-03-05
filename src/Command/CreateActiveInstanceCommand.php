@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Game;
+use App\Entity\Instance;
 use App\Entity\User;
 use App\Repository\AnswerRepository;
 use App\Repository\CheckpointRepository;
@@ -13,6 +14,8 @@ use App\Repository\RoleRepository;
 use App\Repository\RoundRepository;
 use App\Repository\ScanQRRepository;
 use App\Repository\UserRepository;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,32 +30,14 @@ class CreateActiveInstanceCommand extends Command
 
     // Pour intéragir avec les entités
     private $roleRepository;
-    private $userRepository;
-    private $gameRepository;
-    private $checkpointRepository;
-    private $instanceRepository;
-    private $roundRepository;
-    private $scanQRRepository;
-    private $enigmaRepository;
-    private $answerRepository;
-
     private $entityManager;
     private $passwordHasher;
 
     
 
-    public function __construct(RoleRepository $roleRepository, UserRepository $userRepository, GameRepository $gameRepository, CheckpointRepository $checkpointRepository, InstanceRepository $instanceRepository, RoundRepository $roundRepository, ScanQRRepository $scanQRRepository, EnigmaRepository $enigmaRepository, AnswerRepository $answerRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(RoleRepository $roleRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
     {
         $this->roleRepository = $roleRepository;
-        $this->userRepository = $userRepository;
-        $this->gameRepository = $gameRepository;
-        $this->checkpointRepository = $checkpointRepository;
-        $this->instanceRepository = $instanceRepository;
-        $this->roundRepository = $roundRepository;
-        $this->scanQRRepository = $scanQRRepository;
-        $this->enigmaRepository = $enigmaRepository;
-        $this->answerRepository = $answerRepository;
-
         $this->entityManager = $entityManager;
         $this->passwordHasher = $passwordHasher;
         
@@ -122,6 +107,22 @@ class CreateActiveInstanceCommand extends Command
         $game->setUser($organisator);
 
         $this->entityManager->persist($game);
+
+        /********** INSTANCE **********/
+
+        $instance = new Instance();
+        $instance->setTitle('Instance de test créée par une commande');
+        // get actual date
+        $now = new DateTimeImmutable();
+        // substract 1h to set the start hour of the instance
+        $start = $now->sub(new DateInterval('PT1H'));
+        $instance->setStartAt($start);
+        // add 1h to set the start hour of the instance
+        $end = $now->add(new DateInterval('PT2H'));
+        $instance->setEndAt($end);
+        $instance->setGame($game);
+        
+        $this->entityManager->persist($instance);
         
 
         $this->entityManager->flush();
