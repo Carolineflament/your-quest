@@ -3,8 +3,10 @@
 namespace App\Controller\Backoffice;
 
 use App\Entity\Game;
+use App\Entity\User;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Security\Voter\GameVoter;
 use App\Service\CascadeTrashed;
 use App\Service\MySlugger;
 use DateTime;
@@ -31,6 +33,7 @@ class GameController extends AbstractController
      */
     public function index(GameRepository $gameRepository ): Response
     {
+
         //TODO Does the game belong to the organizer?
         // $this->denyAccessUnlessGranted('VIEW', $game);
 
@@ -102,6 +105,9 @@ class GameController extends AbstractController
      */
     public function edit(Request $request, Game $game, EntityManagerInterface $entityManager): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+
         $form = $this->createForm(GameType::class, $game);
         $form->handleRequest($request);
 
@@ -127,6 +133,10 @@ class GameController extends AbstractController
      */
     public function delete(Request $request, Game $game, CascadeTrashed $cascadeTrashed): Response
     {
+
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('DELETE_GAME', $game); 
+
         if ($this->isCsrfTokenValid('delete'.$game->getId(), $request->request->get('_token')))
         {
             $cascadeTrashed->trashGame($game);
@@ -141,6 +151,7 @@ class GameController extends AbstractController
                 'notice-danger',
                 'Impossible de supprimer le jeu '.$game->getTitle().', token invalide !'
             );
+
         }
 
         return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
@@ -154,7 +165,11 @@ class GameController extends AbstractController
      */
     public function update_status(Request $request, Game $game, EntityManagerInterface $entityManager)
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+
         if ($this->isCsrfTokenValid('trash'.$game->getId(), $request->request->get('_token')))
+
         {
             if($game->getStatus())
             {

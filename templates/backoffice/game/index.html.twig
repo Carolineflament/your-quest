@@ -26,25 +26,31 @@
     {# END NAV BACKOFFICE #}
 
     {# CARDS #}
-    <div class="tab-content">
-        <div class="tab-pane active" id="active_games">
-            {% for game in actives_games %}
-                {{ include('backoffice/game/_game_card.html.twig') }}
-            {% else %}
-                <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
-            {% endfor %}
+
+    {% if is_granted('ROLE_ORGANISATEUR') %}
+    
+        <div class="tab-content">
+            <div class="tab-pane active" id="active_games">
+                {% for game in actives_games %}
+                    {{ include('backoffice/game/_game_card.html.twig') }}
+                {% else %}
+                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="tab-pane fade" id="inactive_games">
+                {% for game in inactives_games %}
+                    {{ include('backoffice/game/_game_card.html.twig') }}
+                {% else %}
+                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
+                {% endfor %}
+            </div>
         </div>
 
-        <div class="tab-pane fade" id="inactive_games">
-            {% for game in inactives_games %}
-                {{ include('backoffice/game/_game_card.html.twig') }}
-            {% else %}
-                <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
-            {% endfor %}
-        </div>
-    </div>
 
-</div>
+    {% endif %}
 
     {# END CARDS #}
 
