@@ -56,7 +56,7 @@
                                  
                                     aria-expanded="false" 
                                  aria-controls="instances-{{loop.index}}">
-                                    Instace en cours : Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}} <a href="#">test</a>
+                                    Instace en cours : Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}}
                                 </button>
                             </h2>
                             <div id="instances-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="instance-head-{{loop.index}}" data-bs-parent="#ac-instances">
@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="d-grid gap-2 ">
                                         <a href="{{ path('app_backoffice_instance_edit',{'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-3">Modifier</a>
-                                        <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}" class="btn btn-primary mb-3">Voir</a>
+                                        <a href="{{ path('app_backoffice_instance_show', {'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-3">Voir</a>
                                     </div>
                                 </div>
                             </div>
