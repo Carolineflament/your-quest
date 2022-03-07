@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+
 use App\Entity\Game;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -10,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GameVoter extends Voter
 {
+
     private $games;
 
     public function __construct (Security $security)
@@ -25,6 +27,7 @@ class GameVoter extends Voter
     }
 
     protected function voteOnAttribute(string $attribute, $game, TokenInterface $token): bool
+
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
@@ -53,6 +56,7 @@ class GameVoter extends Voter
                 if ($user === $game->getUser()) {
                     return true;
                 }
+
                 break;
         }
 

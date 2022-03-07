@@ -25,7 +25,7 @@ class QrcodeService
         $writer = new PngWriter();
 
         // Create QR code
-        $qrCode = QR::create($checkpoint->getTitle())
+        $qrCode = QR::create($checkpoint->getSuccessMessage())
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
             ->setSize(300)

@@ -15,21 +15,38 @@ body {
 	border-color: #7eb5a6c4;
 }
 
+.btn-primary:active
+{
+	background-color: #7eb5a6;
+	border-color: #7eb5a6;
+}
+
 .container
 {
-	background-color: #E8D0B3;
+	/*background-color: #E8D0B3;
 	border-radius:35px;
-	box-shadow: 0px 15px 50px 0px rgb(0 0 0 / 10%);
+	box-shadow: 0px 15px 50px 0px rgb(0 0 0 / 10%);*/
+}
+
+.p-6
+{
+	padding: 2.5rem;
+}
+
+.logo-lost-password
+{
+	filter: invert(1) sepia(1) saturate(5) hue-rotate(258deg);
+
 }
 
 label.required:after {
-	content: "*";
+	content: " *";
 	color:red;
 }
 
 #reader__dashboard
 {
-	display:none;
+	/*display:none;*/
 }
 
 /* Barre de navigation */
@@ -183,3 +200,14 @@ label.required:after {
   transform: translateX(0);
 }
 
+/* show game page */ 
+#games-cards-ic
+{
+	flex-direction: row;
+}
+
+@media (max-width: 800px) {
+	#games-cards-ic {
+	  flex-direction: column;
+	}
+  }

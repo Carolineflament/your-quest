@@ -10,46 +10,47 @@
         <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary mb-3">Créer un nouveau jeu</a>
     </div>
 
+    {{ include('front/_notice_message.html.twig') }}
+
     {# NAV BACKOFFICE GAME #}
 
     <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ path('app_backoffice_game_index') }}">Mes jeux actifs</a>
+        <li class="nav-item ">
+            <a class="nav-link active" data-bs-toggle="tab" href="#active_games">Mes jeux actifs</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_backoffice_game_index_inactive') }}">Mes jeux archivés</a>
+            <a class="nav-link" data-bs-toggle="tab" href="#inactive_games">Mes jeux archivés</a>
         </li>
     </ul>
 
     {# END NAV BACKOFFICE #}
 
     {# CARDS #}
+
     {% if is_granted('ROLE_ORGANISATEUR') %}
-    {% for game in games %}
-        {% if game.status is same as true %}
-        <div class="card mb-3" >
-            <div class="row g-0">
-                <div class="col-md-4">
-                <img src="{{ game.image }}" class="card-img-top" alt="..." >
-                </div>
-                <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">{{ game.title }}</h5>
-                    <p class="card-text">{{ game.city }} ({{ game.postalCode }})</p>
-                    <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
-                    {{ include('backoffice/game/_delete_form.html.twig') }}
-                </div>
-                </div>
+    
+        <div class="tab-content">
+            <div class="tab-pane active" id="active_games">
+                {% for game in actives_games %}
+                    {{ include('backoffice/game/_game_card.html.twig') }}
+                {% else %}
+                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="tab-pane fade" id="inactive_games">
+                {% for game in inactives_games %}
+                    {{ include('backoffice/game/_game_card.html.twig') }}
+                {% else %}
+                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
+                {% endfor %}
             </div>
         </div>
-        {% endif %}
 
-    {% else %}
-    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
-    {% endfor %}
+
     {% endif %}
-
-</div>
 
     {# END CARDS #}
 

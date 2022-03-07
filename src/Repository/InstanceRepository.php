@@ -19,46 +19,6 @@ class InstanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Instance::class);
     }
 
-    /**
-     * Find the next instance of a game that hasn't ended yet
-     * 
-     * @param int game_id The ID of the game we're looking for instances of.
-     * 
-     * @return An array of instances.
-     */
-    public function findNextInstance(int $game_id)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.endAt > :date AND i.isTrashed != :trash AND i.game = :game')
-            ->setParameter('date', new \DateTimeImmutable())
-            ->setParameter('trash', 1)
-            ->setParameter('game', $game_id)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * FindPreviousInstance()
-     * 
-     * The function takes in a game_id and returns the previous instance of the game
-     * 
-     * @param int game_id The id of the game we're looking for.
-     * 
-     * @return An array of instances.
-     */
-    public function findPreviousInstance(int $game_id)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.endAt <= :date AND i.isTrashed != :trash AND i.game = :game')
-            ->setParameter('date', new \DateTimeImmutable())
-            ->setParameter('trash', 1)
-            ->setParameter('game', $game_id)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     // /**
     //  * @return Instance[] Returns an array of Instance objects
     //  */

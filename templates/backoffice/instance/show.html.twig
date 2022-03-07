@@ -33,7 +33,7 @@
             </tbody>
         </table>
 
-        <a href="{{ path('app_backoffice_instance_edit', {'id': instance.id}) }}" class="btn btn-primary mb-2">Modifier</a>
+        <a href="{{ path('app_backoffice_instance_edit', {'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-2">Modifier</a>
 
         {{ include('backoffice/instance/_delete_form.html.twig') }}
     </div>

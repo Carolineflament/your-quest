@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,7 +36,6 @@ class Game
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message = "Le slug du titre du jeu ne doit pas être vide")
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -104,19 +104,19 @@ class Game
     /**
      * @ORM\Column(type="datetime_immutable")
      * @Assert\NotBlank(message = "La date de création du jeu doit être renseignée")
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Instance::class, mappedBy="game")
-     * @ORM\OrderBy({"startAt" = "ASC"})
+     * @ORM\OrderBy({"startAt" = "DESC"})
      */
     private $instances;
 
@@ -146,6 +146,8 @@ class Game
         $this->instances = new ArrayCollection();
         $this->checkpoints = new ArrayCollection();
         $this->isTrashed = false;
+        $this->status = true;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -281,6 +283,16 @@ class Game
         return $this->instances;
     }
 
+    /**
+     * @return Collection<int, Instance>
+     */
+    public function getUnTrashedInstances(): Collection
+    {
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->eq('isTrashed', false));
+        return $this->instances->matching($criteria);
+    }
+
     public function addInstance(Instance $instance): self
     {
         if (!$this->instances->contains($instance)) {
@@ -309,6 +321,16 @@ class Game
     public function getCheckpoints(): Collection
     {
         return $this->checkpoints;
+    }
+
+    /**
+     * @return Collection<int, Checkpoint>
+     */
+    public function getUnTrashedCheckpoints(): Collection
+    {
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->eq('isTrashed', false));
+        return $this->checkpoints->matching($criteria);
     }
 
     public function addCheckpoint(Checkpoint $checkpoint): self
