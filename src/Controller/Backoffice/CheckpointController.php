@@ -38,8 +38,6 @@ class CheckpointController extends AbstractController
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager,QrcodeService $qrcodeService): Response
     {
-
-
         $checkpoint = new Checkpoint();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);

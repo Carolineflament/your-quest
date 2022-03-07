@@ -17,19 +17,22 @@
         {# Scanner message zone #}
         <div style="margin: 0px auto 50px auto;" id="message"></div>
         {# End Scanner message zone #}
-
+        
     </div>
 </div>
 
 <script>
+        
         function onScanSuccess(decodedText, decodedResult) {
             // Handle on success condition with the decoded text or result.
             console.log(`Decoded QR code : ${decodedText}`, decodedResult);
-
-            /* A décommenter dès qu'on utilisera nos QR codes générés par l'appli
+            
+            var url = window.location.href.replace(window.location.pathname, '');
+            console.log(url);
+            // A décommenter dès qu'on utilisera nos QR codes générés par l'appli
             // TRAITEMENT APRES DECODAGE DU QR CODE (et message d'erreur si un QR code "étranger" à l'appli est scanné)
             // On vérifie que la string retournée commence par "URL:https://yourquest.fr/checkpoint/"
-            if (decodedText.startsWith('URL:https://yourquest.fr/checkpoint/')) {
+            if (decodedText.startsWith('URL:'+url)) {
                 // Si vrai on retire "URL:" du début de la chaine de caractères
                 const checkpointUrl = decodedText.substring(4);
                 // On redirige l'utilisateur vers l'URL du checkpoint
@@ -41,7 +44,7 @@
                 // On écrit dans l'élément
                 messageElement.textContent = `ERREUR : le QR code que vous venez de scanner n'a pas été généré par notre application YourQuest ( le décodage du QR code indique : ${decodedText} )`;
             }
-            */
+            
 
             // This will stop the scanner (video feed) and clear the scan area.
             html5QrcodeScanner.clear();
