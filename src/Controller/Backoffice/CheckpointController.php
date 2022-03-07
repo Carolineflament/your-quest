@@ -126,8 +126,6 @@ class CheckpointController extends AbstractController
     {
         $game = $checkpoint->getGame();
 
-        $checkpoint->setGame($game);
-
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
             if ($checkpoint->getIsTrashed()) {
                 $cascadeTrashed->trashCheckpoint($checkpoint);
