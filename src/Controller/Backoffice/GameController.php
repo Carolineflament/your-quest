@@ -31,16 +31,24 @@ class GameController extends AbstractController
     /**
      * @Route("/", name="app_backoffice_game_index", methods={"GET"})
      */
-    public function index(GameRepository $gameRepository ): Response
+    public function index(GameRepository $gameRepository): Response
     {
+        // It's getting the user id of the user connected.
+        $userConnected = $this->getUser()->getId();
+        //dump($userConnected);
+        $gameUser = $gameRepository->findBy(['user' => $userConnected]);
+        $gameUserCreated = $gameUser[0];
+        $thisPlayersGames= $gameUserCreated->getUser()->getId();
+        //dump($thisUser);
 
-        //TODO Does the game belong to the organizer?
-        // $this->denyAccessUnlessGranted('VIEW', $game);
-
-        return $this->render('backoffice/game/index.html.twig', [
-            'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0]),
-            'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0]),
-        ]);
+        // It's checking if the user connected is the owner of the game.
+        if ($userConnected == $thisPlayersGames)
+        {
+            return $this->render('backoffice/game/index.html.twig', [
+                'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected]),
+                'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected]),
+            ]);
+        }
     }
 
     /**
