@@ -3,7 +3,37 @@
 {% block title %}{{ instance.title }}{% endblock %}
 
 {% block body %}
-<div class="container-fluid mb-3">
-    <h1>Instance {{ instance.title }} du jeu {{ game.title }}</h1>
-</div>
+<div class="container-xl p-5">
+    <div class="row">
+        <h1 class="text-muted fw-bold mb-4 text-center h1">{{game.title}}</h1>
+        {{ include('front/_notice_message.html.twig') }}
+    </div>
+
+    <div class="row">
+        <img src="{{ asset(app_games_images_directory~game.image) }}" alt="{{instance.title}}" />
+    </div>
+
+    <div class="card-list mt-4">
+
+    <h3 class="text-muted fw-bold mb-4 text-center h3">{{instance.title}}</h3>
+        <div class="card card-task text-center">
+            <p class="mt-4 mb-4">
+                {{ instance.message }}
+            </p><br>
+
+            <p>Cette instance débutera le {{ instance.startAt|date('d-m-Y à H:i:s')}} et se terminera le {{ instance.endAt|date('d-m-Y à H:i:s')}}
+            </p>
+
+            {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %}
+            <a href="#" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
+
+            {% else %}
+            <a href="#" class="btn btn-primary mb-4">Voir les scores</a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>        
 {% endblock %}
