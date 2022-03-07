@@ -33,7 +33,7 @@ class QrcodeService
         $writer = new PngWriter();
 
         // Create QR code
-        $url = $this->routerInterface->generate('front_checkpoint_check', ['id' => $checkpoint->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->routerInterface->generate('front_checkpoint_check', ['id' => $checkpoint->getId(), 'token' => sha1($checkpoint->getTitle())], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $qrCode = QR::create($url)
             ->setEncoding(new Encoding('UTF-8'))
