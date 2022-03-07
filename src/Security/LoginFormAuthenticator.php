@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use App\Repository\CheckpointRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +16,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Routing\RouterInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -28,14 +26,12 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private UrlGeneratorInterface $urlGenerator;
     private UserRepository $userRepository;
     private SessionInterface $session;
-    private CheckpointRepository $checkpointRepos;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, SessionInterface $session, CheckpointRepository $checkpointRepos)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, SessionInterface $session)
     {
         $this->urlGenerator = $urlGenerator;
         $this->userRepository = $userRepository;
         $this->session = $session;
-        $this->checkpointRepos = $checkpointRepos;
     }
 
     public function authenticate(Request $request): Passport
@@ -70,13 +66,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
         
-        if($this->session->get('checkpoint_id') !== null)
+        if($this->session->get('route_redirect') !== null)
         {
-            $checkpoint = $this->checkpointRepos->find($this->session->get('checkpoint_id'));
-            if($checkpoint !== null)
-            {
-                return new RedirectResponse($this->urlGenerator->generate('front_checkpoint_check', ['id' => $checkpoint->getId(), 'token' => sha1($checkpoint->getTitle())]));
-            }
+            return new RedirectResponse($this->session->get('route_redirect'));
         }
         elseif ($token->getUser()->getRole()->getSlug() === "ROLE_ADMIN")
         {
