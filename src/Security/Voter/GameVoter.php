@@ -20,7 +20,7 @@ class GameVoter extends Voter
 
     protected function supports(string $attribute, $game): bool
     {
-        return in_array($attribute, ["VIEW_GAME"])
+        return in_array($attribute, ["EDIT_GAME"])
         && $game instanceof Game;
     }
 
@@ -34,9 +34,9 @@ class GameVoter extends Voter
 
         // Check conditions and return true to grant permission
         switch ($attribute) {
-            case "VIEW_GAME":
-                //Organizer of this game, or Admin
-                if ($this->security->isGranted('ROLE_ADMIN')) {
+            case "EDIT_GAME":
+                //Organizer or Admin can modify this game
+                if ($this->security->isGranted('ROLE_ORGANISATEUR')) {
                     return true;
                 }
 
@@ -44,9 +44,16 @@ class GameVoter extends Voter
                     return true;
                 }
                 break;
-            // case self::VIEW:
-            //     return true;
-            //     break;
+            case "DELETE_GAME":
+                //Organizer or Admin can delete this game
+                if ($this->security->isGranted('ROLE_ORGANISATEUR')) {
+                    return true;
+                }
+
+                if ($user === $game->getUser()) {
+                    return true;
+                }
+                break;
         }
 
         return false;

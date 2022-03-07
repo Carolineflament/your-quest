@@ -6,6 +6,7 @@ use App\Entity\Game;
 use App\Entity\User;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Security\Voter\GameVoter;
 use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,11 +22,8 @@ class GameController extends AbstractController
     /**
      * @Route("/", name="app_backoffice_game_index", methods={"GET"})
      */
-    public function index(GameRepository $gameRepository, Game $game): Response
+    public function index(GameRepository $gameRepository): Response
     {
-        //TODO Does the game belong to the organizer?
-        $this->denyAccessUnlessGranted('VIEW_GAME', $game);
-
         return $this->render('backoffice/game/index.html.twig', [
             'games' => $gameRepository->findBy(['status' => 1]),
         ]);
@@ -36,12 +34,6 @@ class GameController extends AbstractController
      */
     public function index_inactive(GameRepository $gameRepository): Response
     {
-        //TODO Does the game belong to the organizer?
-        // $gameUser = $this->getUser();
-        // if ($gameUser !== $game->getUser()) {
-        //     throw $this->createAccessDeniedException('Non autorisé.');
-        // }
-
         return $this->render('backoffice/game/index_archive.html.twig', [
             'games' => $gameRepository->findBy(['status' => 0]),
         ]);
@@ -84,6 +76,9 @@ class GameController extends AbstractController
      */
     public function edit(Request $request, Game $game, EntityManagerInterface $entityManager): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+
         $form = $this->createForm(GameType::class, $game);
         $form->handleRequest($request);
 
@@ -104,6 +99,9 @@ class GameController extends AbstractController
      */
     public function delete(Request $request, Game $game, EntityManagerInterface $entityManager): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('DELETE_GAME', $game);
+
         if ($this->isCsrfTokenValid('delete'.$game->getId(), $request->request->get('_token'))) {
             $entityManager->remove($game);
             $entityManager->flush();
@@ -120,6 +118,9 @@ class GameController extends AbstractController
      */
     public function update_status(Game $game, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed)
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+
         if($game->getStatus())
         {
             $cascadeTrashed->trashGame($game);
