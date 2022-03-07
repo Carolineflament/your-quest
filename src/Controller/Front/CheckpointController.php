@@ -17,4 +17,14 @@ class CheckpointController extends AbstractController
             'controller_name' => 'CheckpointController',
         ]);
     }
+
+    /**
+     * @Route("/check/{id}", name="front_checkpoint_check", methods={"GET", "POST"}, requirements={"id"="\d+"})
+     */
+    public function check() : Response
+    {
+        return $this->render('front/checkpoint/check.html.twig', [
+            'controller_name' => 'CheckpointController',
+        ]);
+    }
 }

@@ -14,18 +14,28 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
-
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class QrcodeService
 {
+    private $routerInterface;
 
+    public function __construct(RouterInterface $routerInterface)
+    {
+        $this->routerInterface = $routerInterface;
+    }
 
     public function qrcode(Checkpoint $checkpoint)
     {
         $writer = new PngWriter();
 
         // Create QR code
-        $qrCode = QR::create($checkpoint->getSuccessMessage())
+        $url = $this->routerInterface->generate('front_checkpoint_check', ['id' => $checkpoint->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $qrCode = QR::create($url)
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
             ->setSize(300)
