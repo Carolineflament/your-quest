@@ -1,0 +1,14 @@
+<div>
+
+    <img height="64" src="http://localhost:8080/assets/images/QuestLogoResize.png" alt="YourQuest" />
+
+    <h1>Bonjour,</h1>
+
+    <p>Pour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous</p>
+
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+    <p>Ce lien expire dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+    <p>Cordialement</p>
+</div>
