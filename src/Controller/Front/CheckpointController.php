@@ -4,7 +4,9 @@ namespace App\Controller\Front;
 
 use App\Entity\Checkpoint;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CheckpointController extends AbstractController
@@ -20,15 +22,24 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/check/{id}/{token}", name="front_checkpoint_check", methods={"GET", "POST"}, requirements={"id"="\d+"})
+     * @Route("/checkpoint/{id}/{token}", name="front_checkpoint_check", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function check(Checkpoint $checkpoint, string $token) : Response
+    public function check(Checkpoint $checkpoint, string $token, SessionInterface $session) : Response
     {
+        $user = $this->getUser();
 
-
-        // TODO check si token correspond bien au checkpoint
+        if($user === null)
+        {
+            $session->set('checkpoint_id', $checkpoint->getId());
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+        }
+        
 
         //TODO cehck si user bien connecté, sinon page de login + session url pour retourner ici
+
+        // TODO test checkpoint si jeu actif
+
+        // TODO check si token correspond bien au checkpoint
 
         // TODO Test si l'utilisateur en est bien à se check point
 

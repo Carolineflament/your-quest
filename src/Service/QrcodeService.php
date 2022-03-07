@@ -35,7 +35,7 @@ class QrcodeService
         // Create QR code
         $url = $this->routerInterface->generate('front_checkpoint_check', ['id' => $checkpoint->getId(), 'token' => sha1($checkpoint->getTitle())], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $qrCode = QR::create($url)
+        $qrCode = QR::create('URL:'.$url)
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
             ->setSize(300)

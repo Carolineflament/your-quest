@@ -2,10 +2,12 @@
 
 namespace App\Security;
 
+use App\Repository\CheckpointRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -24,12 +26,16 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
-    private $userRepository;
+    private UserRepository $userRepository;
+    private SessionInterface $session;
+    private CheckpointRepository $checkpointRepos;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, SessionInterface $session, CheckpointRepository $checkpointRepos)
     {
         $this->urlGenerator = $urlGenerator;
         $this->userRepository = $userRepository;
+        $this->session = $session;
+        $this->checkpointRepos = $checkpointRepos;
     }
 
     public function authenticate(Request $request): Passport
@@ -64,7 +70,15 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
         
-        if ($token->getUser()->getRole()->getSlug() === "ROLE_ADMIN")
+        if($this->session->get('checkpoint_id') !== null)
+        {
+            $checkpoint = $this->checkpointRepos->find($this->session->get('checkpoint_id'));
+            if($checkpoint !== null)
+            {
+                return new RedirectResponse($this->urlGenerator->generate('front_checkpoint_check', ['id' => $checkpoint->getId(), 'token' => sha1($checkpoint->getTitle())]));
+            }
+        }
+        elseif ($token->getUser()->getRole()->getSlug() === "ROLE_ADMIN")
         {
             return new RedirectResponse($this->urlGenerator->generate('app_admin_user_index'));
         }
