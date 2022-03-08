@@ -21,17 +21,18 @@
                 {{ instance.message }}
             </p><br>
 
-            <p>Cette instance débutera le {{ instance.startAt|date('d-m-Y à H:i:s')}} et se terminera le {{ instance.endAt|date('d-m-Y à H:i:s')}}
+            <p>Cette instance débute le {{ instance.startAt|date('d-m-Y à H:i:s')}} et se termine le {{ instance.endAt|date('d-m-Y à H:i:s')}}
             </p>
 
+            <div class="d-grid gap-2 justify-content-md-center">
             {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %}
-            <a href="#" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
+            <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
 
             {% else %}
-            <a href="#" class="btn btn-primary mb-4">Voir les scores</a>
+            <a href="{{ path('app_front_instance_score', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les scores</a>
 
             {% endif %}
-
+            
         </div>
 
     </div>

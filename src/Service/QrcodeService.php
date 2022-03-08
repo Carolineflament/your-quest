@@ -9,7 +9,7 @@ use Endroid\QrCode\Builder\BuilderInterface;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
-use Endroid\QrCode\QrCode as QR; // obligé d'utiliser un alias car le nom de cette class utilisée par le composant est identique au nom de mon entité !
+use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
@@ -35,7 +35,7 @@ class QrcodeService
         // Create QR code
         $url = $this->routerInterface->generate('front_checkpoint_check', ['id' => $checkpoint->getId(), 'token' => sha1($checkpoint->getTitle())], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $qrCode = QR::create('URL:'.$url)
+        $qrCode = QrCode::create('URL:'.$url)
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
             ->setSize(300)

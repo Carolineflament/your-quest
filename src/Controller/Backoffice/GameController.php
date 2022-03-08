@@ -273,7 +273,7 @@ class GameController extends AbstractController
         /***** On traite le document PDF généré *****/
 
         // On enregistre le PDF dans le dossier "pdf"
-        $pdf->Output('F', $this->paramBag->get('app.game_pdf_directory').'YourQuest-'.$game->getSlug().'.pdf');
+        // $pdf->Output('F', $this->paramBag->get('app.game_pdf_directory').'YourQuest-'.$game->getSlug().'.pdf');
 
         // On retourne le PDF directement dans le visualiseur du navigateur
         return new Response($pdf->Output(), 200, array(
