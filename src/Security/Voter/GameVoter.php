@@ -11,8 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GameVoter extends Voter
 {
-
-    private $games;
+    private $security;
 
     public function __construct (Security $security)
     {
@@ -22,7 +21,7 @@ class GameVoter extends Voter
 
     protected function supports(string $attribute, $game): bool
     {
-        return in_array($attribute, ["EDIT_GAME"])
+        return in_array($attribute, ["EDIT_GAME", 'VIEW_GAME', 'DELETE_GAME'])
         && $game instanceof Game;
     }
 
@@ -38,6 +37,7 @@ class GameVoter extends Voter
         // Check conditions and return true to grant permission
         switch ($attribute) {
             case "EDIT_GAME":
+            case "VIEW_GAME":
             case "DELETE_GAME":
             {
                 //Admin can modify this game

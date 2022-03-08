@@ -99,6 +99,9 @@ class InstanceController extends AbstractController
         // Get Instance from slug
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('VIEW_INSTANCE', $instance);
+
         // Get parent Game
         $game = $instance->getGame();
        
@@ -123,6 +126,9 @@ class InstanceController extends AbstractController
     {
         // Get Instance from slug
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
+
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_INSTANCE', $instance);
 
         // Get parent Game
          $game = $instance->getGame();
@@ -161,6 +167,9 @@ class InstanceController extends AbstractController
      */
     public function delete(Request $request, Instance $instance, EntityManagerInterface $entityManager): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('DELETE_INSTANCE', $instance);
+
         if ($this->isCsrfTokenValid('delete'.$instance->getId(), $request->request->get('_token'))) {
             $instance->setIsTrashed(true);
             $entityManager->flush();

@@ -101,7 +101,7 @@ class GameController extends AbstractController
     public function show(Game $game): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+        $this->denyAccessUnlessGranted('VIEW_GAME', $game);
         $instances = $game->getUnTrashedInstances()->getValues();
         $date = new DateTime();
         $date = $date->getTimestamp();
@@ -159,7 +159,6 @@ class GameController extends AbstractController
      */
     public function delete(Request $request, Game $game, CascadeTrashed $cascadeTrashed): Response
     {
-
         // Organizer or Admin can modify this game
         $this->denyAccessUnlessGranted('DELETE_GAME', $game); 
 
@@ -235,6 +234,9 @@ class GameController extends AbstractController
      */
     public function pdf(Game $game): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+        
         /***** On prépare les données à insérer dans le PDF *****/
 
         // Titre des pages
