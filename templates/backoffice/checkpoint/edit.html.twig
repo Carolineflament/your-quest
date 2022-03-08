@@ -1,17 +1,14 @@
-{% extends 'base.html.twig' %}
+{% extends 'backoffice/back_base.html.twig' %}
 
-{% block title %}Modifier Checkpoint{% endblock %}
+{% block title %}Modifier le Checkpoint : {{ checkpoint.title }} du jeu {{ game.title }}{% endblock %}
 
-{% block body %}
-<div class="container-fluid mb-3">
-    <h1>Modifier Checkpoint {{ checkpoint.title }} du jeu {{ game.title }}</h1>
-
-    <div class="d-grid gap-2 my-5 d-md-flex justify-content-md-start">
+{% block back_body %}
+    <div class="d-flex flex-column align-items-end">
 
         <a href="{{ path('app_backoffice_checkpoint_index', {'gameSlug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retouner à la liste</a>
     </div> 
+    <div class="clearfix"></div>
 
     {{ include('backoffice/checkpoint/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
-</div>
 
 {% endblock %}
