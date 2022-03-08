@@ -8,8 +8,6 @@ use App\Repository\GameRepository;
 use App\Repository\InstanceRepository;
 use App\Repository\RoundRepository;
 use App\Repository\ScanQRRepository;
-use App\Repository\UserRepository;
-use DateTime;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class InstanceController extends AbstractController
 {
     /**
-     * @Route("/jeu/{gameSlug}/instance/{instanceSlug}", name="app_front_instance_show", methods={"GET"})
+     * @Route("/jeux/{gameSlug}/instances/{instanceSlug}", name="app_front_instance_show", methods={"GET"})
      */
     public function show($gameSlug, $instanceSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository): Response
     {
@@ -62,7 +60,7 @@ class InstanceController extends AbstractController
 
 
     /**
-     * @Route("/jeu/{gameSlug}/instance/{instanceSlug}/realtime", name="app_front_instance_realtime", methods={"GET"})
+     * @Route("/jeux/{gameSlug}/instances/{instanceSlug}/realtime", name="app_front_instance_realtime", methods={"GET"})
      */
     public function realtime($gameSlug, $instanceSlug, InstanceRepository $instanceRepository, CheckpointRepository $checkpointRepository, RoundRepository $roundRepository, ScanQRRepository $scanQRRepository): Response
     {
@@ -70,7 +68,35 @@ class InstanceController extends AbstractController
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
         // Get parent Game
-        $game = $instance->getGame();
+         $game = $instance->getGame();
+
+        // Now
+        $now = new DateTimeImmutable();
+
+        // Is instance not started yet ?
+        if ($now < $instance->getStartAt()) {
+
+            // Redirect to Instance show
+            // + flash message
+            $this->addFlash(
+                'notice-danger',
+                'Cette instance n\'a pas encore débuté, impossible d\'afficher la position des joueurs.'
+            );
+            return $this->redirectToRoute('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
+            
+        }
+
+        // Is instance finished
+        if ($now > $instance->getEndAt()) {
+
+            // Redirect to score page
+            // + flash message
+            $this->addFlash(
+                'notice-danger',
+                'Cette instance est terminée, impossible d\'afficher la position des joueurs en tant réél, mais voici le tableau des scores.'
+            );
+            // TODO redirect to score page
+        }
 
         /***** Avancée des joueurs en temps réél *****/
 

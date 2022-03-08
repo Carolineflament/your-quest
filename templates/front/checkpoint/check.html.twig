@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Check ok{% endblock %}
+
+{% block body %}
+
+
+<div class="row mt-5">
+    <div class="col text-center">
+        <h1>Check OK</h1>
+        {{ include('front/_notice_message.html.twig') }}
+       
+        {{message}}
+
+    </div>
+</div>
+
+
+
+{% endblock %}

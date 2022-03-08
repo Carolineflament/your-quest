@@ -7,6 +7,8 @@ parameters:
     app.limit_games_per_page: '%env(LIMIT_GAMES_PER_PAGE)%'
     app.limit_users_per_page: '%env(LIMIT_USERS_PER_PAGE)%'
     app.game_images_directory: '%env(GAME_IMAGES_DIRECTORY)%'
+    app.game_qrcode_directory: '%env(GAME_QRCODE_DIRECTORY)%'
+    app.game_pdf_directory: '%env(GAME_PDF_DIRECTORY)%'
 
 services:
     # default configuration for services in *this* file

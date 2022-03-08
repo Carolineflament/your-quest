@@ -5,6 +5,7 @@
 {% block body %}
     <div class="container-fluid mb-3">
         <h1>Instance {{ instance.title }} du jeu {{ game.title }}</h1>
+        {{ include('front/_notice_message.html.twig') }}
 
         <a href="{{ path('app_front_instance_realtime', {'gameSlug': game.slug, 'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-2">Voir la position des joueurs</a>        
 

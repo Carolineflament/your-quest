@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -15,7 +16,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Routing\RouterInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -24,12 +24,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
-    private $userRepository;
+    private UserRepository $userRepository;
+    private SessionInterface $session;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, SessionInterface $session)
     {
         $this->urlGenerator = $urlGenerator;
         $this->userRepository = $userRepository;
+        $this->session = $session;
     }
 
     public function authenticate(Request $request): Passport
@@ -64,7 +66,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
         
-        if ($token->getUser()->getRole()->getSlug() === "ROLE_ADMIN")
+        if($this->session->get('route_redirect') !== null)
+        {
+            return new RedirectResponse($this->session->get('route_redirect'));
+        }
+        elseif ($token->getUser()->getRole()->getSlug() === "ROLE_ADMIN")
         {
             return new RedirectResponse($this->urlGenerator->generate('app_admin_user_index'));
         }

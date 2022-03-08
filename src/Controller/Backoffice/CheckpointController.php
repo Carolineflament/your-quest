@@ -38,8 +38,6 @@ class CheckpointController extends AbstractController
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager,QrcodeService $qrcodeService): Response
     {
-
-
         $checkpoint = new Checkpoint();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
@@ -125,8 +123,6 @@ class CheckpointController extends AbstractController
     public function trash(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
         $game = $checkpoint->getGame();
-
-        $checkpoint->setGame($game);
 
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
             if ($checkpoint->getIsTrashed()) {
