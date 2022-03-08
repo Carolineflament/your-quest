@@ -9,10 +9,13 @@ use App\Entity\Round;
 use App\Entity\ScanQR;
 use App\Entity\User;
 use App\Repository\RoleRepository;
+use App\Service\MySlugger;
+use App\Service\QrcodeService;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,20 +24,25 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class CreateActiveInstanceCommand extends Command
 {
     protected static $defaultName = 'app:instance:now';
-    protected static $defaultDescription = 'Create a test game and its one hour active instance now, with all their related entities datas';
+    protected static $defaultDescription = 'Create a test game and its four hour active instance now, with all their related entities datas';
 
-    // Pour intéragir avec les entités
+    // Pour intéragir avec les entités et services
     private $roleRepository;
     private $entityManager;
     private $passwordHasher;
+    private $slugger;
+    private $qrcodeService;
 
     
 
-    public function __construct(RoleRepository $roleRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(RoleRepository $roleRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger, QrcodeService $qrcodeService)
     {
         $this->roleRepository = $roleRepository;
         $this->entityManager = $entityManager;
         $this->passwordHasher = $passwordHasher;
+        $this->slugger = $slugger;
+        $this->qrcodeService = $qrcodeService;
+
         
 
         parent::__construct();
@@ -42,17 +50,36 @@ class CreateActiveInstanceCommand extends Command
 
     protected function configure(): void
     {
-        
+        $this
+            // Add 4 required command arguments
+            ->addArgument('gameName', InputArgument::REQUIRED, 'What is the name of the new game ?')
+            ->addArgument('numberOfCheckpoints', InputArgument::REQUIRED, 'How many checkpoints ?')
+            ->addArgument('instanceName', InputArgument::REQUIRED, 'What is the name of the new instance ?')
+            ->addArgument('numberOfPlayers', InputArgument::REQUIRED, 'How many players are playing this instance ?')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // Get all the command arguments
+        $gameNameArg = $input->getArgument('gameName');
+        $numberOfCheckpointsArg = $input->getArgument('numberOfCheckpoints');
+        $instanceNameArg = $input->getArgument('instanceName');
+        $numberOfPlayersArg = $input->getArgument('numberOfPlayers');
+
+        // Generate slugs to add them on users credentials
+        $gameSlug = $this->slugger->slugify($gameNameArg);
+        $instanceSlug = $this->slugger->slugify($instanceNameArg); 
+
+
         // Class pour styliser les inputs/outputs
         $io = new SymfonyStyle($input, $output);
 
-        $io->info("Création d'une instance de test, valide depuis 1h et pendant encore 1h.");
+        $io->info("Création d'un jeu et de son instance valide depuis 1h et pendant encore 4h.");
 
         /********** USERS **********/
+
+        $io->info("Création de l'organisateur");
 
         // Get necessary Role objects 
         $organisatorRole = $this->roleRepository->findOneBy(['slug' => 'ROLE_ORGANISATEUR']);
@@ -61,10 +88,10 @@ class CreateActiveInstanceCommand extends Command
         
         // One new organisator
         $organisator = new User();
-        $organisator->setEmail('organisateur1@organisateur.com');
+        $organisator->setEmail('orga'.$gameSlug.'@organisateur.com');
         $organisator->setRole($organisatorRole);
-        $organisator->setPassword($this->passwordHasher->hashPassword($organisator, 'organisateur1'));
-        $organisator->setUsername('organisateur1');
+        $organisator->setPassword($this->passwordHasher->hashPassword($organisator, 'organisateur'));
+        $organisator->setUsername('orga'.$gameSlug);
         $organisator->setLastname('Numéro1');
         $organisator->setFirstname('Orga');
         $organisator->setStatus(true);
@@ -73,16 +100,18 @@ class CreateActiveInstanceCommand extends Command
 
         // Ten new players
 
+        $io->info("Création de $numberOfPlayersArg joueurs");
+
         // Players array for next uses
         $playerObjectsArray = [];
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= $numberOfPlayersArg; $i++) {
             $player = new User();
-            $player->setEmail("joueur$i@joueur.com");
+            $player->setEmail('joueur'.$i.$gameSlug.'@joueur.com');
             $player->setRole($playerRole);
-            $player->setPassword($this->passwordHasher->hashPassword($player, "joueur$i"));
-            $player->setUsername("joueur$i");
-            $player->setLastname("Numéro$i");
+            $player->setPassword($this->passwordHasher->hashPassword($player, 'joueur'));
+            $player->setUsername('joueur'.$i.$gameSlug);
+            $player->setLastname('Numéro'.$i);
             $player->setFirstname('Joueur');
             $player->setStatus(true);
 
@@ -93,8 +122,11 @@ class CreateActiveInstanceCommand extends Command
         
         /********** GAME **********/
 
+        $io->info("Création du jeu $gameNameArg");
+
         $game = new Game();
-        $game->setTitle('Jeu de test créé par une commande');
+        $game->setTitle($gameNameArg);
+        $game->setSummary("Ceci est un jeu créé par la commande bin/console app:instance:now $gameNameArg $numberOfCheckpointsArg $instanceNameArg $numberOfPlayersArg");
         $game->setAddress('Adresse de test');
         $game->setPostalCode('66666');
         $game->setCity('Testville');
@@ -104,12 +136,14 @@ class CreateActiveInstanceCommand extends Command
 
         /********** CHECKPOINTS **********/
 
+        $io->info("Création de $numberOfCheckpointsArg checkpoints");
+
         // Checkpoints array for next uses
         $checkpointObjectsArray = [];
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= $numberOfCheckpointsArg; $i++) {
             $checkpoint = new Checkpoint();
-            $checkpoint->setTitle("Checkpoint de test créé par une commande ($i/5)");
+            $checkpoint->setTitle("Checkpoint de test (initialement $i/$numberOfCheckpointsArg)");
             $checkpoint->setOrderCheckpoint($i);
             $checkpoint->setSuccessMessage("Bravo ! Rendez-vous maintenant au checkpoint suivant.");
             $checkpoint->setGame($game);
@@ -117,25 +151,34 @@ class CreateActiveInstanceCommand extends Command
             $checkpointObjectsArray[] = $checkpoint;
 
             $this->entityManager->persist($checkpoint);
+
+            // generate QR code image
+            $this->qrcodeService->qrcode($checkpoint);
+
         }
 
         /********** INSTANCE **********/
 
+        $io->info("Création de l'instance $instanceNameArg");
+
         $instance = new Instance();
-        $instance->setTitle('Instance de test créée par une commande');
+        $instance->setTitle($instanceNameArg);
+        $instance->setMessage("Ceci est une instance créée par la commande bin/console app:instance:now $gameNameArg $numberOfCheckpointsArg $instanceNameArg $numberOfPlayersArg");
         // get actual date
         $now = new DateTimeImmutable();
         // substract 1h to set the start hour of the instance
         $InstanceStart = $now->sub(new DateInterval('PT1H'));
         $instance->setStartAt($InstanceStart);
-        // add 1h to set the end hour of the instance
-        $InstanceEnd = $now->add(new DateInterval('PT1H'));
+        // add 4h to set the end hour of the instance
+        $InstanceEnd = $now->add(new DateInterval('PT4H'));
         $instance->setEndAt($InstanceEnd);
         $instance->setGame($game);
         
         $this->entityManager->persist($instance);
 
         /********** ROUND **********/
+
+        $io->info("Création des rounds (1 round par joueur pour cette instance)");
 
         // Rounds array for next uses
         $roundObjectsArray = [];
@@ -155,6 +198,8 @@ class CreateActiveInstanceCommand extends Command
         }
 
         /********** SCAN QR **********/
+
+        $io->info("Création d'un nombre aléatoire de scans de QR codes pour chaque round, dans l'ordre des checkpoints du jeu.");
 
         // Number of checkpoints of this Game
         $numberOfCheckpoints = count($checkpointObjectsArray);
