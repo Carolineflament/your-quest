@@ -145,7 +145,7 @@ class GameController extends AbstractController
             return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_edit', ['slug' => $game->getSlug()])));
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_edit', 'url' => $this->urlGenerator->generate('app_backoffice_game_edit', ['slug' => $game->getSlug()])));
 
         return $this->renderForm('backoffice/game/edit.html.twig', [
             'game' => $game,
