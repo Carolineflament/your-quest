@@ -207,4 +207,60 @@ class GameController extends AbstractController
         }
         return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * PDF generator
+     * 
+     * @Route("/{slug}/pdf", name="app_backoffice_game_pdf", methods={"GET"})
+     * 
+     * @return void
+     */
+    public function pdf(Game $game): Response
+    {
+        /***** On prépare les données à insérer dans le PDF *****/
+
+        // Titre des pages
+        $title = $game->getTitle();
+        // On converti de utf-8 vers ISO-8859-1 pour gérer les accents
+        $title = utf8_decode($title);
+
+        /***** On génére le document PDF *****/
+
+        // On récupère la liste des checkpoints dans l'ordre de l'utilisateur
+        $checkpointsList = $game->getCheckpoints();
+
+        // Création d'un nouvel objet (document PDF)
+        $pdf = new \FPDF();
+
+        // On boucle sur la liste des checkpoints
+        foreach ($checkpointsList as $checkpoint) {
+            // Ajout d'une nouvelle page, avec ses header et footer
+            $pdf->AddPage();
+
+            // Réglage de la police
+            $pdf->SetFont('Arial', 'B', 60);
+
+            // Titre en haut de page, dans une cellule avec passage à la ligne et création d'une nouvelle cellule si trop long (MultiCell)
+            $pdf->MultiCell(0, 20, $title, 0, 'C');
+            // Saut de ligne
+            $pdf->Ln();
+            // Déplacement du curseur sur axe X pour centrage du QR code
+            $pdf->SetX(45);
+            // Insertion du QR code
+            $pdf->Image($this->paramBag->get('app.game_qrcode_directory').$checkpoint->getId().'qrcode.png', null, null, 120);
+        }
+
+        /***** On traite le document PDF généré *****/
+
+        // On enregistre le PDF dans le dossier "pdf"
+        $pdf->Output('F', $this->paramBag->get('app.game_pdf_directory').'YourQuest-'.$game->getSlug().'.pdf');
+
+        // On retourne le PDF directement dans le visualiseur du navigateur
+        return new Response($pdf->Output(), 200, array(
+            'Content-Type' => 'application/pdf'));
+
+        // On retourne le PDF en forçant son téléchargement 
+        return new Response($pdf->Output('D', 'YourQuest-'.$game->getSlug().'.pdf'), 200, array(
+            'Content-Type' => 'application/pdf'));
+    }
 }
