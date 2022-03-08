@@ -58,6 +58,10 @@ class CheckpointController extends AbstractController
         /* This is a way to redirect the user to the login page if he is not logged in. */
         if($user === null)
         {
+            $this->addFlash(
+                'notice-danger',
+                'Merci de vous connecter ou de vous inscrire afin de participer au jeu ;)'
+            );
             $session->set('route_redirect', $this->urlGenerator->generate('front_checkpoint_check', ['id' => $checkpointScan->getId(), 'token' => sha1($checkpointScan->getTitle())]));
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
