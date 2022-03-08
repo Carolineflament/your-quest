@@ -9,7 +9,7 @@
                         <div class="card-body">
                             <div class="card-title">
                                 <h6>
-                                    <a href="#">{{instance.title}}</a>
+                                    <a href="{{ path('app_front_instance_show', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}">{{instance.title}}</a>
                                     {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %}
                                         <span class="badge bg-danger ms-2">En cours</span>
                                     {% endif %}
