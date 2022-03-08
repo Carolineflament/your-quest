@@ -1,16 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'backoffice/back_base.html.twig' %}
 
-{% block title %}Checkpoints du jeu {{game.title }}{% endblock %}
+{% block title %}Liste des checkpoints du jeu {{game.title }}{% endblock %}
 
-{% block body %}
-
-<div class="container-fluid mb-3">
-    <h1>Liste des checkpoints du jeu {{ game.title }}</h1>
-    {{ include('front/_notice_message.html.twig') }}
-
-    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+{% block back_body %}
+    <div class="d-flex flex-column align-items-end">
         <a href="{{ path('app_backoffice_checkpoint_new', { 'gameSlug' : game.slug}) }}" class="btn btn-success">Créer un checkpoint</a>
     </div>
+
+    <div class="clearfix"></div>
+
+    {{ include('front/_notice_message.html.twig') }}
 
     <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
         <thead class="table-dark ">
@@ -43,6 +42,5 @@
         {% endfor %}
         </tbody>
     </table>
-</div>
     
 {% endblock %}

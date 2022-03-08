@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid mb-3">
+        <div class="float-start">
+            <h1>{% block title %} {% endblock %}</h1>
+
+            {{ include('backoffice/_breadcrumb.html.twig') }}
+        </div>
+        {% block back_body %}{% endblock %}
+    </div>
+{% endblock %}

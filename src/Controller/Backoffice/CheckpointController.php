@@ -14,27 +14,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * @Route("/back/checkpoint")
+ * @Route("/back/checkpoint", name="app_backoffice_checkpoint_")
  */
 class CheckpointController extends AbstractController
 {
+    private $breadcrumb;
+    private $urlGenerator;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->breadcrumb = array(array('libelle' => 'Jeux', 'libelle_url' => 'app_backoffice_game_index', 'url' => $this->urlGenerator->generate('app_backoffice_game_index')));
+    }
+
     /**
-     * @Route("/jeux/{gameSlug}", name="app_backoffice_checkpoint_index", methods={"GET"})
+     * @Route("/jeux/{gameSlug}", name="index", methods={"GET"})
      */
     public function index($gameSlug, GameRepository $gameRepository, CheckpointRepository $checkpointRepository): Response
     {
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
 
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
+
         return $this->render('backoffice/checkpoint/index.html.twig', [
             'checkpoints' => $checkpointRepository->findBy(['game' => $game,'isTrashed' => false]),
             'game' =>$game,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
     /**
-     * @Route("/jeux/{gameSlug}/nouveau", name="app_backoffice_checkpoint_new", methods={"GET", "POST"})
+     * @Route("/jeux/{gameSlug}/nouveau", name="new", methods={"GET", "POST"})
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager,QrcodeService $qrcodeService): Response
     {
@@ -63,33 +76,45 @@ class CheckpointController extends AbstractController
             ], Response::HTTP_SEE_OTHER);
         }
 
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => 'Nouveau checkpoint', 'libelle_url' => 'app_backoffice_checkpoint_new', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_new', ['gameSlug' => $game->getSlug()])));
+
         return $this->renderForm('backoffice/checkpoint/new.html.twig', [
             'checkpoint' => $checkpoint,
             'form' => $form,
-            'game' => $game
+            'game' => $game,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_checkpoint_show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"})
      */
     public function show(Checkpoint $checkpoint): Response
     {
-
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_CHEKCPOINT', $checkpoint);
         $game = $checkpoint->getGame();
+
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
         return $this->render('backoffice/checkpoint/show.html.twig', [
             'checkpoint' => $checkpoint,
             'game' => $game,
-            
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
     /**
-     * @Route("/{id}/modifier", name="app_backoffice_checkpoint_edit", methods={"GET", "POST"})
+     * @Route("/{id}/modifier", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
     public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, QrcodeService $qrcodeService): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_CHEKCPOINT', $checkpoint);
         $game = $checkpoint->getGame();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
@@ -110,18 +135,25 @@ class CheckpointController extends AbstractController
             ], Response::HTTP_SEE_OTHER);
         }
 
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_edit', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_edit', ['id' => $checkpoint->getId()])));
+
         return $this->renderForm('backoffice/checkpoint/edit.html.twig', [
             'checkpoint' => $checkpoint,
             'form' => $form,
             'game' => $game,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_checkpoint_trash", methods={"POST"})
+     * @Route("/{id}", name="trash", methods={"POST"}, requirements={"id"="\d+"})
      */
     public function trash(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_CHEKCPOINT', $checkpoint);
         $game = $checkpoint->getGame();
 
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {

@@ -16,43 +16,49 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * @Route("/back/jeux")
+ * @Route("/back/jeux", name="app_backoffice_")
  */
 class GameController extends AbstractController
 {
     private $paramBag;
+    private $urlGenerator;
+    private $breadcrumb;
 
-    public function __construct(ParameterBagInterface $paramBag)
+    public function __construct(ParameterBagInterface $paramBag, UrlGeneratorInterface $urlGenerator)
     {
         $this->paramBag = $paramBag;
+        $this->urlGenerator = $urlGenerator;
+        $this->breadcrumb = array(array('libelle' => 'Jeux', 'libelle_url' => 'app_backoffice_game_index', 'url' => $this->urlGenerator->generate('app_backoffice_game_index')));
     }
     /**
-     * @Route("/", name="app_backoffice_game_index", methods={"GET"})
+     * @Route("/", name="game_index", methods={"GET"})
      */
     public function index(GameRepository $gameRepository): Response
     {
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
         //dump($userConnected);
-        $gameUser = $gameRepository->findBy(['user' => $userConnected]);
-        $gameUserCreated = $gameUser[0];
-        $thisPlayersGames= $gameUserCreated->getUser()->getId();
+        //$gameUser = $gameRepository->findBy(['user' => $userConnected]);
+        //$gameUserCreated = $gameUser[0];
+        //$thisPlayersGames= $gameUserCreated->getUser()->getId();
         //dump($thisUser);
 
         // It's checking if the user connected is the owner of the game.
-        if ($userConnected == $thisPlayersGames)
+        //if ($userConnected == $thisPlayersGames)
         {
             return $this->render('backoffice/game/index.html.twig', [
                 'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected]),
                 'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected]),
+                'breadcrumbs' => $this->breadcrumb
             ]);
         }
     }
 
     /**
-     * @Route("/nouveau", name="app_backoffice_game_new", methods={"GET", "POST"})
+     * @Route("/nouveau", name="game_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager, MySlugger $mySlugger): Response
     {
@@ -80,17 +86,22 @@ class GameController extends AbstractController
             return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        array_push($this->breadcrumb, array('libelle' => 'Nouveau jeu', 'libelle_url' => 'app_backoffice_game_new', 'url' => $this->urlGenerator->generate('app_backoffice_game_new')));
+
         return $this->renderForm('backoffice/game/new.html.twig', [
             'game' => $game,
             'form' => $form,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
     /**
-     * @Route("/{slug}", name="app_backoffice_game_show", methods={"GET"})
+     * @Route("/{slug}", name="game_show", methods={"GET"})
      */
     public function show(Game $game): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('VIEW_GAME', $game);
         $instances = $game->getUnTrashedInstances()->getValues();
         $date = new DateTime();
         $date = $date->getTimestamp();
@@ -102,14 +113,18 @@ class GameController extends AbstractController
                 array_unshift($instances, $instance);
             }
         }
+
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
+
         return $this->render('backoffice/game/show.html.twig', [
             'game' => $game,
-            'instances' => $instances
+            'instances' => $instances,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
     /**
-     * @Route("/{slug}/modifier", name="app_backoffice_game_edit", methods={"GET", "POST"})
+     * @Route("/{slug}/modifier", name="game_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Game $game, EntityManagerInterface $entityManager): Response
     {
@@ -130,18 +145,20 @@ class GameController extends AbstractController
             return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_edit', 'url' => $this->urlGenerator->generate('app_backoffice_game_edit', ['slug' => $game->getSlug()])));
+
         return $this->renderForm('backoffice/game/edit.html.twig', [
             'game' => $game,
             'form' => $form,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_game_delete", methods={"POST"}, requirements={"id"="\d+"})
+     * @Route("/{id}", name="game_delete", methods={"POST"}, requirements={"id"="\d+"})
      */
     public function delete(Request $request, Game $game, CascadeTrashed $cascadeTrashed): Response
     {
-
         // Organizer or Admin can modify this game
         $this->denyAccessUnlessGranted('DELETE_GAME', $game); 
 
@@ -166,7 +183,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/status/{id}",name="app_backoffice_update_status", methods={"POST"}, requirements={"id"="\d+"})
+     * @Route("/status/{id}",name="update_status", methods={"POST"}, requirements={"id"="\d+"})
      *
      * @param Game $game
      * @return void
@@ -211,12 +228,15 @@ class GameController extends AbstractController
     /**
      * PDF generator
      * 
-     * @Route("/{slug}/pdf", name="app_backoffice_game_pdf", methods={"GET"})
+     * @Route("/{slug}/pdf", name="game_pdf", methods={"GET"})
      * 
      * @return void
      */
     public function pdf(Game $game): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+        
         /***** On prépare les données à insérer dans le PDF *****/
 
         // Titre des pages

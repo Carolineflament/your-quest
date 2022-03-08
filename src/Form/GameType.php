@@ -39,6 +39,7 @@ class GameType extends AbstractType
             ])
             ->add('image', FileType::class, [
                 'required' => false,
+                'mapped' => false,
             ])
             ->add('summary', TextareaType::class, [
                 'required' => false,
