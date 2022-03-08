@@ -32,9 +32,9 @@ class CheckpointVoter extends Voter
 
         // Check conditions and return true to grant permission
         switch ($attribute) {
-            case "EDIT_INSTANCE":
-            case "VIEW_INSTANCE":
-            case "DELETE_INSTANCE":
+            case "EDIT_CHECKPOINT":
+            case "VIEW_CHECKPOINT":
+            case "DELETE_CHECKPOINT":
             {
                 //Admin can modify this game
                 if ($this->security->isGranted('ROLE_ADMIN')) {
