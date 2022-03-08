@@ -8,6 +8,7 @@ use App\Entity\Instance;
 use App\Entity\Round;
 use App\Entity\ScanQR;
 use App\Entity\User;
+use App\Repository\GameRepository;
 use App\Repository\RoleRepository;
 use App\Service\MySlugger;
 use App\Service\QrcodeService;
@@ -32,19 +33,19 @@ class CreateActiveInstanceCommand extends Command
     private $passwordHasher;
     private $slugger;
     private $qrcodeService;
+    private $gameRepository;
 
     
 
-    public function __construct(RoleRepository $roleRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger, QrcodeService $qrcodeService)
+    public function __construct(RoleRepository $roleRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger, QrcodeService $qrcodeService, GameRepository $gameRepository)
     {
         $this->roleRepository = $roleRepository;
         $this->entityManager = $entityManager;
         $this->passwordHasher = $passwordHasher;
         $this->slugger = $slugger;
         $this->qrcodeService = $qrcodeService;
-
+        $this->gameRepository = $gameRepository;
         
-
         parent::__construct();
     }
 
@@ -67,15 +68,13 @@ class CreateActiveInstanceCommand extends Command
         $instanceNameArg = $input->getArgument('instanceName');
         $numberOfPlayersArg = $input->getArgument('numberOfPlayers');
 
-        // Generate slugs to add them on users credentials
+        // Generate game slug to add it on users credentials
         $gameSlug = $this->slugger->slugify($gameNameArg);
-        $instanceSlug = $this->slugger->slugify($instanceNameArg); 
-
 
         // Class pour styliser les inputs/outputs
         $io = new SymfonyStyle($input, $output);
 
-        $io->info("Création d'un jeu et de son instance valide depuis 1h et pendant encore 4h.");
+        $io->info("Lancement de la commande de création d'un jeu et de son instance valide depuis 1h et pendant encore 4h :");
 
         /********** USERS **********/
 
@@ -151,9 +150,6 @@ class CreateActiveInstanceCommand extends Command
             $checkpointObjectsArray[] = $checkpoint;
 
             $this->entityManager->persist($checkpoint);
-
-            // generate QR code image
-            $this->qrcodeService->qrcode($checkpoint);
 
         }
 
@@ -236,6 +232,23 @@ class CreateActiveInstanceCommand extends Command
         }
 
         $this->entityManager->flush();
+
+        /********** QR codes PNG generation **********/
+
+        $io->info("Génération des images PNG des QR codes des checkpoints");
+
+        // Get just created Game
+        $createdGame = $this->gameRepository->findOneBy(['slug' => $gameSlug]);
+
+        // Get the checkpoints list of the Game, after flush because we need Id property
+        $gameCheckpointsList = $createdGame->getCheckpoints();
+        $this->qrcodeService->qrcode($gameCheckpointsList[0]);
+        // }
+
+        // // Create a QR code PNG file for each checkpoint
+        // foreach ($gameCheckpointsList as $checkpoint) {
+        //     $this->qrcodeService->qrcode($checkpoint);
+        // }
         
         return Command::SUCCESS;
     }
