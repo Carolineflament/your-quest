@@ -93,6 +93,8 @@ class CheckpointController extends AbstractController
      */
     public function show(Checkpoint $checkpoint): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_CHEKCPOINT', $checkpoint);
         $game = $checkpoint->getGame();
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
@@ -111,6 +113,8 @@ class CheckpointController extends AbstractController
      */
     public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, QrcodeService $qrcodeService): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_CHEKCPOINT', $checkpoint);
         $game = $checkpoint->getGame();
         $form = $this->createForm(CheckpointType::class, $checkpoint);
         $form->handleRequest($request);
@@ -148,6 +152,8 @@ class CheckpointController extends AbstractController
      */
     public function trash(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('EDIT_CHEKCPOINT', $checkpoint);
         $game = $checkpoint->getGame();
 
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
