@@ -234,6 +234,7 @@ class CreateActiveInstanceCommand extends Command
         }
 
         $this->entityManager->flush();
+        
 
         /********** QR codes PNG generation **********/
 
