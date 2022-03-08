@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class InstanceController extends AbstractController
 {
     /**
-     * @Route("/jeu/{gameSlug}/instance/{instanceSlug}", name="app_front_instance_show", methods={"GET"})
+     * @Route("/jeux/{gameSlug}/instances/{instanceSlug}", name="app_front_instance_show", methods={"GET"})
      */
     public function show($gameSlug, $instanceSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository): Response
     {
@@ -33,7 +33,7 @@ class InstanceController extends AbstractController
     }
 
     /**
-     * @Route("/jeu/{gameSlug}/instance/{instanceSlug}/realtime", name="app_front_instance_realtime", methods={"GET"})
+     * @Route("/jeux/{gameSlug}/instances/{instanceSlug}/realtime", name="app_front_instance_realtime", methods={"GET"})
      */
     public function realtime($gameSlug, $instanceSlug, InstanceRepository $instanceRepository, CheckpointRepository $checkpointRepository, RoundRepository $roundRepository, ScanQRRepository $scanQRRepository): Response
     {

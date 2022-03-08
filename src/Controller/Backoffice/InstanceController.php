@@ -19,7 +19,7 @@ class InstanceController extends AbstractController
 {
     /**
      * List all instances that belong to game = {gameSlug}
-     * @Route("/jeu/{gameSlug}", name="app_backoffice_instance_index", methods={"GET"})
+     * @Route("/jeux/{gameSlug}", name="app_backoffice_instance_index", methods={"GET"})
      */
     public function index($gameSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository): Response
     {
@@ -36,7 +36,7 @@ class InstanceController extends AbstractController
 
     /**
      * Create new instance that belongs to game = {gameId}
-     * @Route("/jeu/{gameSlug}/nouveau", name="app_backoffice_instance_new", methods={"GET", "POST"})
+     * @Route("/jeux/{gameSlug}/nouveau", name="app_backoffice_instance_new", methods={"GET", "POST"})
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
