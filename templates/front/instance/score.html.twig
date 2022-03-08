@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ instance.title }}{% endblock %}
+
+{% block body %}
+
+<div class="container-xl p-5">
+      <div class="row">
+        <h1 class="text-muted fw-bold mb-4 text-center h1">Résultat du jeu {{game.title}}</h1>
+          {{ include('front/_notice_message.html.twig') }}
+      </div>  
+
+      <div class="row">
+            <h3 class="text-muted fw-bold mb-4 text-center h3">Instance {{instance.title}} du {{ instance.startAt|date('d-m-Y')}}</h3>
+      </div>      
+
+      <div class="card-list mt-4">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Nom du joueur</th>
+                  <th scope="col">Temps réalisé</th>
+                </tr>
+              </thead>
+
+            <tbody>
+                {% for rounds in roundsList %}
+                <tr scope="row">
+                {{ dump(roundsList) }}
+                    <td>{{ rounds.user.username }}</td>                   
+                    <td>{{ rounds.endAt.diff(rounds.startAt)|date("%Hh%Imin%Ssec") }}</td>
+                {% endfor %} 
+                </tr>
+                  
+            </tbody>    
+        </table>          
+      </div>            
+               
+        
+
+   
+</div>
+     
+{% endblock %}  
