@@ -160,7 +160,7 @@ class CheckpointController extends AbstractController
             /* This is a way to get the last checkpoint scanned by the user. */
             $lastScanAt = $scanQRRepos->findOneBy(['user' => $user, 'round' => $round], ['scanAt' => 'DESC']);
             $checkpointScan = $lastScanAt->getCheckpoint();
-            //TODO s'il a déja scan le message on le redirge vers le checkpoint où il est 
+            
             $this->addFlash(
                 'notice-danger',
                 'Vous avez déjà flashé ce checkpoint !'
