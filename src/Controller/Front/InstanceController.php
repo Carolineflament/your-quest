@@ -2,11 +2,15 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Round;
 use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
 use App\Repository\InstanceRepository;
 use App\Repository\RoundRepository;
 use App\Repository\ScanQRRepository;
+use App\Repository\UserRepository;
+use DateTime;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +38,7 @@ class InstanceController extends AbstractController
      /**
      * @Route("/jeu/{gameSlug}/instance/{instanceSlug}/scores", name="app_front_instance_score", methods={"GET"})
      */
-    public function score($gameSlug, $instanceSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository): Response
+    public function score($gameSlug, $instanceSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository, RoundRepository $roundRepository): Response
     {
         // Get Game from slug
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
@@ -42,10 +46,16 @@ class InstanceController extends AbstractController
         // Get Instance from slug
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
+        // je récupéré la liste des round d'une instance
+
+        /* This is a query to get all the rounds of an instance. */
+        $roundsList = $roundRepository->findBy(['instance' => $instance]);
 
         return $this->render('front/instance/score.html.twig', [
             'instance' => $instance,
             'game' => $game,
+            'roundsList' => $roundsList
+
         ]);
     }
 
