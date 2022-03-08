@@ -8,6 +8,7 @@ use App\Entity\Instance;
 use App\Entity\Round;
 use App\Entity\ScanQR;
 use App\Entity\User;
+use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
 use App\Repository\RoleRepository;
 use App\Service\MySlugger;
@@ -34,10 +35,10 @@ class CreateActiveInstanceCommand extends Command
     private $slugger;
     private $qrcodeService;
     private $gameRepository;
-
+    private $checkpointRepository;
     
 
-    public function __construct(RoleRepository $roleRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger, QrcodeService $qrcodeService, GameRepository $gameRepository)
+    public function __construct(RoleRepository $roleRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger, QrcodeService $qrcodeService, GameRepository $gameRepository, CheckpointRepository $checkpointRepository)
     {
         $this->roleRepository = $roleRepository;
         $this->entityManager = $entityManager;
@@ -45,6 +46,7 @@ class CreateActiveInstanceCommand extends Command
         $this->slugger = $slugger;
         $this->qrcodeService = $qrcodeService;
         $this->gameRepository = $gameRepository;
+        $this->checkpointRepository = $checkpointRepository;
         
         parent::__construct();
     }
@@ -239,16 +241,16 @@ class CreateActiveInstanceCommand extends Command
 
         // Get just created Game
         $createdGame = $this->gameRepository->findOneBy(['slug' => $gameSlug]);
+        $createdGameId = $createdGame->getId();
 
         // Get the checkpoints list of the Game, after flush because we need Id property
-        $gameCheckpointsList = $createdGame->getCheckpoints();
-        $this->qrcodeService->qrcode($gameCheckpointsList[0]);
-        // }
+        $gameCheckpointsList = $this->checkpointRepository->findBy(['game' => $createdGameId]);
+        
+        // Create a QR code PNG file for each checkpoint
+        foreach ($gameCheckpointsList as $checkpoint) {
 
-        // // Create a QR code PNG file for each checkpoint
-        // foreach ($gameCheckpointsList as $checkpoint) {
-        //     $this->qrcodeService->qrcode($checkpoint);
-        // }
+            $this->qrcodeService->qrcode($checkpoint);
+        }
         
         return Command::SUCCESS;
     }
