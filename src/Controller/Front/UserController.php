@@ -49,29 +49,31 @@ class UserController extends AbstractController
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
 
+        /* It's getting the user id of the user connected for the rounds */
         $rounds = $roundRepository->findBy(['user' => $userConnected]);
-        dump($rounds);
-        for ($round = 0; $round < count($rounds); $round++) {
-            dd($round);
-            $instanceRepository->findBy(['instance_id' => $round]);
-        }
-        
-        
 
-        // $roundPLayerId = $this->getUserId();
-        // $instanceId = $instanceRepository->findBy(['']
-        //getInstanceId();
-        // $game = $this->getGameId()->getGameTitle();   
+        /* It's getting the number of rounds of the user connected. */
+        for ($i = 0; $i<count($rounds); $i++) {
+            /* It's getting the round of the user connected. */
+            $round = $rounds[$i];
+
+            /* It's getting the instance id of the round. */
+            $instance = $round->getInstance()->getId();
+            $thisInstance = $instanceRepository->findOneBy(['id' => $instance]);
+            //dump($thisInstance);
+
+            /* It's getting the game id of the instance. */
+            $game = $thisInstance->getGame()->getId();
+            $myPlayerGame = $gameRepository->findOneBy(['id' => $game]);
+        } 
 
         return $this->renderForm('front/user/profile.html.twig', [
             'user' => $user,
             'form' => $form,
-            //Je récupère le(s) round dans le(s)quel(s) j'ai joué
-            // 'round' => $roundRepository->findBy(['user' => $userConnected]),
-            // Je dois remonter dans l'instance associées
-            // PUis dans le game associé pour y mettre le nom
-            // 'instance' => $instanceRepository->findBy(['instance_id' => $instanceId]),
-            // 'game' => $gameRepository->findBy(['title' => $game]),
+            'rounds' => $rounds,
+            'instance' => $thisInstance,
+            'game' => $game,
+            'myPlayerGame' => $myPlayerGame,
         ]);
     }
 
