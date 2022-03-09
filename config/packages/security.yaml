@@ -23,10 +23,16 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         # partie de l'API sécurisée
-        api:
-            pattern:   ^/api
+        api_secure:
+            pattern:   ^/api/secure
             stateless: true
             jwt: ~
+        
+        # partie de l'API public
+        api_public:
+            pattern:   ^/api
+            stateless: true
+        #    jwt: ~
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -50,7 +56,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/secure,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api,       roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/back, roles: ROLE_ORGANISATEUR }
         - { path: ^/user, roles: ROLE_JOUEUR, methods: [GET,POST] }

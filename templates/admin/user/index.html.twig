@@ -60,7 +60,7 @@
         </table>
         {{ include('_paginate.html.twig') }}-->
     </div>
-
+    
     <script>
         var columns = {
             'id':'#',
@@ -85,19 +85,19 @@
                 prevText:'<span>Précédent</span>',
 
             });
-
+            
             $.ajax({
                 method: "POST",
-                url: "http://localhost:8080/api/login_check",
+                url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/api/login_check",
                 contentType: "application/json; charset=utf-8",
-                data: '{"username":"admin@admin.com","password":"admin"}',
+                data: '{"username":"{{ app_api_email }}","password":"{{ app_api_password }}"}',
                 dataType: "json",
                 processData: false,
             })
             .done(function( msg ) {
                 $.ajax({
                     method: "GET",
-                    url: "http://localhost:8080/api/users",
+                    url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/api/users",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     headers: {
