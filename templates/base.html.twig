@@ -33,6 +33,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link {% if route == 'front_games' %} active {% endif %}" href="{{ path('front_games') }}">Liste des jeux</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if route == 'front_checkpoint' %} active {% endif %}" href="{{ path('front_checkpoint') }}">Scanner un QR code</a>
+                                </li>
                                 {% if app.user is not defined %}
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
