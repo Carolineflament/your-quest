@@ -4,6 +4,7 @@
 
 {% block back_body %}
     <div class="d-flex flex-column align-items-end">
+        <a href="{{ path('app_backoffice_enigma_index', {'id': checkpoint.id}) }}" class="btn btn-primary mb-2">Voir l'énigme</a>
         <a href="{{ path('app_backoffice_game_show', {'slug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
     </div>
 
