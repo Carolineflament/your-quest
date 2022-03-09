@@ -82,7 +82,7 @@ class AppFixtures extends Fixture
             $user->setEmail($currentUser['login']);
             $user->setRole($roleEntity[$currentUser['role']]);
             $user->setPassword($this->passwordHasher->hashPassword($user, $currentUser['password']));
-            $user->setUsername($faker->userName());
+            $user->setPseudo($faker->userName());
             $user->setLastname($faker->lastName());
             $user->setFirstname($faker->firstName());
             $user->setAddress($faker->secondaryAddress());
@@ -98,7 +98,7 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail($faker->email());
             $user->setPassword($this->passwordHasher->hashPassword($user, $faker->password()));
-            $user->setUsername($faker->userName());
+            $user->setPseudo($faker->userName());
             $user->setLastname($faker->lastName());
             $user->setFirstname($faker->firstName());
             $user->setAddress($faker->secondaryAddress());

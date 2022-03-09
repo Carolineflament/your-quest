@@ -11,7 +11,7 @@
                 <div class="form-error mb-3">
                     {{ form_errors(registrationForm.email) }}
                     {{ form_errors(registrationForm.password) }}
-                    {{ form_errors(registrationForm.username) }}
+                    {{ form_errors(registrationForm.pseudo) }}
                     {{ form_errors(registrationForm.lastname) }}
                     {{ form_errors(registrationForm.firstname) }}
                     {{ form_errors(registrationForm.address) }}
@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    {{ form_widget(registrationForm.username) }}
-                    {{ form_label(registrationForm.username) }}
+                    {{ form_widget(registrationForm.pseudo) }}
+                    {{ form_label(registrationForm.pseudo) }}
                 </div>
 
                 <div class="form-floating mb-3">

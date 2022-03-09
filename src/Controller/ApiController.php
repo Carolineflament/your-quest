@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/api", name="api_")
@@ -85,22 +87,6 @@ class ApiController extends AbstractController
             [],
             // Contexte de serialization
             ['groups' => 'list_users']
-        );
-    }
-
-    /**
-     * @Route("/secure/test", name="test", methods={"GET", "POST"})
-     */
-    public function test():Response
-    {
-        return $this->json(
-            'test',
-            // HTTP status code
-            Response::HTTP_OK,
-            // HTTP header
-            [],
-            // Contexte de serialization
-            []
         );
     }
 }

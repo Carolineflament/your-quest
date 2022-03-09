@@ -71,7 +71,7 @@ class Role
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="role")
-     * @ORM\OrderBy({"username" = "ASC"})
+     * @ORM\OrderBy({"pseudo" = "ASC"})
      */
     private $users;
 

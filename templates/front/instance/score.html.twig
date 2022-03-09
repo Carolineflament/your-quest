@@ -27,7 +27,7 @@
               {% for round in roundsList %}
               <tr scope="row">
                 {% if round.endAt %}
-                    <td>{{ round.user.username }}</td>                   
+                    <td>{{ round.user.pseudo }}</td>                   
                     <td>{{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}</td>
                 {% endif %}
               {% endfor %} 
@@ -48,7 +48,7 @@
               {% for round in roundsList %}
               <tr scope="row">
                 {% if round.endAt is same as(null) %}
-                    <td>{{ round.user.username }}</td>                   
+                    <td>{{ round.user.pseudo }}</td>                   
                 {% endif %}
               {% endfor %} 
               </tr>  

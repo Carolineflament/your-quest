@@ -92,7 +92,7 @@ class CreateActiveInstanceCommand extends Command
         $organisator->setEmail('orga'.$gameSlug.'@organisateur.com');
         $organisator->setRole($organisatorRole);
         $organisator->setPassword($this->passwordHasher->hashPassword($organisator, 'organisateur'));
-        $organisator->setUsername('orga'.$gameSlug);
+        $organisator->setPseudo('orga'.$gameSlug);
         $organisator->setLastname('Numéro1');
         $organisator->setFirstname('Orga');
         $organisator->setStatus(true);
@@ -111,7 +111,7 @@ class CreateActiveInstanceCommand extends Command
             $player->setEmail('joueur'.$i.$gameSlug.'@joueur.com');
             $player->setRole($playerRole);
             $player->setPassword($this->passwordHasher->hashPassword($player, 'joueur'));
-            $player->setUsername('joueur'.$i.$gameSlug);
+            $player->setPseudo('joueur'.$i.$gameSlug);
             $player->setLastname('Numéro'.$i);
             $player->setFirstname('Joueur');
             $player->setStatus(true);

@@ -20,7 +20,7 @@
             {{ form_start(form) }}
                 <div class="form-error mb-3">
                     {{ form_errors(form.password) }}
-                    {{ form_errors(form.username) }}
+                    {{ form_errors(form.pseudo) }}
                     {{ form_errors(form.lastname) }}
                     {{ form_errors(form.firstname) }}
                     {% if is_granted('ROLE_ORGANISATEUR') %}
@@ -31,8 +31,8 @@
                 </div>
                 <div class="row g-3 align-items-center">
                     <div class="col form-floating mb-3">
-                        {{ form_widget(form.username) }}
-                        {{ form_label(form.username) }}
+                        {{ form_widget(form.pseudo) }}
+                        {{ form_label(form.pseudo) }}
                     </div>
 
                     <div class="col form-floating mb-3">
