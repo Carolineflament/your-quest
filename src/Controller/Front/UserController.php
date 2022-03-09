@@ -72,8 +72,7 @@ class UserController extends AbstractController
             'form' => $form,
             'rounds' => $rounds,
             'instance' => $thisInstance,
-            'game' => $game,
-            'myPlayerGame' => $myPlayerGame,
+            'game' => $myPlayerGame,
         ]);
     }
 

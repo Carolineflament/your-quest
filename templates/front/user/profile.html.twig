@@ -82,7 +82,6 @@
             <h2>Les derniers jeu(x) au(x)uquel(s) j'ai joué</h2>            
             {% for round in rounds %}
                 {{ include('front/user/_game_card.html.twig') }}
-                
             {% else %}
                 <div class="d-flex p-2 bd-highlight">Vous n'avez pas encore joué pour le moment !</div>
             {% endfor %} 
