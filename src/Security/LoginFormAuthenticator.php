@@ -71,7 +71,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        //$this->session->set('token', $this->JWTManager->create($token->getUser()));
+        $this->session->set('token', $this->JWTManager->create($token->getUser()));
         
         if($this->session->get('route_redirect') !== null)
         {
