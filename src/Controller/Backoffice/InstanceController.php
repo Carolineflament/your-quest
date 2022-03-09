@@ -211,26 +211,25 @@ class InstanceController extends AbstractController
         foreach ($roundsList as $key => $round) {
             // if endAt is not null
             if ($round->getEndAt()) {
-            
+                // Duration
                 $roundDuration = $round->getEndAt()->diff($round->getStartAt());
                 
-                dd($roundDuration->format('%h'));
-                $DurationsArray[$key] = $roundDuration;
+                // Send to array, with a type change to string in order to use array sort function later
+                $DurationsArray[$key] = $roundDuration->format('%Hh%Mm%Ss');
             }
         }
 
-        
-        // Je tri le tableau des durées par clé (durée du round)
+        // Je tri le tableau des durées
         asort($DurationsArray);
-        dd($DurationsArray);
+        // dd($DurationsArray);
 
         
 
-        return $this->render('front/instance/score.html.twig', [
+        return $this->render('backoffice/instance/score.html.twig', [
             'instance' => $instance,
             'game' => $game,
-            'roundslist' => $roundsList,
-
+            'roundsList' => $roundsList,
+            'orderedDurations' => $DurationsArray,
         ]);
     }
 }
