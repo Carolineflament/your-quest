@@ -40,21 +40,12 @@ class GameController extends AbstractController
     {
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
-        //dump($userConnected);
-        //$gameUser = $gameRepository->findBy(['user' => $userConnected]);
-        //$gameUserCreated = $gameUser[0];
-        //$thisPlayersGames= $gameUserCreated->getUser()->getId();
-        //dump($thisUser);
-
-        // It's checking if the user connected is the owner of the game.
-        //if ($userConnected == $thisPlayersGames)
-        {
-            return $this->render('backoffice/game/index.html.twig', [
-                'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
-                'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
-                'breadcrumbs' => $this->breadcrumb
-            ]);
-        }
+       
+        return $this->render('backoffice/game/index.html.twig', [
+            'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
+            'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
+            'breadcrumbs' => $this->breadcrumb
+        ]);
     }
 
     /**

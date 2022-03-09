@@ -2,8 +2,13 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Game;
+use App\Entity\Instance;
 use App\Form\RegistrationFormType;
 use App\Form\UserType;
+use App\Repository\GameRepository;
+use App\Repository\InstanceRepository;
+use App\Repository\RoundRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +25,7 @@ class UserController extends AbstractController
     /**
      * @Route("profil", name="profile", methods={"GET", "POST"})
      */
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
+    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, RoundRepository $roundRepository, GameRepository $gameRepository, InstanceRepository $instanceRepository)
     {
         $user = $this->getUser();
 
@@ -40,12 +45,33 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('app_front_user_profile', [], Response::HTTP_SEE_OTHER);
         }
-
         
+        // It's getting the user id of the user connected.
+        $userConnected = $this->getUser()->getId();
+
+        $rounds = $roundRepository->findBy(['user' => $userConnected]);
+        dump($rounds);
+        for ($round = 0; $round < count($rounds); $round++) {
+            dd($round);
+            $instanceRepository->findBy(['instance_id' => $round]);
+        }
+        
+        
+
+        // $roundPLayerId = $this->getUserId();
+        // $instanceId = $instanceRepository->findBy(['']
+        //getInstanceId();
+        // $game = $this->getGameId()->getGameTitle();   
 
         return $this->renderForm('front/user/profile.html.twig', [
             'user' => $user,
             'form' => $form,
+            //Je récupère le(s) round dans le(s)quel(s) j'ai joué
+            // 'round' => $roundRepository->findBy(['user' => $userConnected]),
+            // Je dois remonter dans l'instance associées
+            // PUis dans le game associé pour y mettre le nom
+            // 'instance' => $instanceRepository->findBy(['instance_id' => $instanceId]),
+            // 'game' => $gameRepository->findBy(['title' => $game]),
         ]);
     }
 
