@@ -6,6 +6,7 @@ use App\Entity\Instance;
 use App\Form\InstanceType;
 use App\Repository\GameRepository;
 use App\Repository\InstanceRepository;
+use App\Repository\RoundRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -188,5 +189,48 @@ class InstanceController extends AbstractController
         // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
 
         return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/{instanceSlug}/score", name="score", methods={"GET"})
+     */
+    public function score($instanceSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository, RoundRepository $roundRepository): Response
+    {
+        // Get Instance from slug
+        $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
+
+        // Get parent Game
+        $game = $instance->getGame();
+
+        // Je récupére la liste des rounds terminés et non-terminés d'une instance
+        $roundsList = $roundRepository->findBy(['instance' => $instance]);
+
+        // Pour chaque round je calcul la durée de celui-ci, et je l'inscrit dans un tableau
+        $DurationsArray = [];
+
+        foreach ($roundsList as $key => $round) {
+            // if endAt is not null
+            if ($round->getEndAt()) {
+            
+                $roundDuration = $round->getEndAt()->diff($round->getStartAt());
+                
+                dd($roundDuration->format('%h'));
+                $DurationsArray[$key] = $roundDuration;
+            }
+        }
+
+        
+        // Je tri le tableau des durées par clé (durée du round)
+        asort($DurationsArray);
+        dd($DurationsArray);
+
+        
+
+        return $this->render('front/instance/score.html.twig', [
+            'instance' => $instance,
+            'game' => $game,
+            'roundslist' => $roundsList,
+
+        ]);
     }
 }
