@@ -17,7 +17,7 @@ class InstanceListener
     public function updateSlug(Instance $instance)
     {
         // calcul du slug
-        $slug = $this->slugger->slugify($instance->getTitle(), Instance::class);
+        $slug = $this->slugger->slugify($instance->getTitle(), Instance::class, $instance->getId());
         // modification du slug dans l'entity
         $instance->setSlug($slug);
 
