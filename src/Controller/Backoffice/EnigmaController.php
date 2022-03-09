@@ -81,7 +81,9 @@ class EnigmaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_backoffice_enigma_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_enigma_index', [
+                'id' => $checkpoint->getId()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/enigma/edit.html.twig', [
@@ -96,11 +98,14 @@ class EnigmaController extends AbstractController
      */
     public function delete(Request $request, Enigma $enigma, EntityManagerInterface $entityManager): Response
     {
+        $checkpoint = $enigma->getCheckpoint();
         if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token'))) {
             $entityManager->remove($enigma);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_backoffice_enigma_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_backoffice_enigma_index', [
+            'id' => $checkpoint->getId()
+        ], Response::HTTP_SEE_OTHER);
     }
 }

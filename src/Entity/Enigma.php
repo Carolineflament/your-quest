@@ -41,13 +41,13 @@ class Enigma
     /**
      * @ORM\Column(type="datetime_immutable")
      * @Assert\NotBlank(message = "La date de création de la question doit être renseignée")
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
@@ -74,6 +74,7 @@ class Enigma
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
         $this->isTrashed = false;
     }
 
