@@ -215,7 +215,7 @@ class InstanceController extends AbstractController
                 $roundDuration = $round->getEndAt()->diff($round->getStartAt());
                 
                 // Send to array, with a type change to string in order to use array sort function later
-                $DurationsArray[$key] = $roundDuration->format('%Hh%Mm%Ss');
+                $DurationsArray[$key] = $roundDuration->format('%Hh%im%Ss');
             }
         }
 
