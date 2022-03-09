@@ -50,8 +50,8 @@ class GameController extends AbstractController
         //if ($userConnected == $thisPlayersGames)
         {
             return $this->render('backoffice/game/index.html.twig', [
-                'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected]),
-                'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected]),
+                'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
+                'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
                 'breadcrumbs' => $this->breadcrumb
             ]);
         }
@@ -67,8 +67,8 @@ class GameController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $slug = $mySlugger->slugify($game->getTitle());
-            $game->setSlug($slug);
+            $slug = $mySlugger->slugify($game->getTitle(), Game::class);
+
             $game->setUser($this->getUser());
             
             $file = $form['image']->getData();
@@ -126,7 +126,7 @@ class GameController extends AbstractController
     /**
      * @Route("/{slug}/modifier", name="game_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Game $game, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Game $game, EntityManagerInterface $entityManager, MySlugger $mySlugger): Response
     {
         // Organizer or Admin can modify this game
         $this->denyAccessUnlessGranted('EDIT_GAME', $game);
@@ -135,6 +135,16 @@ class GameController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form['image']->getData();
+            if($file != "")
+            {
+                $slug = $mySlugger->slugify($game->getTitle(), Game::class);
+                $filename = $slug.'.'.$file->guessExtension();
+                $file->move($this->paramBag->get('app.game_images_directory'), $filename);
+                $game->setImage($filename);
+            }
+
             $entityManager->flush();
 
             $this->addFlash(
