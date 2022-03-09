@@ -6,7 +6,16 @@
     {{ include('front/_notice_message.html.twig') }}
 
     <div class="d-flex flex-column align-items-end">
-        <a href="{{ path('app_front_instance_realtime', {'gameSlug': game.slug, 'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-2">Voir la position des joueurs</a>
+        {% if "now"|date('d-m-Y H:i:s') > instance.startAt|date('d-m-Y H:i:s') and "now"|date('d-m-Y H:i:s') < instance.endAt|date('d-m-Y H:i:s') %}
+        {# {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %} #}
+            <a href="{{ path('app_front_instance_realtime', {'gameSlug': game.slug, 'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
+
+        {% else %}
+        <a href="{{ path('app_front_instance_score', {'gameSlug' : game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les scores</a>
+
+        {% endif %}
+
+
         <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}"  class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
     </div>
 
