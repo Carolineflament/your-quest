@@ -19,6 +19,17 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+    public function findBySlugWithoutId(string $slug, int $id)
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.slug = :slug AND g.id != :id')
+            ->setParameter('slug', $slug)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Game[] Returns an array of Game objects
     //  */

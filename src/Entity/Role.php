@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
@@ -30,6 +31,7 @@ class Role
      *      minMessage = "Le nom du rôle doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le nom du rôle ne doit pas éxéder {{ limit }} caractères !"
      * )
+     * @Groups({"list_users"})
      */
     private $name;
 

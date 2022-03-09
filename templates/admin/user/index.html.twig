@@ -11,7 +11,12 @@
             <a href="{{ path('app_admin_user_new') }}" class="btn btn-success">Ajouter un utilisateur</a>
         </div>
 
-        <table id="user_table" class="user_table table table-hover align-middle" style="text-align:center; margin-top:10px;">
+        <input type="text" placeholder="Search in table..." id="searchField">
+        <div class="table-sortable">
+        </div>
+
+
+        <!--<table id="user_table" class="user_table table table-hover align-middle" style="text-align:center; margin-top:10px;">
             <thead class="table-dark ">
                 <tr>
                     <th scope="col">#</th>
@@ -52,7 +57,24 @@
             {% endfor %}
             </tbody>
         </table>
-        {{ include('_paginate.html.twig') }}
+        {{ include('_paginate.html.twig') }}-->
     </div>
+
+    <script>
+        var table = $('#table-sortable').tableSortable({
+            data: [],
+            columns: columns,
+            rowsPerPage: 10,
+            pagination: true,
+        });
+
+        $.get(/* url */, function(data) {
+            // Push data into existing data
+            table.setData(data, null, true);
+
+            // or Set new data on table, columns is optional.
+            table.setData(data, columns);
+        })
+    </script>
     
 {% endblock %}
