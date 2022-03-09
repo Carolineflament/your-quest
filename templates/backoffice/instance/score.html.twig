@@ -26,7 +26,7 @@
           <tbody>
               {% for key, duration in orderedDurations %}
               <tr scope="row">
-                    <td>{{ roundsList[key].user.username }}</td>                   
+                    <td>{{ roundsList[key].user.pseudo }}</td>                   
                     <td>{{ duration }}</td>
               {% endfor %} 
               </tr>  
@@ -46,7 +46,7 @@
               {% for round in roundsList %}
               <tr scope="row">
                 {% if round.endAt is same as(null) %}
-                    <td>{{ round.user.username }}</td>                   
+                    <td>{{ round.user.pseudo }}</td>                   
                 {% endif %}
               {% endfor %} 
               </tr>  
