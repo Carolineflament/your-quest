@@ -5,8 +5,6 @@ twig:
     globals:
         app_games_images_directory: '%env(GAME_IMAGES_DIRECTORY)%'
         app_default_local: '%env(DEFAULT_LOCAL)%'
-        app_api_email: '%env(API_EMAIL)%'
-        app_api_password: '%env(API_PASSWORD)%'
 
 when@test:
     twig:
