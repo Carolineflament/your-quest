@@ -72,9 +72,12 @@ class GameController extends AbstractController
             $game->setUser($this->getUser());
             
             $file = $form['image']->getData();
-            $filename = $slug.'.'.$file->guessExtension();
-            $file->move($this->paramBag->get('app.game_images_directory'), $filename);
-            $game->setImage($filename);
+            if($file !== null)
+            {
+                $filename = $slug.'.'.$file->guessExtension();
+                $file->move($this->paramBag->get('app.game_images_directory'), $filename);
+                $game->setImage($filename);
+            }
             $entityManager->persist($game);
             $entityManager->flush();
 
@@ -137,9 +140,9 @@ class GameController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $file = $form['image']->getData();
-            if($file != "")
+            if($file !== null)
             {
-                $slug = $mySlugger->slugify($game->getTitle(), Game::class);
+                $slug = $mySlugger->slugify($game->getTitle(), Game::class, $game->getId());
                 $filename = $slug.'.'.$file->guessExtension();
                 $file->move($this->paramBag->get('app.game_images_directory'), $filename);
                 $game->setImage($filename);

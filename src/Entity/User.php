@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -22,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"list_users"})
      */
     private $id;
 
@@ -37,6 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "L'email de l'utilisateur doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "L'email de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
      * )
+     * @Groups({"list_users"})
      */
     private $email;
 
@@ -60,6 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "Le pseudo de l'utilisateur doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le pseudo de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
      * )
+     * @Groups({"list_users"})
      */
     private $username;
 
@@ -72,6 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "Le nom de l'utilisateur doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le nom de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
      * )
+     * @Groups({"list_users"})
      */
     private $lastname;
 
@@ -84,6 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "Le prénom de l'utilisateur doit au minimum faire {{ limit }} caractères !",
      *      maxMessage = "Le prénom de l'utilisateur ne doit pas éxéder {{ limit }} caractères !"
      * )
+     * @Groups({"list_users"})
      */
     private $firstname;
 
@@ -127,6 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *     type="bool",
      *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
      * )
+     * @Groups({"list_users"})
      */
     private $status;
 
@@ -134,18 +141,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime_immutable")
      * @Assert\NotBlank(message = "La date de création doit être renseignée")
      * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Groups({"list_users"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Groups({"list_users"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"list_users"})
      */
     private $role;
 
