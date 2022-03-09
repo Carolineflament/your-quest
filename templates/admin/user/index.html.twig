@@ -9,9 +9,10 @@
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a href="{{ path('app_admin_user_new') }}" class="btn btn-success">Ajouter un utilisateur</a>
+            <input type="text" placeholder="Recherche..." id="searchField" class="form-control" style="width:auto;">
         </div>
 
-        <input type="text" placeholder="Recherche..." id="searchField" class="form-control">
+        
         <div id="table-sortable"class="user_table table table-hover align-middle" style="text-align:center; margin-top:10px;">
         </div>
 
@@ -82,7 +83,6 @@
                 searchField : $('#searchField'),
                 nextText:'<span>Suivant</span>',
                 prevText:'<span>Précédent</span>',
-                formatHeader:'table-dark',
 
             });
 

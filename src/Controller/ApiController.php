@@ -37,6 +37,9 @@ class ApiController extends AbstractController
             $token = $csrfTokenManager->getToken('delete'.$user['id'])->getValue();
             $updateUrl = $this->urlGenerator->generate('app_admin_user_edit', ['id' => $user['id']]);
             $deleteUrl = $this->urlGenerator->generate('app_admin_user_update_status', ['id' => $user['id']]);
+            $showUrl = $this->urlGenerator->generate('app_admin_user_show', ['id' => $user['id']]);
+
+            $users[$key]['email'] = '<a href="'.$showUrl.'">'.$user['email'].'</a>';
             $users[$key]['status'] = $user['status'] ? 'Actif' : 'Inactif';
             $users[$key]['createdAt'] = $user['createdAt'] ? date('d-m-Y à H:i:s', date_timestamp_get($user['createdAt'])) : '';
             $users[$key]['updatedAt'] = $user['updatedAt'] ? date('d-m-Y à H:i:s', date_timestamp_get($user['updatedAt'])) : '';
