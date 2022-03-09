@@ -1,42 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Enigma{% endblock %}
+{% block title %}Les énigmes du checkpoint{{ checkpoint.title }}{% endblock %}
 
 {% block body %}
-    <h1>Enigma</h1>
+    <div class="d-flex flex-column align-items-end">
+        <a href="{{ path('app_backoffice_enigma_index', {'id': checkpoint.id }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+    </div>
+
+    <div class="clearfix"></div>
 
     <table class="table">
         <tbody>
+
             <tr>
-                <th>Id</th>
-                <td>{{ enigma.id }}</td>
-            </tr>
-            <tr>
-                <th>Question</th>
+                <th>Enigme</th>
                 <td>{{ enigma.question }}</td>
             </tr>
             <tr>
-                <th>OrderEnigma</th>
+                <th>Ordre de l'énigme</th>
                 <td>{{ enigma.orderEnigma }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Créée le</th>
                 <td>{{ enigma.createdAt ? enigma.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Modifié le</th>
                 <td>{{ enigma.updatedAt ? enigma.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>IsTrashed</th>
-                <td>{{ enigma.isTrashed ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_backoffice_enigma_index') }}">back to list</a>
-
-    <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}">edit</a>
+    <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}" class="btn btn-primary mb-2">Modifier</a>
 
     {{ include('backoffice/enigma/_delete_form.html.twig') }}
 {% endblock %}

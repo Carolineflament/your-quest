@@ -1,43 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Enigma index{% endblock %}
+{% block title %}Les énigmes du checkpoint{{ checkpoint.title }}{% endblock %}
 
 {% block body %}
-    <h1>Enigma index</h1>
+    <div class="d-flex flex-column align-items-end">
+        <a href="{{ path('app_backoffice_enigma_new', {'id': checkpoint.id}) }}" class="btn btn-success">Créer une énigme </a>
+    </div>
 
-    <table class="table">
-        <thead>
+    <div class="clearfix"></div>
+
+    {{ include('front/_notice_message.html.twig') }}
+
+    <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
+        <thead class="table-dark ">
             <tr>
-                <th>Id</th>
-                <th>Question</th>
-                <th>OrderEnigma</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>IsTrashed</th>
-                <th>actions</th>
+                <th>Enigme</th>
+                <th>Ordre de l'énigme</th>
+                <th>Crée le </th>
+                <th>Mis à jour le </th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for enigma in enigmas %}
-            <tr>
-                <td>{{ enigma.id }}</td>
-                <td>{{ enigma.question }}</td>
+            <tr scope="row">
+                <td><a href="{{ path('app_backoffice_enigma_show', {'id': enigma.id}) }}">{{ enigma.question }}</a></td>
                 <td>{{ enigma.orderEnigma }}</td>
                 <td>{{ enigma.createdAt ? enigma.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ enigma.updatedAt ? enigma.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ enigma.isTrashed ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('app_backoffice_enigma_show', {'id': enigma.id}) }}">show</a>
-                    <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}">edit</a>
+                    <div class="d-grid gap-2 justify-content-md-center">
+                        <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}"class="btn btn-primary">Modifier</a>
+                        {{ include('backoffice/enigma/_delete_form.html.twig') }}
+                    </div>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="7">Aucune énigme trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_backoffice_enigma_new') }}">Create new</a>
 {% endblock %}
