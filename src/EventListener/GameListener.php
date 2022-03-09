@@ -17,7 +17,7 @@ class GameListener
     public function updateSlug(Game $game)
     {
         //slug
-        $slug = $this->slugger->slugify($game->getTitle());
+        $slug = $this->slugger->slugify($game->getTitle(), Game::class);
         // update slug in the entity
         $game->setSlug($slug);
     }
