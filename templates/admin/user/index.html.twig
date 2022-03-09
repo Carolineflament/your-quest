@@ -38,7 +38,7 @@
                     <td>{{ user.id }}</td>
                     <td><a href="{{ path('app_admin_user_show', {'id': user.id}) }}">{{ user.email }}</a></td>
                     <td>{{ user.role.name }}</td>
-                    <td>{{ user.username }}</td>
+                    <td>{{ user.pseudo }}</td>
                     <td>{{ user.lastname }}</td>
                     <td>{{ user.firstname }}</td>
                     <td>{{ user.status ? 'Actif' : 'Inactif' }}</td>
@@ -66,7 +66,7 @@
             'id':'#',
             'email':'Email',
             'role':'Rôle',
-            'username':'Pseudo',
+            'pseudo':'Pseudo',
             'lastname':'Nom',
             'firstname':'Prénom',
             'status':'Actif / Inactif',

@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * )
      * @Groups({"list_users"})
      */
-    private $username;
+    private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -211,7 +211,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string) $this->email;
     }
 
     /**
@@ -273,9 +273,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function setUsername(string $username): self
+    public function getPseudo(): ?string
     {
-        $this->username = $username;
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
 
         return $this;
     }

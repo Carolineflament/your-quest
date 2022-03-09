@@ -49,7 +49,7 @@ class UserType extends AbstractType
                 'label' => 'Votre mot de passe : ',
                 'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Mot de passe'],
             ])
-            ->add('username', TextType::class, [
+            ->add('pseudo', TextType::class, [
                 'required' => true,
                 'label' => 'Votre pseudo : ',
                 'attr' => ['placeholder' => 'Pseudo']
