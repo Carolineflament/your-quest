@@ -26,7 +26,6 @@
             <tbody>
                 {% for rounds in roundsList %}
                 <tr scope="row">
-                {{ dump(roundsList) }}
                     <td>{{ rounds.user.username }}</td>                   
                     <td>{{ rounds.endAt.diff(rounds.startAt)|date("%Hh%Imin%Ssec") }}</td>
                 {% endfor %} 

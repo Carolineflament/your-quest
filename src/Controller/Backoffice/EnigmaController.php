@@ -37,7 +37,6 @@ class EnigmaController extends AbstractController
     {
         $checkpoint = $checkpointRepository->findOneBy(['id' => $id]);
         $game = $checkpoint->getGame();
-        $enigma =$enigmaRepository->findBy(['id' => $id]);
 
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
