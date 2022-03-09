@@ -9,9 +9,15 @@
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a href="{{ path('app_admin_user_new') }}" class="btn btn-success">Ajouter un utilisateur</a>
+            <input type="text" placeholder="Recherche..." id="searchField" class="form-control" style="width:auto;">
         </div>
 
-        <table id="user_table" class="user_table table table-hover align-middle" style="text-align:center; margin-top:10px;">
+        
+        <div id="table-sortable"class="user_table table table-hover align-middle" style="text-align:center; margin-top:10px;">
+        </div>
+
+
+        <!--<table id="user_table" class="user_table table table-hover align-middle" style="text-align:center; margin-top:10px;">
             <thead class="table-dark ">
                 <tr>
                     <th scope="col">#</th>
@@ -52,7 +58,64 @@
             {% endfor %}
             </tbody>
         </table>
-        {{ include('_paginate.html.twig') }}
+        {{ include('_paginate.html.twig') }}-->
     </div>
+    
+    <script>
+        var columns = {
+            'id':'#',
+            'email':'Email',
+            'role':'Rôle',
+            'username':'Pseudo',
+            'lastname':'Nom',
+            'firstname':'Prénom',
+            'status':'Actif / Inactif',
+            'createdAt':'Créer le',
+            'updatedAt':'Mis à jour le',
+            'actions':'Actions'
+        }
+        $(document).ready(function() {
+            var table = $('#table-sortable').tableSortable({
+                data: [],
+                columns: columns,
+                rowsPerPage: 5,
+                pagination: true,
+                searchField : $('#searchField'),
+                nextText:'<span>Suivant</span>',
+                prevText:'<span>Précédent</span>',
+
+            });
+            
+            $.ajax({
+                method: "POST",
+                url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/api/login_check",
+                contentType: "application/json; charset=utf-8",
+                data: '{"username":"{{ app_api_email }}","password":"{{ app_api_password }}"}',
+                dataType: "json",
+                processData: false,
+            })
+            .done(function( msg ) {
+                $.ajax({
+                    method: "GET",
+                    url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/api/users",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    headers: {
+                        "Authorization": "Bearer " + msg.token
+                    },
+                    processData: false,
+                })
+                .done(function( data ) {
+                    // Push data into existing data
+                    table.setData(data, null, true);
+
+                    // or Set new data on table, columns is optional.
+                    table.setData(data, columns);
+                });
+            });
+
+            
+        });
+    </script>
     
 {% endblock %}

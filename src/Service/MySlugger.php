@@ -22,16 +22,18 @@ class MySlugger
      * @param string $input
      * @return string
      */
-    public function slugify(string $input, string $className): string
+    public function slugify(string $input, string $className, int $id = null): string
     {
         $slug = $this->slugger->slug($input)->lower();
-        $repository = $this->doctrine->getRepository($className)->findOneBy(['slug' => $slug]);
+        $respository = $this->doctrine->getRepository($className);
+        $element = $respository->findBySlugWithoutId($slug, $id);
 
         $i = 1;
-        while ($repository)
+        while ($element)
         {
+
             $slug = $this->slugger->slug($input.'-'.$i)->lower();
-            $repository = $this->doctrine->getRepository($className)->findOneBy(['slug' => $slug]);
+            $element = $respository->findBySlugWithoutId($slug, $id);
         }
         return $slug;
     }

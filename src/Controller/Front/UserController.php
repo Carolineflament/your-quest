@@ -2,8 +2,13 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Game;
+use App\Entity\Instance;
 use App\Form\RegistrationFormType;
 use App\Form\UserType;
+use App\Repository\GameRepository;
+use App\Repository\InstanceRepository;
+use App\Repository\RoundRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +25,7 @@ class UserController extends AbstractController
     /**
      * @Route("profil", name="profile", methods={"GET", "POST"})
      */
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
+    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, RoundRepository $roundRepository, GameRepository $gameRepository, InstanceRepository $instanceRepository)
     {
         $user = $this->getUser();
 
@@ -40,10 +45,34 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('app_front_user_profile', [], Response::HTTP_SEE_OTHER);
         }
+        
+        // It's getting the user id of the user connected.
+        $userConnected = $this->getUser()->getId();
+
+        /* It's getting the user id of the user connected for the rounds */
+        $rounds = $roundRepository->findBy(['user' => $userConnected]);
+
+        /* It's getting the number of rounds of the user connected. */
+        for ($i = 0; $i<count($rounds); $i++) {
+            /* It's getting the round of the user connected. */
+            $round = $rounds[$i];
+
+            /* It's getting the instance id of the round. */
+            $instance = $round->getInstance()->getId();
+            $thisInstance = $instanceRepository->findOneBy(['id' => $instance]);
+            //dump($thisInstance);
+
+            /* It's getting the game id of the instance. */
+            $game = $thisInstance->getGame()->getId();
+            $myPlayerGame = $gameRepository->findOneBy(['id' => $game]);
+        } 
 
         return $this->renderForm('front/user/profile.html.twig', [
             'user' => $user,
             'form' => $form,
+            'rounds' => $rounds,
+            'instance' => $thisInstance,
+            'game' => $myPlayerGame,
         ]);
     }
 
