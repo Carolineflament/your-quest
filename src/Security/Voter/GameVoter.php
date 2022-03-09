@@ -11,8 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GameVoter extends Voter
 {
-
-    private $games;
+    private $security;
 
     public function __construct (Security $security)
     {
@@ -22,7 +21,7 @@ class GameVoter extends Voter
 
     protected function supports(string $attribute, $game): bool
     {
-        return in_array($attribute, ["EDIT_GAME"])
+        return in_array($attribute, ["EDIT_GAME", 'VIEW_GAME', 'DELETE_GAME'])
         && $game instanceof Game;
     }
 
@@ -34,30 +33,23 @@ class GameVoter extends Voter
         if (!$user instanceof UserInterface) {
             return false;
         }
-
+        
         // Check conditions and return true to grant permission
         switch ($attribute) {
             case "EDIT_GAME":
-                //Organizer or Admin can modify this game
-                if ($this->security->isGranted('ROLE_ORGANISATEUR')) {
-                    return true;
-                }
-
-                if ($user === $game->getUser()) {
-                    return true;
-                }
-                break;
+            case "VIEW_GAME":
             case "DELETE_GAME":
-                //Organizer or Admin can delete this game
-                if ($this->security->isGranted('ROLE_ORGANISATEUR')) {
+            {
+                //Admin can modify this game
+                if ($this->security->isGranted('ROLE_ADMIN')) {
                     return true;
                 }
 
-                if ($user === $game->getUser()) {
+                if ($user->getId() === $game->getUser()->getId() && $this->security->isGranted('ROLE_ORGANISATEUR')) {
                     return true;
                 }
-
                 break;
+            }
         }
 
         return false;
