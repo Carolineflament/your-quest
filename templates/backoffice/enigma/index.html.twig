@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enigma index{% endblock %}
+
+{% block body %}
+    <h1>Enigma index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Question</th>
+                <th>OrderEnigma</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>IsTrashed</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for enigma in enigmas %}
+            <tr>
+                <td>{{ enigma.id }}</td>
+                <td>{{ enigma.question }}</td>
+                <td>{{ enigma.orderEnigma }}</td>
+                <td>{{ enigma.createdAt ? enigma.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ enigma.updatedAt ? enigma.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ enigma.isTrashed ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_backoffice_enigma_show', {'id': enigma.id}) }}">show</a>
+                    <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_backoffice_enigma_new') }}">Create new</a>
+{% endblock %}
