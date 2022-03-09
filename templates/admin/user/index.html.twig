@@ -87,34 +87,22 @@
             });
             
             $.ajax({
-                method: "POST",
-                url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/api/login_check",
+                method: "GET",
+                url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/api/users",
                 contentType: "application/json; charset=utf-8",
-                data: '{"username":"{{ app_api_email }}","password":"{{ app_api_password }}"}',
                 dataType: "json",
+                headers: {
+                    "Authorization": "Bearer {{app.session.get('token')}}"
+                },
                 processData: false,
             })
-            .done(function( msg ) {
-                $.ajax({
-                    method: "GET",
-                    url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/api/users",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    headers: {
-                        "Authorization": "Bearer " + msg.token
-                    },
-                    processData: false,
-                })
-                .done(function( data ) {
-                    // Push data into existing data
-                    table.setData(data, null, true);
+            .done(function( data ) {
+                // Push data into existing data
+                table.setData(data, null, true);
 
-                    // or Set new data on table, columns is optional.
-                    table.setData(data, columns);
-                });
+                // or Set new data on table, columns is optional.
+                table.setData(data, columns);
             });
-
-            
         });
     </script>
     
