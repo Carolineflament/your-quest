@@ -44,7 +44,7 @@ class InstanceController extends AbstractController
         // Get Instance from slug
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
-        // je récupéré la liste des round d'une instance
+        // je récupére la liste des rounds terminés et non-terminés d'une instance
 
         /* This is a query to get all the rounds of an instance. */
         $roundsList = $roundRepository->findBy(['instance' => $instance]);

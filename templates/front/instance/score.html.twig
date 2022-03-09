@@ -15,26 +15,46 @@
       </div>      
 
       <div class="card-list mt-4">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">Nom du joueur</th>
-                  <th scope="col">Temps réalisé</th>
-                </tr>
-              </thead>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Nom du joueur</th>
+              <th scope="col">Temps réalisé</th>
+            </tr>
+          </thead>
 
-            <tbody>
-                {% for rounds in roundsList %}
-                <tr scope="row">
-                {{ dump(roundsList) }}
-                    <td>{{ rounds.user.username }}</td>                   
-                    <td>{{ rounds.endAt.diff(rounds.startAt)|date("%Hh%Imin%Ssec") }}</td>
-                {% endfor %} 
-                </tr>
-                  
-            </tbody>    
+          <tbody>
+              {% for round in roundsList %}
+              <tr scope="row">
+                {% if round.endAt %}
+                    <td>{{ round.user.username }}</td>                   
+                    <td>{{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}</td>
+                {% endif %}
+              {% endfor %} 
+              </tr>  
+          </tbody> 
         </table>          
-      </div>            
+      </div>
+
+      <div class="card-list mt-4">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Nom des joueurs ayant participé, mais sans terminer le parcours</th>
+            </tr>
+          </thead>
+
+          <tbody>
+              {% for round in roundsList %}
+              <tr scope="row">
+                {% if round.endAt == null %}
+                    <td>{{ round.user.username }}</td>                   
+                {% endif %}
+              {% endfor %} 
+              </tr>  
+          </tbody> 
+        </table>          
+      </div>              
                
         
 
