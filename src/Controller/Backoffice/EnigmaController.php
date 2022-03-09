@@ -47,6 +47,10 @@ class EnigmaController extends AbstractController
             $entityManager->persist($enigma);
             $entityManager->flush();
 
+            $this->addFlash(
+                'notice-success',
+                'L\'énigme a été ajouté !');
+
             return $this->redirectToRoute('app_backoffice_enigma_index', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
         }
 
@@ -80,6 +84,10 @@ class EnigmaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice-success',
+                'L\'énigme a été modifié !');
 
             return $this->redirectToRoute('app_backoffice_enigma_index', [
                 'id' => $checkpoint->getId()
