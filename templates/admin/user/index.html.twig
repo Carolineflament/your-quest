@@ -86,13 +86,35 @@
 
             });
 
-            $.get('http://localhost:8080/api/users', function(data) {
-                // Push data into existing data
-                table.setData(data, null, true);
-
-                // or Set new data on table, columns is optional.
-                table.setData(data, columns);
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:8080/api/login_check",
+                contentType: "application/json; charset=utf-8",
+                data: '{"username":"admin@admin.com","password":"admin"}',
+                dataType: "json",
+                processData: false,
             })
+            .done(function( msg ) {
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:8080/api/users",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    headers: {
+                        "Authorization": "Bearer " + msg.token
+                    },
+                    processData: false,
+                })
+                .done(function( data ) {
+                    // Push data into existing data
+                    table.setData(data, null, true);
+
+                    // or Set new data on table, columns is optional.
+                    table.setData(data, columns);
+                });
+            });
+
+            
         });
     </script>
     

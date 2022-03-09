@@ -87,4 +87,20 @@ class ApiController extends AbstractController
             ['groups' => 'list_users']
         );
     }
+
+    /**
+     * @Route("/test", name="test", methods={"GET"})
+     */
+    public function test():Response
+    {
+        return $this->json(
+            'test',
+            // HTTP status code
+            Response::HTTP_OK,
+            // HTTP header
+            [],
+            // Contexte de serialization
+            []
+        );
+    }
 }
