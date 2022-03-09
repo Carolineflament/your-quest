@@ -24,7 +24,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/users", name="list_users", methods={"GET"})
+     * @Route("/users", name="list_users", methods={"GET", "POST"})
      */
     public function list_users(Request $request, UserRepository $userRepos, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
@@ -89,7 +89,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/test", name="test", methods={"GET"})
+     * @Route("/test", name="test", methods={"GET", "POST"})
      */
     public function test():Response
     {
