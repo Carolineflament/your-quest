@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_backoffice_enigma_delete', {'id': enigma.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette énigme ? Cette énigme sera mit à la poubelle !');">
+<form method="post" action="{{ path('app_backoffice_enigma_trash', {'id': enigma.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette énigme ? Cette énigme sera mit à la poubelle !');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ enigma.id) }}">
     <button class="btn btn-danger">Supprimer</button>
 </form>

@@ -6,6 +6,7 @@ use App\Entity\Enigma;
 use App\Form\EnigmaType;
 use App\Repository\CheckpointRepository;
 use App\Repository\EnigmaRepository;
+use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +50,7 @@ class EnigmaController extends AbstractController
 
             $this->addFlash(
                 'notice-success',
-                'L\'énigme a été ajouté !');
+                'L\' énigme a été ajouté !');
 
             return $this->redirectToRoute('app_backoffice_enigma_index', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
         }
@@ -87,7 +88,7 @@ class EnigmaController extends AbstractController
 
             $this->addFlash(
                 'notice-success',
-                'L\'énigme a été modifié !');
+                'L\' énigme a été modifié !');
 
             return $this->redirectToRoute('app_backoffice_enigma_index', [
                 'id' => $checkpoint->getId()
@@ -102,15 +103,23 @@ class EnigmaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_backoffice_enigma_delete", methods={"POST"})
+     * @Route("/{id}", name="app_backoffice_enigma_trash", methods={"POST"})
      */
-    public function delete(Request $request, Enigma $enigma, EntityManagerInterface $entityManager): Response
+    public function trash(Request $request, Enigma $enigma, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
         $checkpoint = $enigma->getCheckpoint();
         if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($enigma);
-            $entityManager->flush();
+            if( $enigma->getIsTrashed()){
+                $cascadeTrashed->trashEnigma($enigma);
+            }
+            $enigma->setIsTrashed(true);
+            $this->addFlash(
+                'notice-success',
+                'L\' énigme a été mis à la poubelle !'
+            );
         }
+
+            $entityManager->flush();
 
         return $this->redirectToRoute('app_backoffice_enigma_index', [
             'id' => $checkpoint->getId()
