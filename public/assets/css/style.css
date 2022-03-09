@@ -210,4 +210,18 @@ label.required:after {
 	#games-cards-ic {
 	  flex-direction: column;
 	}
-  }
+}
+
+  /* Show profile page */
+.img-profile
+{
+	border-radius: 50%;
+	max-width: 15rem;
+	max-height: 15rem;
+}
+
+input.form-control
+{
+	background-color: #e8d0b359;
+  	border: none;
+}
