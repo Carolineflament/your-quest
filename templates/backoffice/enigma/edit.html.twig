@@ -1,0 +1,14 @@
+{% extends 'backoffice/back_base.html.twig' %}
+
+{% block title %}Modifier l'énigme du checkpoint{{checkpoint.title}}{% endblock %}
+
+{% block back_body %}
+    <div class="d-flex flex-column align-items-end">
+        <a href="{{ path('app_backoffice_enigma_index', {'id': checkpoint.id}) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+     </div> 
+
+    <div class="clearfix"></div>
+
+    {{ include('backoffice/enigma/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+{% endblock %}

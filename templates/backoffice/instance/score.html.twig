@@ -24,12 +24,10 @@
           </thead>
 
           <tbody>
-              {% for round in roundsList %}
+              {% for key, duration in orderedDurations %}
               <tr scope="row">
-                {% if round.endAt %}
-                    <td>{{ round.user.pseudo }}</td>                   
-                    <td>{{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}</td>
-                {% endif %}
+                    <td>{{ roundsList[key].user.username }}</td>                   
+                    <td>{{ duration }}</td>
               {% endfor %} 
               </tr>  
           </tbody> 
@@ -48,7 +46,7 @@
               {% for round in roundsList %}
               <tr scope="row">
                 {% if round.endAt is same as(null) %}
-                    <td>{{ round.user.pseudo }}</td>                   
+                    <td>{{ round.user.username }}</td>                   
                 {% endif %}
               {% endfor %} 
               </tr>  
