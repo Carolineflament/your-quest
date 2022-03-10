@@ -17,12 +17,35 @@ class MySlugger
     }
 
     /**
-     * method slugify
+     * method slugify for create
      *
      * @param string $input
      * @return string
      */
-    public function slugify(string $input, string $className, int $id = null): string
+    public function slugifyCreate(string $input, string $className): string
+    {
+        $slug = $this->slugger->slug($input)->lower();
+        $respository = $this->doctrine->getRepository($className);
+        $element = $respository->findBySlugWithoutId($slug);
+
+        $i = 1;
+        while ($element)
+        {
+
+            $slug = $this->slugger->slug($input.'-'.$i)->lower();
+            $element = $respository->findBySlugWithoutId($slug);
+            $i++;
+        }
+        return $slug;
+    }
+
+    /**
+     * method slugify for update
+     *
+     * @param string $input
+     * @return string
+     */
+    public function slugifyUpdate(string $input, string $className, int $id = null): string
     {
         $slug = $this->slugger->slug($input)->lower();
         $respository = $this->doctrine->getRepository($className);
@@ -34,7 +57,9 @@ class MySlugger
 
             $slug = $this->slugger->slug($input.'-'.$i)->lower();
             $element = $respository->findBySlugWithoutId($slug, $id);
+            $i++;
         }
         return $slug;
     }
+
 }

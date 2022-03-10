@@ -49,7 +49,7 @@ services:
                 # Entity
                 entity: App\Entity\Instance
                 # Method (optional)
-                method: updateSlug
+                method: createSlug
 
     App\EventListener\GameListener:
         tags:
@@ -70,7 +70,7 @@ services:
                 # Entity
                 entity: App\Entity\Game
                 # Method (optional)
-                method: updateSlug
+                method: createSlug
 
     App\Normalizer\EntityNormalizer:
         public: false
