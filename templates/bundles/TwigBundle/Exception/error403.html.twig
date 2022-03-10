@@ -3,14 +3,14 @@
 {% block title %}Accès refusé{% endblock %}
 
 {% block body %} 
-    <div class="text-center">
+    <div class="error-custom d-flex flex-column text-center">
         <h1>Il n'y a rien à scanner ici ! </h1>
         <div>
-            <a href="{{ path('front_main') }}"><img class="error403" src="{{ asset('assets/images/errors/Forbidden.png') }}" alt="forbidden"></a>
-            <p>
-            un indice, pour retrouver votre chemin c'est par ici !
-            <a href="{{ path('front_main') }}"><img src="{{ asset('assets/images/favicon.ico') }}" alt="YourQuest" ></a>
-            </p>
+            <a href="{{ path('front_main') }}">
+                <img class="error_img" src="{{ asset('assets/images/errors/Forbidden.png') }}" alt="forbidden">
+            </a>
+            <p>un indice, c'est par ici !</p>
+            <a href="{{ path('front_main') }}"><img class="mb-5" src="{{ asset('assets/images/favicon.ico') }}" alt="YourQuest" ></a>
         </div>
     </div>
 {% endblock %}
