@@ -223,7 +223,7 @@ label.required:after {
 	max-height: 15rem;
 }
 
-input.form-control
+.form-control
 {
 	background-color: #e8d0b359;
   	border: none;
