@@ -3,6 +3,9 @@ body {
 	color: #86340A;
 }
 
+a{
+	color:#7EB5A6;
+}
 .btn-primary:hover
 {
 	background-color: #7eb5a6;
@@ -212,7 +215,7 @@ label.required:after {
 	}
 }
 
-  /* Show profile page */
+/* Show profile page */
 .img-profile
 {
 	border-radius: 50%;
@@ -220,8 +223,38 @@ label.required:after {
 	max-height: 15rem;
 }
 
-input.form-control
+.form-control
 {
 	background-color: #e8d0b359;
   	border: none;
+}
+
+.score
+{
+	background-color: #C36839;
+	color: white
+}
+
+/* errors pages */
+.error-custom
+{
+	height:100vh;
+}
+
+.error_img
+{
+	width: 100%;
+	padding: 2rem;
+}
+
+@media (min-width: 768px) {
+    .error_img{
+		width: 50%;
+	}
+}
+
+@media (min-width: 1024px) {
+	.error_img{
+		width: 30%;
+	}
 }

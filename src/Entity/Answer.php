@@ -37,13 +37,13 @@ class Answer
     /**
      * @ORM\Column(type="datetime_immutable")
      * @Assert\NotBlank(message = "La date de création de la réponse doit être renseignée")
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     * @Assert\DateTime(message = "La date {{value}} du champ {{label}} n'est pas au bon format")
+     * @Assert\Type(type="\DateTimeInterface", message = "La date {{value}} du champ {{label}} n'est pas au bon format")
      */
     private $updatedAt;
 
@@ -52,6 +52,21 @@ class Answer
      * @ORM\JoinColumn(nullable=false)
      */
     private $enigma;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
+     */
+    private $isTrashed;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->isTrashed = false;
+    }
 
     public function getId(): ?int
     {
@@ -132,5 +147,17 @@ class Answer
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getIsTrashed(): ?bool
+    {
+        return $this->isTrashed;
+    }
+
+    public function setIsTrashed(bool $isTrashed): self
+    {
+        $this->isTrashed = $isTrashed;
+
+        return $this;
     }
 }

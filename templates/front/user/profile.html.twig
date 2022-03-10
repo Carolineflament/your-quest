@@ -76,7 +76,6 @@
             {{ form_end(form) }}
         </div>
     </div>
-
     <div id="game-play" class="d-flex justify-content-evenly align-items-center mt-5 mb-5">
         <div class="col-xl-6  text-center" id="game-play">
             <h2>Mes jeux</h2>            
@@ -86,15 +85,9 @@
                 <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas encore joué pour le moment !</div>
             {% endfor %} 
         </div>
-        {% if is_granted('ROLE_ORGANISATEUR') %}
-        <div id="game-play" class="d-flex justify-content-evenly align-items-center mt-3 mb-3">
-            <h2>Les derniers jeux au(x)uquel(s) j'ai joué</h2>
-        </div>
-        {% elseif is_granted('ROLE_JOUEUR') %}
         <div>
             <img src="{{ asset('assets/images/profilePicture/cell-phone.png') }}" class="img-profile" alt="..." >
         </div>
-        {% endif %}
     </div>
 </div>
 

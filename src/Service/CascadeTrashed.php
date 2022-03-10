@@ -74,6 +74,10 @@ class CascadeTrashed
     public function trashEnigma(Enigma $enigma)
     {
         $enigma->setIsTrashed(true);
+        foreach($enigma->getAnswers() AS $answer)
+        {
+            $answer->setIsTrashed(true);
+        }
         $this->doctrine->flush();
     }
 }

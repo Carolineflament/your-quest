@@ -11,6 +11,7 @@ use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,7 +44,7 @@ class EnigmaController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
-       array_push($this->breadcrumb, array('libelle' => 'énigme' , 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
+       array_push($this->breadcrumb, array('libelle' => 'Enigme' , 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
 
         return $this->render('backoffice/enigma/index.html.twig', [
             'enigmas' => $enigmaRepository->findBy(['checkpoint' => $checkpoint, 'isTrashed' => false]),
@@ -76,13 +77,11 @@ class EnigmaController extends AbstractController
                 'notice-success',
                 'L\' énigme a été ajouté !');
 
-            return $this->redirectToRoute('app_backoffice_enigma_index', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
         }
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
-
-        array_push($this->breadcrumb, array('libelle' => 'énigme', 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
 
         array_push($this->breadcrumb, array('libelle' => 'Nouvelle énigme', 'libelle_url' => 'app_backoffice_enigma_new', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_new', ['id' => $checkpoint->getId()])));
 
@@ -100,6 +99,8 @@ class EnigmaController extends AbstractController
      */
     public function show(Enigma $enigma): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $enigma);
         $checkpoint = $enigma->getCheckpoint();
 
         $game = $checkpoint->getGame();
@@ -108,9 +109,10 @@ class EnigmaController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
+        array_push($this->breadcrumb, array('libelle' => 'Enigme n°'.$enigma->getOrderEnigma(), 'libelle_url' => 'app_backoffice_enigma_show', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_show', ['id' => $enigma->getId()])));
+
         return $this->render('backoffice/enigma/show.html.twig', [
             'enigma' => $enigma,
-            'checkpoint' => $checkpoint,
             'breadcrumbs' => $this->breadcrumb,
         ]);
     }
@@ -120,7 +122,8 @@ class EnigmaController extends AbstractController
      */
     public function edit(Request $request, Enigma $enigma, EntityManagerInterface $entityManager): Response
     {
-
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $enigma);
         $checkpoint = $enigma->getCheckpoint();
 
         $game = $checkpoint->getGame();
@@ -134,8 +137,8 @@ class EnigmaController extends AbstractController
             $this->addFlash(
                 'notice-success',
                 'L\' énigme a été modifié !');
-
-            return $this->redirectToRoute('app_backoffice_enigma_index', [
+            
+            return $this->redirectToRoute('app_backoffice_checkpoint_show', [
                 'id' => $checkpoint->getId()
             ], Response::HTTP_SEE_OTHER);
         }
@@ -144,9 +147,7 @@ class EnigmaController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
-        array_push($this->breadcrumb, array('libelle' => 'énigme', 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
-
-        array_push($this->breadcrumb, array('libelle' => 'énigme n°'. $enigma->getOrderEnigma(), 'libelle_url' => 'app_backoffice_enigma_edit', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_edit', ['id' => $checkpoint->getId()])));
+        array_push($this->breadcrumb, array('libelle' => 'Enigme n°'. $enigma->getOrderEnigma(), 'libelle_url' => 'app_backoffice_enigma_edit', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_edit', ['id' => $checkpoint->getId()])));
 
         return $this->renderForm('backoffice/enigma/edit.html.twig', [
             'enigma' => $enigma,
@@ -161,21 +162,26 @@ class EnigmaController extends AbstractController
      */
     public function trash(Request $request, Enigma $enigma, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $enigma);
         $checkpoint = $enigma->getCheckpoint();
-        if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token'))) {
-            if( $enigma->getIsTrashed()){
-                $cascadeTrashed->trashEnigma($enigma);
-            }
-            $enigma->setIsTrashed(true);
+        if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token')))
+        {
+            $cascadeTrashed->trashEnigma($enigma);
             $this->addFlash(
                 'notice-success',
                 'L\' énigme a été mis à la poubelle !'
             );
         }
+        else
+        {
+            $this->addFlash(
+                'notice-danger',
+                'Impossible de supprimer l\'énigme '.$enigma->getOrderEnigma().', token invalide !'
+            );
+        }
 
-            $entityManager->flush();
-
-        return $this->redirectToRoute('app_backoffice_enigma_index', [
+        return $this->redirectToRoute('app_backoffice_checkpoint_show', [
             'id' => $checkpoint->getId()
         ], Response::HTTP_SEE_OTHER);
     }

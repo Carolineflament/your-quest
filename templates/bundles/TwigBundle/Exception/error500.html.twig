@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page non trouvée{% endblock %}
+
+{% block body %} 
+    <div class="error-custom d-flex flex-column text-center">
+        <h1>C'est tout cassé !</h1>
+        <div>
+            <img class="error_img" class="mb-5" src="{{ asset('assets/images/errors/Broken.jpg') }}" alt="server_error">            
+        </div>
+    </div>
+{% endblock %}
