@@ -19,22 +19,12 @@ class InstanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Instance::class);
     }
 
-    public function findBySlugWithId(string $slug, int $id)
+    public function findBySlugAndId(string $slug, int $id)
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.slug = :slug AND i.id != :id')
             ->setParameter('slug', $slug)
             ->setParameter('id', $id)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    public function findBySlugWithoutId(string $slug)
-    {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.slug = :slug')
-            ->setParameter('slug', $slug)
             ->getQuery()
             ->getResult()
         ;

@@ -121,14 +121,14 @@ class AppFixtures extends Fixture
             $game = new Game();
             $title = $faker->words(2, true);
             $game->setTitle($title);
-            $game->setSlug($this->slugger->slugify($title));
+            $game->setSlug($this->slugger->slugify($title, Game::class));
             $game->setAddress($faker->address());
             $game->setPostalCode($faker->randomNumber(5, true));
             $game->setCity($faker->country());
             $image = "https://picsum.photos/id/".mt_rand(1, 20)."/828/315";
             $response = $this->client->request('GET', $image);
-            file_put_contents('./public/assets/images/games/'.$this->slugger->slugify($title).'.jpg', $response->getContent());
-            $game->setImage($this->slugger->slugify($title).'.jpg');
+            file_put_contents('./public/assets/images/games/'.$this->slugger->slugify($title, Game::class).'.jpg', $response->getContent());
+            $game->setImage($this->slugger->slugify($title, Game::class).'.jpg');
             $game->setSummary($faker->text(30));
             $game->setStatus(rand(0, 1));
             $game->setIsTrashed(rand(0, 1));

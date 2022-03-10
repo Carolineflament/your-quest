@@ -71,7 +71,7 @@ class CreateActiveInstanceCommand extends Command
         $numberOfPlayersArg = $input->getArgument('numberOfPlayers');
 
         // Generate game slug to add it on users credentials
-        $gameSlug = $this->slugger->slugify($gameNameArg);
+        $gameSlug = $this->slugger->slugify($gameNameArg, Game::class);
 
         // Class pour styliser les inputs/outputs
         $io = new SymfonyStyle($input, $output);
