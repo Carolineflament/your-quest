@@ -9,9 +9,24 @@
     <div class="col text-center">
         <h1>Check OK</h1>
         {{ include('front/_notice_message.html.twig') }}
-       
-        {{message}}
 
+        {% if enigmas|length == 0 %}
+            {{message}}
+        {% else %}
+            {% for enigma in enigmas %}
+                <h3>{{enigma.question}}</h3>
+                <form method="post" action="{{ path('front_checkpoint_response', {'id': enigma.id}) }}">
+                    {% for answer in enigma.unTrashedAnswers %}
+                        <div>
+                            <input type="radio" id="{{ answer.id }}" name="enigma-{{enigma.id}}" value="{{ answer.answer }}" />
+                            <label for="{{ answer.id }}">{{ answer.answer }}</label>
+                        </div>
+                    {% endfor %}
+                    <input type="hidden" name="_token" value="{{ csrf_token('response' ~ enigma.id) }}">
+                    <button class="btn btn-success">Envoyer</button>
+                </form>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 

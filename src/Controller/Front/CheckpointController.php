@@ -3,9 +3,11 @@
 namespace App\Controller\Front;
 
 use App\Entity\Checkpoint;
+use App\Entity\Enigma;
 use App\Entity\Instance;
 use App\Entity\Round;
 use App\Entity\ScanQR;
+use App\Repository\AnswerRepository;
 use App\Repository\CheckpointRepository;
 use App\Repository\RoundRepository;
 use App\Repository\ScanQRRepository;
@@ -162,7 +164,7 @@ class CheckpointController extends AbstractController
         else
         {
             /* This is a way to get the last checkpoint scanned by the user. */
-            $lastScanAt = $scanQRRepos->findOneBy(['user' => $user, 'round' => $round], ['scanAt' => 'DESC']);
+            $lastScanAt = $scanQRRepos->findOneBy(['round' => $round], ['scanAt' => 'DESC']);
             $checkpointScan = $lastScanAt->getCheckpoint();
             
             $this->addFlash(
@@ -183,12 +185,33 @@ class CheckpointController extends AbstractController
         }
         $entityManager->flush();
 
-        // TODO on récup les énigmes associées au checkpoint
-
-        
         return $this->render('front/checkpoint/check.html.twig', [
-            'controller_name' => 'CheckpointController',
+            'enigmas' => $checkpointScan->getEnigmas(),
             'message' => $checkpointScan->getSuccessMessage()
+        ]);
+    }
+
+    /**
+     * @Route("/checkpoint/enigma/{id}", name="_response", methods={"POST"}, requirements={"id"="\d+"})
+     */
+    public function response(Enigma $enigma, AnswerRepository $answerRepository): Response
+    {
+        $checkpoint = $enigma->getCheckpoint();
+        $good_answer = $answerRepository->findOneBy(['enigma' => $enigma, 'status' => true, 'isTrashed' => false]);
+
+        $type_response = '';
+        if($good_answer->getAnswer() == $_POST['enigma-'.$enigma->getId()])
+        {
+            $type_response = 'good';
+        }
+        else
+        {
+            $type_response = 'wrong';
+        }
+
+        return $this->render('front/checkpoint/check.html.twig', [
+            'message' => $checkpoint->getSuccessMessage(),
+            'enigmas' => array(),
         ]);
     }
 }
