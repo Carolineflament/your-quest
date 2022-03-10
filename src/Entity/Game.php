@@ -216,8 +216,12 @@ class Game
     }
 
     public function getImage(): ?string
-    {
-        return $this->image;
+    {   
+        if ($this->image) {
+            return $this->image;
+        } else {
+            return 'default/game-default-image.jpg';
+        }
     }
 
     public function setImage(?string $image): self
