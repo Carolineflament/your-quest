@@ -3,7 +3,95 @@
 {% block title %}Mon compte{% endblock %}
 
 {% block body %}
-    <div class="d-flex flex-column justify-content-evenly bd-highlight mb-3" >
+{# MOBILE FIRST VERSION #}
+<div class="d-flex flex-column" >
+        <div class="d-flex flex-column align-items-center mt-5 mb-5">
+            {% if is_granted('ROLE_ORGANISATEUR') %}
+                <div>
+                    <img src="{{ asset('assets/images/profilePicture/girl.png') }}" class="img-profile" alt="..." >
+                </div>
+            {% elseif is_granted('ROLE_JOUEUR') %}
+                <div>
+                    <img src="{{ asset('assets/images/profilePicture/boy.png') }}" class="img-profile" alt="..." >
+                </div>
+            {% endif %}
+            <div class="col-xl-6 text-center">
+                <h1>Votre profil : {{ user.email }}</h1>
+                {{ include('front/_notice_message.html.twig') }}
+            {{ form_start(form) }}
+                <div class="form-error mb-3">
+                    {{ form_errors(form.password) }}
+                    {{ form_errors(form.pseudo) }}
+                    {{ form_errors(form.lastname) }}
+                    {{ form_errors(form.firstname) }}
+                    {% if is_granted('ROLE_ORGANISATEUR') %}
+                        {{ form_errors(form.address) }}
+                        {{ form_errors(form.postalCode) }}
+                        {{ form_errors(form.city) }}
+                    {% endif %}
+                </div>
+                <div class="row g-3 align-items-center">
+                    <div class="col form-floating mb-3">
+                        {{ form_widget(form.pseudo) }}
+                        {{ form_label(form.pseudo) }}
+                    </div>
+
+                    <div class="col form-floating mb-3">
+                        {{ form_widget(form.password) }}
+                        {{ form_label(form.password) }}
+                    </div>
+                </div>
+                    
+                <div class="row g-3 align-items-center">
+                    <div class="col form-floating mb-3">
+                        {{ form_widget(form.lastname) }}
+                        {{ form_label(form.lastname) }}
+                    </div>
+
+                    <div class="col form-floating mb-3">
+                        {{ form_widget(form.firstname) }}
+                        {{ form_label(form.firstname) }}
+                    </div>
+                </div>
+
+                {% if is_granted('ROLE_ORGANISATEUR') %}
+                    <div class="form-floating mb-3">
+                        {{ form_widget(form.address) }}
+                        {{ form_label(form.address) }}
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form_widget(form.postalCode) }}
+                        {{ form_label(form.postalCode) }}
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form_widget(form.city) }}
+                        {{ form_label(form.city) }}
+                    </div>
+                {% endif %}
+                    
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <div id="game-play" class="d-flex justify-content-evenly align-items-center mt-5 mb-5">
+        <div class="col-xl-6  text-center" id="game-play">
+            <h2>Mes jeux</h2>            
+            {% for round in rounds %}
+                {{ include('front/user/_game_card.html.twig') }}
+            {% else %}
+                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas encore joué pour le moment !</div>
+            {% endfor %} 
+        </div>
+        <div>
+            <img src="{{ asset('assets/images/profilePicture/cell-phone.png') }}" class="img-profile" alt="..." >
+        </div>
+    </div>
+{# DEKSTOP VERSION #}
+    {# <div class="d-flex flex-column justify-content-evenly bd-highlight mb-3" >
         <div class="d-flex justify-content-evenly align-items-center mt-5 mb-5">
             {% if is_granted('ROLE_ORGANISATEUR') %}
                 <div>
@@ -88,7 +176,9 @@
         <div>
             <img src="{{ asset('assets/images/profilePicture/cell-phone.png') }}" class="img-profile" alt="..." >
         </div>
-    </div>
+    </div> #}
+{# END DEKSTOP VERSION #}
+
 </div>
 
 {% endblock %}
