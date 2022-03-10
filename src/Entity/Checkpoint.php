@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Game;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * @ORM\Entity(repositoryClass=CheckpointRepository::class)
@@ -212,6 +213,16 @@ class Checkpoint
     public function getEnigmas(): Collection
     {
         return $this->enigmas;
+    }
+
+    /**
+     * @return Collection<int, Enigma>
+     */
+    public function getUnTrashedEnigmas(): Collection
+    {
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->eq('isTrashed', false));
+        return $this->enigmas->matching($criteria);
     }
 
     public function addEnigma(Enigma $enigma): self

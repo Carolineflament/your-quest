@@ -3,12 +3,9 @@
 {% block title %}Instances du jeu {{ game.title }} {% endblock %}
 
 {% block back_body %}
-    <div class="d-flex flex-column align-items-end">
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
         <a href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}" class="btn btn-success">Créer une nouvelle instance</a>
     </div>
-    <div class="clearfix"></div>
-
-    {{ include('front/_notice_message.html.twig') }}
 
     <table class="table table-hover align-middle" style="text-align:center; margin-top:10px;">
         <thead class="table-dark">

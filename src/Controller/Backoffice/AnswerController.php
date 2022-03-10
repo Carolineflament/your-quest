@@ -121,7 +121,7 @@ class AnswerController extends AbstractController
                 'La réponse '.$answer->getAnswer().' a été modifié !'
             );
 
-            return $this->redirectToRoute('app_backoffice_answer_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_enigma_show', ['id' => $answer->getEnigma()->getId()], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => $answer->getEnigma()->getCheckpoint()->getGame()->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $answer->getEnigma()->getCheckpoint()->getGame()->getSlug()])));
@@ -144,8 +144,8 @@ class AnswerController extends AbstractController
      */
     public function trash(Request $request, Answer $answer, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$answer->getId(), $request->request->get('_token'))) {
-
+        if ($this->isCsrfTokenValid('trash'.$answer->getId(), $request->request->get('_token')))
+        {
             $answer->setIsTrashed(true);
             $this->addFlash(
                 'notice-success',
@@ -153,7 +153,14 @@ class AnswerController extends AbstractController
             );
             $entityManager->flush();
         }
+        else
+        {
+            $this->addFlash(
+                'notice-danger',
+                'Impossible de supprimer la réponse '.$answer->getAnswer().', token invalide !'
+            );
+        }
 
-        return $this->redirectToRoute('app_backoffice_answer_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_backoffice_enigma_show', ['id' => $answer->getEnigma()->getId()], Response::HTTP_SEE_OTHER);
     }
 }

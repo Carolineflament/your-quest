@@ -71,8 +71,8 @@ class CheckpointController extends AbstractController
                 'Le checkpoint '.$checkpoint->getTitle().' a été ajouté !'
             );
 
-            return $this->redirectToRoute('app_backoffice_checkpoint_index', [
-                'gameSlug' => $game->getSlug()
+            return $this->redirectToRoute('app_backoffice_game_show', [
+                'slug' => $game->getSlug()
             ], Response::HTTP_SEE_OTHER);
         }
 
@@ -130,8 +130,8 @@ class CheckpointController extends AbstractController
                 'Le checkpoint '.$checkpoint->getTitle().' a été modifié !'
             );
 
-            return $this->redirectToRoute('app_backoffice_checkpoint_index', [
-                'gameSlug' => $game->getSlug()
+            return $this->redirectToRoute('app_backoffice_game_show', [
+                'slug' => $game->getSlug()
             ], Response::HTTP_SEE_OTHER);
         }
 
@@ -156,20 +156,27 @@ class CheckpointController extends AbstractController
         $this->denyAccessUnlessGranted('IS_MY_GAME', $checkpoint);
         $game = $checkpoint->getGame();
 
-        if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token')))
+        {
             $cascadeTrashed->trashCheckpoint($checkpoint);
-            $checkpoint->setIsTrashed(true);
             $this->addFlash(
                 'notice-success',
                 'Le checkpoint '.$checkpoint->getTitle().' a été supprimé ! Le checkpoint et ses énigmes ont été mis à la poubelle !'
+            );
+        }
+        else
+        {
+            $this->addFlash(
+                'notice-danger',
+                'Impossible de supprimer le checkpoint '.$checkpoint->getTitle().', token invalide !'
             );
         }
             
         $entityManager->flush();
         
     
-        return $this->redirectToRoute('app_backoffice_checkpoint_index', [
-            'gameSlug' => $game->getSlug()
+        return $this->redirectToRoute('app_backoffice_game_show', [
+            'slug' => $game->getSlug()
         ], Response::HTTP_SEE_OTHER);
     }
 }

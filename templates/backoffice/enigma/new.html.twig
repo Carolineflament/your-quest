@@ -3,14 +3,10 @@
 {% block title %}Nouvelle énigme pour le checkpoint {{ checkpoint.title }}{% endblock %}
 
 {% block back_body %}
-    <div class="d-flex flex-column align-items-end">
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
         <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste des énigmes</a>
 
     </div>
 
-    <div class="clearfix"></div>
-
     {{ include('backoffice/enigma/_form.html.twig') }}
-
-
 {% endblock %}

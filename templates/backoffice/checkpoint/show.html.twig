@@ -3,11 +3,11 @@
 {% block title %}Checkpoint {{ checkpoint.title }} du jeu {{ checkpoint.game.title }}{% endblock %}
 
 {% block back_body %}
-    <div class="d-flex flex-column align-items-end">
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
         <a href="{{ path('app_backoffice_game_show', {'slug': checkpoint.game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+        {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
+        <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary btn-sm me-3">Modifier</a>
     </div>
-
-    <div class="clearfix"></div>
 
     <table class="table">
         <tbody>
@@ -42,7 +42,7 @@
                 <a class="btn btn-primary m-3" href="{{ path('app_backoffice_enigma_new', {'id': checkpoint.id}) }}">Créer une énigme</a>
             </div>
             <div class="accordion" id="ac-enigmas">
-                {% for enigma in checkpoint.enigmas %}
+                {% for enigma in checkpoint.unTrashedEnigmas %}
                     
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="instance-head-{{loop.index}}">
@@ -69,12 +69,7 @@
             </div>
         </div>
     </div>
-            <div class="text-center">
-                <img src="{{ asset('assets/Qrcode/'~checkpoint.id~'qrcode.png') }}" alt="QR code">
-            </div>
-
-    <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary mb-2">Modifier</a>
-        
-
-    {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
+    <div class="text-center">
+        <img src="{{ asset('assets/Qrcode/'~checkpoint.id~'qrcode.png') }}" alt="QR code">
+    </div>
 {% endblock %}

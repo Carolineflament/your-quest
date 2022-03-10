@@ -11,6 +11,7 @@ use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -76,7 +77,7 @@ class EnigmaController extends AbstractController
                 'notice-success',
                 'L\' énigme a été ajouté !');
 
-            return $this->redirectToRoute('app_backoffice_enigma_index', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
         }
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
@@ -136,8 +137,8 @@ class EnigmaController extends AbstractController
             $this->addFlash(
                 'notice-success',
                 'L\' énigme a été modifié !');
-
-            return $this->redirectToRoute('app_backoffice_enigma_index', [
+            
+            return $this->redirectToRoute('app_backoffice_checkpoint_show', [
                 'id' => $checkpoint->getId()
             ], Response::HTTP_SEE_OTHER);
         }
@@ -164,18 +165,23 @@ class EnigmaController extends AbstractController
         // Organizer or Admin can modify this game
         $this->denyAccessUnlessGranted('IS_MY_GAME', $enigma);
         $checkpoint = $enigma->getCheckpoint();
-        if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token')))
+        {
             $cascadeTrashed->trashEnigma($enigma);
-            $enigma->setIsTrashed(true);
             $this->addFlash(
                 'notice-success',
                 'L\' énigme a été mis à la poubelle !'
             );
         }
+        else
+        {
+            $this->addFlash(
+                'notice-danger',
+                'Impossible de supprimer l\'énigme '.$enigma->getOrderEnigma().', token invalide !'
+            );
+        }
 
-            $entityManager->flush();
-
-        return $this->redirectToRoute('app_backoffice_enigma_index', [
+        return $this->redirectToRoute('app_backoffice_checkpoint_show', [
             'id' => $checkpoint->getId()
         ], Response::HTTP_SEE_OTHER);
     }

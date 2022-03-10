@@ -2,11 +2,12 @@
 
 {% block body %}
     <div class="container-fluid mb-3">
-        <div class="float-start">
+        <div>
             <h1>{% block title %} {% endblock %}</h1>
 
             {{ include('backoffice/_breadcrumb.html.twig') }}
         </div>
+        {{ include('front/_notice_message.html.twig') }}
         {% block back_body %}{% endblock %}
     </div>
 {% endblock %}
