@@ -215,7 +215,7 @@ label.required:after {
 	}
 }
 
-  /* Show profile page */
+/* Show profile page */
 .img-profile
 {
 	border-radius: 50%;
@@ -233,4 +233,16 @@ label.required:after {
 {
 	background-color: #C36839;
 	color: white
+}
+
+/* errors pages */
+.error404
+{
+	width: 30rem;
+}
+
+.error403
+{
+	width: 40rem;
+	padding: 2rem;
 }
