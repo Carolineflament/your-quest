@@ -49,14 +49,14 @@ class MySlugger
     {
         $slug = $this->slugger->slug($input)->lower();
         $respository = $this->doctrine->getRepository($className);
-        $element = $respository->findBySlugWithoutId($slug, $id);
+        $element = $respository->findBySlugWithId($slug, $id);
 
         $i = 1;
         while ($element)
         {
 
             $slug = $this->slugger->slug($input.'-'.$i)->lower();
-            $element = $respository->findBySlugWithoutId($slug, $id);
+            $element = $respository->findBySlugWithId($slug, $id);
             $i++;
         }
         return $slug;
