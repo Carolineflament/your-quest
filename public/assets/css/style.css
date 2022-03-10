@@ -236,13 +236,25 @@ label.required:after {
 }
 
 /* errors pages */
-.error404
+.error-custom
 {
-	width: 30rem;
+	height:100vh;
 }
 
-.error403
+.error_img
 {
-	width: 40rem;
+	width: 100%;
 	padding: 2rem;
+}
+
+@media (min-width: 768px) {
+    .error_img{
+		width: 50%;
+	}
+}
+
+@media (min-width: 1024px) {
+	.error_img{
+		width: 30%;
+	}
 }
