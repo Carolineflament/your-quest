@@ -14,11 +14,19 @@ class GameListener
         $this->slugger = $slugger;    
     }
 
+    public function createSlug(Game $game)
+    {
+        //slug
+        $slug = $this->slugger->slugifyCreate($game->getTitle(), Game::class);
+        // update slug in the game
+        $game->setSlug($slug);
+    }
+
     public function updateSlug(Game $game)
     {
         //slug
-        $slug = $this->slugger->slugify($game->getTitle(), Game::class, $game->getId());
-        // update slug in the entity
+        $slug = $this->slugger->slugifyUpdate($game->getTitle(), Game::class, $game->getId());
+        // update slug in the game
         $game->setSlug($slug);
     }
 }
