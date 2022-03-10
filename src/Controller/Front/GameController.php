@@ -35,7 +35,7 @@ class GameController extends AbstractController
 
         return $this->render('front/game/index.html.twig', [
             'games' => $games,
-            "pages" => ceil(count($gameRepository->findAll())/$limit_games_per_page)
+            "pages" => ceil(count($gameRepository->findBy(['isTrashed' => 0, 'status' => 1]))/$limit_games_per_page)
         ]);
     }
 
