@@ -86,7 +86,7 @@ class AnswerController extends AbstractController
     public function show(Answer $answer): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('VIEW_ANSWER', $answer);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $answer);
 
         array_push($this->breadcrumb, array('libelle' => $answer->getEnigma()->getCheckpoint()->getGame()->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $answer->getEnigma()->getCheckpoint()->getGame()->getSlug()])));
 
@@ -108,7 +108,7 @@ class AnswerController extends AbstractController
     public function edit(Request $request, Answer $answer, EntityManagerInterface $entityManager): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('EDIT_ANSWER', $answer);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $answer);
 
         $form = $this->createForm(AnswerType::class, $answer);
         $form->handleRequest($request);

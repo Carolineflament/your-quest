@@ -98,6 +98,8 @@ class EnigmaController extends AbstractController
      */
     public function show(Enigma $enigma): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $enigma);
         $checkpoint = $enigma->getCheckpoint();
 
         $game = $checkpoint->getGame();
@@ -119,6 +121,8 @@ class EnigmaController extends AbstractController
      */
     public function edit(Request $request, Enigma $enigma, EntityManagerInterface $entityManager): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $enigma);
         $checkpoint = $enigma->getCheckpoint();
 
         $game = $checkpoint->getGame();
@@ -157,6 +161,8 @@ class EnigmaController extends AbstractController
      */
     public function trash(Request $request, Enigma $enigma, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $enigma);
         $checkpoint = $enigma->getCheckpoint();
         if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token'))) {
             $cascadeTrashed->trashEnigma($enigma);

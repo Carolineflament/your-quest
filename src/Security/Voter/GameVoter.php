@@ -2,8 +2,11 @@
 
 namespace App\Security\Voter;
 
-
+use App\Entity\Answer;
+use App\Entity\Checkpoint;
+use App\Entity\Enigma;
 use App\Entity\Game;
+use App\Entity\Instance;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -19,26 +22,39 @@ class GameVoter extends Voter
         $this->security = $security;
     }
 
-    protected function supports(string $attribute, $game): bool
+    protected function supports(string $attribute, $subject): bool
     {
-        return in_array($attribute, ["EDIT_GAME", 'VIEW_GAME', 'DELETE_GAME', 'EDIT_ANSWER', 'VIEW_ANSWER'])
-        && $game instanceof Game;
+        return in_array($attribute, ['IS_MY_GAME']);
     }
 
-    protected function voteOnAttribute(string $attribute, $game, TokenInterface $token): bool
-
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
             return false;
         }
+
+        if($subject instanceof Answer)
+        {
+            $game = $subject->getEnigma()->getCheckpoint()->getGame();
+        }
+        elseif($subject instanceof Enigma)
+        {
+            $game = $subject->getCheckpoint()->getGame();
+        }
+        elseif($subject instanceof Checkpoint || $subject instanceof Instance)
+        {
+            $game = $subject->getGame();
+        }
+        elseif($subject instanceof Game)
+        {
+            $game = $subject;
+        }
         
         // Check conditions and return true to grant permission
         switch ($attribute) {
-            case "EDIT_GAME":
-            case "VIEW_GAME":
-            case "DELETE_GAME":
+            case "IS_MY_GAME":
             {
                 //Admin can modify this game
                 if ($this->security->isGranted('ROLE_ADMIN')) {
