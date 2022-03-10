@@ -3,47 +3,45 @@
 {% block title %}{{ instance.title }}{% endblock %}
 
 {% block body %}
-
-    <div class="container-fluid mb-3">
-        <h1>Instance {{ instance.title }}</h1>
-        <h2>Dernière position des joueurs</h2>
-
-        <div class="row">
-            <div class="col">
-                <h3>Checkpoint</h3>
-            </div>
-            <div class="col">
-                <h3>Joueurs</h3>
-            </div>
-        </div>
+<div class="container-xl p-5">
+      <div class="row">
+        <h1 class="text-muted fw-bold mb-4 text-center h1"> {{game.title}}</h1>
+        <h2 class="text-muted fw-bold mb-4 text-center h2"> Instance {{ instance.title }}</h2>
+          {{ include('front/_notice_message.html.twig') }}
+      </div>
+      <h4 class="text-dark fw-bold">Dernière position des joueurs</h4>
+    <div class="card-list mt-2">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Checkpoint</th>
+              <th scope="col">Joueurs</th>
+            </tr>
+          </thead>
+         <tbody> 
 
         {# Boucle sur les checkpoints du jeu #}
 
-        {% for key, value in checkpointsDatas %}
+        {% for key, value in checkpointsDatas %}     
+                <tr>
+                    <td>N° {{ loop.index }} - {{ key }}</td>
 
-            <div class="row">
-                <div class="col">
-                    <h4>N° {{ loop.index }} - {{ key }}</h4>
-                </div>            
-                <div class="col">
-                    <ul>
-                        
-                        {% if value %}
-
-                            {% for player in value %}
-
-                                <li>{{ player.pseudo }}</li>
-
-                            {% endfor %}
-
-                        {% endif %}
-                        
-                    </ul>
-                </div>
-            </div>
-
-        {% endfor %}
-
+                           {% if value %}
+                            <td>                          
+                                {% for player in value %}
+                                     
+                                <ul class="list-unstyled">
+                                    <li>{{ player.pseudo }}</li>
+                                </ul>
+                           
+                               {% endfor %}
+                            </td>
+                            {% endif %}                       
+                </tr>    
+        {% endfor %}       
+            </tbody>
+        </table> 
     </div>
+</div>
 
 {% endblock %}
