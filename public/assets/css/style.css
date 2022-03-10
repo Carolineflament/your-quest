@@ -3,6 +3,9 @@ body {
 	color: #86340A;
 }
 
+a{
+	color:#7EB5A6;
+}
 .btn-primary:hover
 {
 	background-color: #7eb5a6;
@@ -224,4 +227,10 @@ input.form-control
 {
 	background-color: #e8d0b359;
   	border: none;
+}
+
+.score
+{
+	background-color: #C36839;
+	color: white
 }

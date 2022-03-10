@@ -3,12 +3,15 @@
         <div class="col-md-4">
             <img src="{{ asset(app_games_images_directory~round.instance.game.image) }}" class="card-img-top" alt="..." >
         </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h5 class="card-title">{{ round.instance.game.title }}</h5>
+        <div class="col-md-8 d-flex flex-column justify-content-evenly align-items-center">
+            <div class="card-body d-flex flex-column justify-content-evenly align-items-center">
+                <a href="{{ path('front_games_show', {'slug': round.instance.game.slug}) }}"><h4 class="card-title">{{ round.instance.game.title }}</h4></a>
                 <p class="card-text">Le {{ round.instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}}, à {{ round.instance.game.city }} ({{ round.instance.game.postalCode }})</p>
-                <a href="{{ path('front_games_show', {'slug': round.instance.game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
             </div>
+        </div>
+        <div class="score d-flex flex-column  align-items-center">
+            <p class="score d-flex flex-column  align-items-center mt-1 mb-1">Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}, et tu es à la place n°{nbre} !</p>
         </div>
     </div>
 </div>
+
