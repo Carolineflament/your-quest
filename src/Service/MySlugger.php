@@ -25,9 +25,9 @@ class MySlugger
         $i = 1;
         while ($element)
         {
-
             $slug = $this->slugger->slug($input.'-'.$i)->lower();
             $element = $respository->findBySlugAndId($slug, $id);
+            $i++;
         }
         return $slug;
     }
