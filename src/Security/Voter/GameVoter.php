@@ -21,7 +21,7 @@ class GameVoter extends Voter
 
     protected function supports(string $attribute, $game): bool
     {
-        return in_array($attribute, ["EDIT_GAME", 'VIEW_GAME', 'DELETE_GAME'])
+        return in_array($attribute, ["EDIT_GAME", 'VIEW_GAME', 'DELETE_GAME', 'EDIT_ANSWER', 'VIEW_ANSWER'])
         && $game instanceof Game;
     }
 

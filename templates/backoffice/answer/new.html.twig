@@ -1,0 +1,12 @@
+{% extends 'backoffice/back_base.html.twig' %}
+
+{% block title %}Créer une réponse{% endblock %}
+
+{% block back_body %}
+    <div class="d-flex flex-column align-items-end">
+        <a href="{{ path('app_backoffice_enigma_show', {'id': answer.enigma.id}) }}" class="btn btn-outline-secondary btn-sm">Retour à la question</a>
+    </div>
+    <div class="clearfix"></div>
+
+    {{ include('backoffice/answer/_form.html.twig') }}
+{% endblock %}

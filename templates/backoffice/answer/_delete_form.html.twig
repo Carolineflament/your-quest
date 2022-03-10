@@ -1,0 +1,6 @@
+{% if is_granted('ROLE_ORGANISATEUR') %}
+<form method="post" action="{{ path('app_backoffice_answer_delete', {'id': answer.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la réponse {{ answer.answer }}?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ answer.id) }}">
+    <button class="btn btn-danger ">Supprimer</button>
+</form>
+{% endif %}

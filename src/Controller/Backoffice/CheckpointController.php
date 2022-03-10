@@ -157,9 +157,7 @@ class CheckpointController extends AbstractController
         $game = $checkpoint->getGame();
 
         if ($this->isCsrfTokenValid('delete'.$checkpoint->getId(), $request->request->get('_token'))) {
-            if ($checkpoint->getIsTrashed()) {
-                $cascadeTrashed->trashCheckpoint($checkpoint);
-            }
+            $cascadeTrashed->trashCheckpoint($checkpoint);
             $checkpoint->setIsTrashed(true);
             $this->addFlash(
                 'notice-success',
@@ -167,11 +165,11 @@ class CheckpointController extends AbstractController
             );
         }
             
-            $entityManager->flush();
-            
+        $entityManager->flush();
         
-            return $this->redirectToRoute('app_backoffice_checkpoint_index', [
+    
+        return $this->redirectToRoute('app_backoffice_checkpoint_index', [
             'gameSlug' => $game->getSlug()
         ], Response::HTTP_SEE_OTHER);
-        }
     }
+}

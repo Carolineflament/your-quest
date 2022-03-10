@@ -53,6 +53,21 @@ class Answer
      */
     private $enigma;
 
+    /**
+     * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas du type : {{ type }}."
+     * )
+     */
+    private $isTrashed;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->isTrashed = false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -132,5 +147,17 @@ class Answer
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getIsTrashed(): ?bool
+    {
+        return $this->isTrashed;
+    }
+
+    public function setIsTrashed(bool $isTrashed): self
+    {
+        $this->isTrashed = $isTrashed;
+
+        return $this;
     }
 }

@@ -163,9 +163,7 @@ class EnigmaController extends AbstractController
     {
         $checkpoint = $enigma->getCheckpoint();
         if ($this->isCsrfTokenValid('delete'.$enigma->getId(), $request->request->get('_token'))) {
-            if( $enigma->getIsTrashed()){
-                $cascadeTrashed->trashEnigma($enigma);
-            }
+            $cascadeTrashed->trashEnigma($enigma);
             $enigma->setIsTrashed(true);
             $this->addFlash(
                 'notice-success',
