@@ -178,15 +178,25 @@ class CheckpointController extends AbstractController
         {
             $round->setEndAt(new \DateTimeImmutable());
             $entityManager->persist($round);
-            $this->addFlash(
-                'notice-success',
-                'Bravo vous avez terminé le jeu :) !'
-            );
+            if(count($checkpointScan->getUnTrashedEnigmas()) == 0)
+            {
+                $this->addFlash(
+                    'notice-success',
+                    'Bravo vous avez terminé le jeu :) !'
+                );
+            }
+            else
+            {
+                $this->addFlash(
+                    'notice-success',
+                    'Dernière énigme :) !'
+                );
+            }
         }
         $entityManager->flush();
 
         return $this->render('front/checkpoint/check.html.twig', [
-            'enigmas' => $checkpointScan->getEnigmas(),
+            'enigmas' => $checkpointScan->getUnTrashedEnigmas(),
             'message' => $checkpointScan->getSuccessMessage()
         ]);
     }
@@ -213,7 +223,7 @@ class CheckpointController extends AbstractController
             $type_response = 'wrong';
             $this->addFlash(
                 'notice-danger',
-                'Loupé pour cette fois, la bonne réponse était : '.$good_answer->getAnswer().', mais comme on est sympa tu peux te rendre au prochain checkpoint dont voici l\indice !'
+                'Loupé pour cette fois, la bonne réponse était : '.$good_answer->getAnswer().', mais comme on est sympa tu peux continuer !'
             );
         }
 
