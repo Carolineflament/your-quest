@@ -34,7 +34,7 @@ class InstanceController extends AbstractController
     }
 
      /**
-     * @Route("/jeu/{gameSlug}/instance/{instanceSlug}/scores", name="app_front_instance_score", methods={"GET"})
+     * @Route("/jeux/{gameSlug}/instances/{instanceSlug}/score", name="app_front_instance_score", methods={"GET"})
      */
     public function score($gameSlug, $instanceSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository, RoundRepository $roundRepository): Response
     {
@@ -44,17 +44,60 @@ class InstanceController extends AbstractController
         // Get Instance from slug
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
-        // je récupére la liste des rounds terminés et non-terminés d'une instance
+        // Now
+        $now = new DateTimeImmutable();
 
-        /* This is a query to get all the rounds of an instance. */
+        // Is instance not started yet ?
+        if ($now < $instance->getStartAt()) {
+
+            // Redirect to Instance show
+            // + flash message
+            $this->addFlash(
+                'notice-danger',
+                'Cette instance n\'a pas encore débuté, impossible d\'afficher le classement des joueurs pour l\'instant.'
+            );
+            return $this->redirectToRoute('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
+            
+        }
+
+        // Is instance is active now
+        if ($now > $instance->getStartAt() && $now < $instance->getEndAt()) {
+
+            // Redirect to realtime page
+            return $this->redirectToRoute('app_front_instance_realtime', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
+            
+        }
+
+        // Je récupére la liste des rounds terminés et non-terminés d'une instance
         $roundsList = $roundRepository->findBy(['instance' => $instance]);
+
+        // Pour chaque round je calcul la durée de celui-ci, et je l'inscrit dans un tableau
+        $DurationsArray = [];
+
+        foreach ($roundsList as $key => $round) {
+            // if endAt is not null
+            if ($round->getEndAt()) {
+                // Duration
+                $roundDuration = $round->getEndAt()->diff($round->getStartAt());
+                
+                // Send to array, with a type change to string in order to use array sort function later
+                $DurationsArray[$key] = $roundDuration->format('%Hh%im%Ss');
+            }
+        }
+
+        // Je tri le tableau des durées
+        asort($DurationsArray);
+        // dd($DurationsArray);
+
+        
 
         return $this->render('front/instance/score.html.twig', [
             'instance' => $instance,
             'game' => $game,
-            'roundsList' => $roundsList
-
+            'roundsList' => $roundsList,
+            'orderedDurations' => $DurationsArray,
         ]);
+
     }
 
 
@@ -80,7 +123,7 @@ class InstanceController extends AbstractController
             // + flash message
             $this->addFlash(
                 'notice-danger',
-                'Cette instance n\'a pas encore débuté, impossible d\'afficher la position des joueurs.'
+                'Cette instance n\'a pas encore débuté, impossible d\'afficher la position des joueurs en temps réel.'
             );
             return $this->redirectToRoute('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
             
@@ -93,9 +136,9 @@ class InstanceController extends AbstractController
             // + flash message
             $this->addFlash(
                 'notice-danger',
-                'Cette instance est terminée, impossible d\'afficher la position des joueurs en tant réél, mais voici le tableau des scores.'
+                'Cette instance est terminée, impossible d\'afficher la position des joueurs en tant réel, mais voici le tableau des scores.'
             );
-            // TODO redirect to score page
+            return $this->redirectToRoute('app_front_instance_score', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         /***** Avancée des joueurs en temps réél *****/

@@ -3,16 +3,19 @@
 {% block title %}Instance {{ instance.title }} du jeu {{ game.title }}{% endblock %}
 
 {% block back_body %}
+
     <div class="d-flex flex-row-reverse bd-highlight align-items-start">
         <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}"  class="btn btn-outline-secondary btn-sm me-3">Retourner à la liste</a>
         {{ include('backoffice/instance/_delete_form.html.twig') }}
         <a href="{{ path('app_backoffice_instance_edit', {'instanceSlug': instance.slug}) }}" class="btn btn-primary btn-sm me-3">Modifier</a>
+
         {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
             <a href="{{ path('app_front_instance_realtime', {'gameSlug': game.slug, 'instanceSlug': instance.slug}) }}" class="btn btn-primary btn-sm me-3">Voir les positions des joueurs</a>
         {% else %}
             <a href="{{ path('app_backoffice_instance_score', {'instanceSlug' : instance.slug}) }}" class="btn btn-primary btn-sm me-3">Voir les scores</a>
 
         {% endif %}
+
     </div>
 
     <table class="table">
