@@ -245,13 +245,20 @@ class InstanceController extends AbstractController
         asort($DurationsArray);
         // dd($DurationsArray);
 
-        
+        // Datas for breadcrumb
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => $instance->getTitle(), 'libelle_url' => 'app_backoffice_instance_show', 'url' => $this->urlGenerator->generate('app_backoffice_instance_show', ['instanceSlug' => $instance->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => 'score', 'libelle_url' => 'app_backoffice_instance_score', 'url' => $this->urlGenerator->generate('app_backoffice_instance_score', ['instanceSlug' => $instance->getSlug()])));
+
 
         return $this->render('backoffice/instance/score.html.twig', [
             'instance' => $instance,
             'game' => $game,
             'roundsList' => $roundsList,
             'orderedDurations' => $DurationsArray,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 }

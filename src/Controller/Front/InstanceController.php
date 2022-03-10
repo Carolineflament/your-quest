@@ -68,17 +68,36 @@ class InstanceController extends AbstractController
             
         }
 
-        // je récupére la liste des rounds terminés et non-terminés d'une instance
-
-        /* This is a query to get all the rounds of an instance. */
+        // Je récupére la liste des rounds terminés et non-terminés d'une instance
         $roundsList = $roundRepository->findBy(['instance' => $instance]);
+
+        // Pour chaque round je calcul la durée de celui-ci, et je l'inscrit dans un tableau
+        $DurationsArray = [];
+
+        foreach ($roundsList as $key => $round) {
+            // if endAt is not null
+            if ($round->getEndAt()) {
+                // Duration
+                $roundDuration = $round->getEndAt()->diff($round->getStartAt());
+                
+                // Send to array, with a type change to string in order to use array sort function later
+                $DurationsArray[$key] = $roundDuration->format('%Hh%im%Ss');
+            }
+        }
+
+        // Je tri le tableau des durées
+        asort($DurationsArray);
+        // dd($DurationsArray);
+
+        
 
         return $this->render('front/instance/score.html.twig', [
             'instance' => $instance,
             'game' => $game,
-            'roundsList' => $roundsList
-
+            'roundsList' => $roundsList,
+            'orderedDurations' => $DurationsArray,
         ]);
+
     }
 
 

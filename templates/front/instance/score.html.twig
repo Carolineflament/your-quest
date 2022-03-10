@@ -3,11 +3,10 @@
 {% block title %}{{ instance.title }}{% endblock %}
 
 {% block body %}
-
+{{ include('front/_notice_message.html.twig') }}
 <div class="container-xl p-5">
       <div class="row">
-        <h1 class="text-muted fw-bold mb-4 text-center h1">Résultat du jeu {{game.title}}</h1>
-          {{ include('front/_notice_message.html.twig') }}
+        <h1 class="text-muted fw-bold mb-4 text-center h1">Résultat du jeu {{game.title}}</h1>     
       </div>  
 
       <div class="row">
@@ -18,18 +17,18 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col">Nom du joueur</th>
+              <th scope="col">Classement</th>
+              <th scope="col">Pseudo du joueur</th>
               <th scope="col">Temps réalisé</th>
             </tr>
           </thead>
 
           <tbody>
-              {% for round in roundsList %}
+              {% for key, duration in orderedDurations %}
               <tr scope="row">
-                {% if round.endAt %}
-                    <td>{{ round.user.pseudo }}</td>                   
-                    <td>{{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}</td>
-                {% endif %}
+                    <td>{{ key + 1 }}</td>
+                    <td>{{ roundsList[key].user.pseudo }}</td>                   
+                    <td>{{ duration }}</td>
               {% endfor %} 
               </tr>  
           </tbody> 
@@ -40,7 +39,7 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col">Nom des joueurs ayant participé, mais sans terminer le parcours</th>
+              <th scope="col">Joueurs ayant participé, mais sans terminer le parcours</th>
             </tr>
           </thead>
 
