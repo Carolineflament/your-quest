@@ -7,6 +7,7 @@ use App\Form\InstanceType;
 use App\Repository\GameRepository;
 use App\Repository\InstanceRepository;
 use App\Repository\RoundRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -185,9 +186,6 @@ class InstanceController extends AbstractController
         // Get parent Game
         $game = $instance->getGame();
 
-
-        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
-
         return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
     }
 
@@ -201,6 +199,30 @@ class InstanceController extends AbstractController
 
         // Get parent Game
         $game = $instance->getGame();
+
+        // Now
+        $now = new DateTimeImmutable();
+
+        // Is instance not started yet ?
+        if ($now < $instance->getStartAt()) {
+
+            // Redirect to Instance show
+            // + flash message
+            $this->addFlash(
+                'notice-danger',
+                'Cette instance n\'a pas encore débuté, impossible d\'afficher le classement des joueurs pour l\'instant.'
+            );
+            return $this->redirectToRoute('app_backoffice_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
+            
+        }
+
+        // Is instance is active now
+        if ($now > $instance->getStartAt() && $now < $instance->getEndAt()) {
+
+            // Redirect to realtime page
+            return $this->redirectToRoute('app_front_instance_realtime', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
+            
+        }
 
         // Je récupére la liste des rounds terminés et non-terminés d'une instance
         $roundsList = $roundRepository->findBy(['instance' => $instance]);
