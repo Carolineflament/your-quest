@@ -43,7 +43,7 @@ class EnigmaController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
-       array_push($this->breadcrumb, array('libelle' => 'énigme' , 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
+       array_push($this->breadcrumb, array('libelle' => 'Enigme' , 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
 
         return $this->render('backoffice/enigma/index.html.twig', [
             'enigmas' => $enigmaRepository->findBy(['checkpoint' => $checkpoint, 'isTrashed' => false]),
@@ -82,8 +82,6 @@ class EnigmaController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
-        array_push($this->breadcrumb, array('libelle' => 'énigme', 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
-
         array_push($this->breadcrumb, array('libelle' => 'Nouvelle énigme', 'libelle_url' => 'app_backoffice_enigma_new', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_new', ['id' => $checkpoint->getId()])));
 
         return $this->renderForm('backoffice/enigma/new.html.twig', [
@@ -108,9 +106,10 @@ class EnigmaController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
+        array_push($this->breadcrumb, array('libelle' => 'Enigme n°'.$enigma->getOrderEnigma(), 'libelle_url' => 'app_backoffice_enigma_show', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_show', ['id' => $enigma->getId()])));
+
         return $this->render('backoffice/enigma/show.html.twig', [
             'enigma' => $enigma,
-            'checkpoint' => $checkpoint,
             'breadcrumbs' => $this->breadcrumb,
         ]);
     }
@@ -120,7 +119,6 @@ class EnigmaController extends AbstractController
      */
     public function edit(Request $request, Enigma $enigma, EntityManagerInterface $entityManager): Response
     {
-
         $checkpoint = $enigma->getCheckpoint();
 
         $game = $checkpoint->getGame();
@@ -144,9 +142,7 @@ class EnigmaController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
 
-        array_push($this->breadcrumb, array('libelle' => 'énigme', 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
-
-        array_push($this->breadcrumb, array('libelle' => 'énigme n°'. $enigma->getOrderEnigma(), 'libelle_url' => 'app_backoffice_enigma_edit', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_edit', ['id' => $checkpoint->getId()])));
+        array_push($this->breadcrumb, array('libelle' => 'Enigme n°'. $enigma->getOrderEnigma(), 'libelle_url' => 'app_backoffice_enigma_edit', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_edit', ['id' => $checkpoint->getId()])));
 
         return $this->renderForm('backoffice/enigma/edit.html.twig', [
             'enigma' => $enigma,

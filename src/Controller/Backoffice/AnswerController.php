@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @Route("/backoffice/answer", name="app_backoffice_answer_")
@@ -18,9 +19,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnswerController extends AbstractController
 {
     private $breadcrumb;
+    private $urlGenerator;
 
-    public function __construct()
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
+        $this->urlGenerator = $urlGenerator;
         $this->breadcrumb = array(array('libelle' => 'Jeux', 'libelle_url' => 'app_backoffice_game_index', 'url' => $this->urlGenerator->generate('app_backoffice_game_index')));
     }
 
@@ -58,7 +61,7 @@ class AnswerController extends AbstractController
                 'La réponse '.$answer->getAnswer().' a été créé !'
             );
 
-            return $this->redirectToRoute('app_backoffice_answer_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_enigma_show', ['id' => $enigma->getId()], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => $enigma->getCheckpoint()->getGame()->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $enigma->getCheckpoint()->getGame()->getSlug()])));
@@ -72,6 +75,7 @@ class AnswerController extends AbstractController
         return $this->renderForm('backoffice/answer/new.html.twig', [
             'answer' => $answer,
             'form' => $form,
+            'enigma' => $enigma,
             'breadcrumbs' => $this->breadcrumb,
         ]);
     }
