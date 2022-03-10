@@ -49,30 +49,10 @@ class UserController extends AbstractController
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
 
-        /* It's getting the user id of the user connected for the rounds */
-        $rounds = $roundRepository->findBy(['user' => $userConnected]);
-
-        /* It's getting the number of rounds of the user connected. */
-        for ($i = 0; $i<count($rounds); $i++) {
-            /* It's getting the round of the user connected. */
-            $round = $rounds[$i];
-
-            /* It's getting the instance id of the round. */
-            $instance = $round->getInstance()->getId();
-            $thisInstance = $instanceRepository->findOneBy(['id' => $instance]);
-            //dump($thisInstance);
-
-            /* It's getting the game id of the instance. */
-            $gameId = $thisInstance->getGame()->getId();
-            $myPlayerGame = $gameRepository->findOneBy(['id' => $gameId]);
-        } 
-
         return $this->renderForm('front/user/profile.html.twig', [
             'user' => $user,
             'form' => $form,
-            'rounds' => $rounds,
-            'instance' => $thisInstance,
-            'game' => $myPlayerGame,
+            'rounds' => $roundRepository->findBy(['user' => $userConnected]),
         ]);
     }
 
