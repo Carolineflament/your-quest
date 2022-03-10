@@ -63,8 +63,8 @@ class UserController extends AbstractController
             //dump($thisInstance);
 
             /* It's getting the game id of the instance. */
-            $game = $thisInstance->getGame()->getId();
-            $myPlayerGame = $gameRepository->findOneBy(['id' => $game]);
+            $gameId = $thisInstance->getGame()->getId();
+            $myPlayerGame = $gameRepository->findOneBy(['id' => $gameId]);
         } 
 
         return $this->renderForm('front/user/profile.html.twig', [

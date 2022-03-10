@@ -1,13 +1,13 @@
 <div class="card mb-3" >
     <div class="row g-0">
         <div class="col-md-4">
-            <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="..." >
+            <img src="{{ asset(app_games_images_directory~round.instance.game.image) }}" class="card-img-top" alt="..." >
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title">{{ game.title }}</h5>
-                <p class="card-text">Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}}, à {{ game.city }} ({{ game.postalCode }})</p>
-                <a href="{{ path('front_games_show', {'slug': game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
+                <h5 class="card-title">{{ round.instance.game.title }}</h5>
+                <p class="card-text">Le {{ round.instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}}, à {{ round.instance.game.city }} ({{ round.instance.game.postalCode }})</p>
+                <a href="{{ path('front_games_show', {'slug': round.instance.game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
             </div>
         </div>
     </div>
