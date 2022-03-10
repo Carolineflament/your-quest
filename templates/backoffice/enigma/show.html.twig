@@ -1,14 +1,14 @@
 {% extends 'backoffice/back_base.html.twig' %}
 
-{% block title %}Les énigmes du checkpoint {{ checkpoint.title }}{% endblock %}
+{% block title %}Enigme {{ enigma.orderEnigma }} du checkpoint {{ enigma.checkpoint.title }}{% endblock %}
 
 {% block back_body %}
 
-    <div class="d-flex flex-column align-items-end">
-        <a href="{{ path('app_backoffice_enigma_index', {'id': checkpoint.id }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
+        <a href="{{ path('app_backoffice_checkpoint_show', {'id': enigma.checkpoint.id }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+        {{ include('backoffice/enigma/_delete_form.html.twig') }}
+        <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}" class="btn btn-primary btn-sm me-3">Modifier</a>
     </div>
-
-    <div class="clearfix"></div>
 
     <table class="table">
         <tbody>
@@ -32,8 +32,49 @@
         </tbody>
     </table>
 
-
-    <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}" class="btn btn-primary mb-2">Modifier</a>
-
-    {{ include('backoffice/enigma/_delete_form.html.twig') }}
+    <div id="answers-cards-ic" class="d-flex bd-highlight">
+        <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <h2 class="p-2 align-self-center flex-grow-1">Les réponses</h2>
+                <a class="btn btn-primary m-3" href="{{ path('app_backoffice_answer_new', {'id': enigma.id}) }}">Créer une réponse</a>
+            </div>
+            <div class="accordion" id="ac-answers">
+                {% for answer in enigma.unTrashedAnswers %}
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="instance-head-{{loop.index}}">
+                            <button class="accordion-button text-white bg-gradient 
+                            {% if answer.status %}
+                                bg-success 
+                            {% else %}
+                                bg-warning
+                            {% endif %}
+                                collapsed" 
+                            type="button" data-bs-toggle="collapse" data-bs-target="#answers-{{loop.index}}" 
+                            aria-expanded="false" 
+                            aria-controls="answers-{{loop.index}}">
+                                Réponse {{answer.answer}} 
+                                    ({% if answer.status %}
+                                        La bonne réponse
+                                    {% else %}
+                                        Une mauvaise réponse
+                                    {% endif %})
+                            </button>
+                        </h2>
+                        <div id="answers-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="answer-head-{{loop.index}}" data-bs-parent="#ac-answers">
+                            <div class="accordion-body">
+                                <div class="">
+                                    <strong>{{answer.answer}}</strong>
+                                </div>
+                                <div class="d-grid gap-2 ">
+                                    <a href="{{ path('app_backoffice_answer_edit',{'id': answer.id}) }}" class="btn btn-primary mb-3">Modifier</a>
+                                    {{ include('backoffice/answer/_delete_form.html.twig') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

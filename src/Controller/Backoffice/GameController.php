@@ -94,7 +94,7 @@ class GameController extends AbstractController
     public function show(Game $game): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('VIEW_GAME', $game);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
         $instances = $game->getUnTrashedInstances()->getValues();
         $date = new DateTime();
         $date = $date->getTimestamp();
@@ -122,7 +122,7 @@ class GameController extends AbstractController
     public function edit(Request $request, Game $game, EntityManagerInterface $entityManager, MySlugger $mySlugger): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
 
         $form = $this->createForm(GameType::class, $game);
         $form->handleRequest($request);
@@ -163,7 +163,7 @@ class GameController extends AbstractController
     public function delete(Request $request, Game $game, CascadeTrashed $cascadeTrashed): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('DELETE_GAME', $game); 
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $game); 
 
         if ($this->isCsrfTokenValid('delete'.$game->getId(), $request->request->get('_token')))
         {
@@ -194,7 +194,7 @@ class GameController extends AbstractController
     public function update_status(Request $request, Game $game, EntityManagerInterface $entityManager)
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
 
         if ($this->isCsrfTokenValid('trash'.$game->getId(), $request->request->get('_token')))
 
@@ -238,7 +238,7 @@ class GameController extends AbstractController
     public function pdf(Game $game): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('EDIT_GAME', $game);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
         
         /***** On prépare les données à insérer dans le PDF *****/
 

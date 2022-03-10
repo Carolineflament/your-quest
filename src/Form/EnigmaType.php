@@ -16,9 +16,11 @@ class EnigmaType extends AbstractType
         $builder
             ->add('question', TextareaType::class,[
                 'label' => 'Votre énigme:',
+                'attr' => ['placeholder' => 'Quel est la couleur du cheval blanc de Henry IV ?'],
             ])
             ->add('orderEnigma', NumberType::class,[
                 'label' => 'Ordre de l\' énigme :',
+                'html5' => true,
             ])
         ;
     }

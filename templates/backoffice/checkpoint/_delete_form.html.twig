@@ -1,5 +1,5 @@
 <form method="post" action="{{ path('app_backoffice_checkpoint_trash', {'id': checkpoint.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le checkpoint {{checkpoint.title}} ? Ce checkpoint sera mit à la poubelle !');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ checkpoint.id) }}">
-        <button class="btn btn-danger">Supprimer</button>
+        <button class="btn btn-danger btn-sm me-3">Supprimer</button>
 
 </form>

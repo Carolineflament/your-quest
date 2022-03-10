@@ -3,11 +3,9 @@
 {% block title %}Modifier l'instance {{ instance.title }} du jeu {{ game.title }}{% endblock %}
 
 {% block back_body %}
-    <div class="d-flex flex-column align-items-end">
-        <a href="{{ path('app_backoffice_instance_index', {'gameSlug': game.slug}) }}"  class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
+        <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}"  class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
     </div>
-
-    <div class="clearfix"></div>
 
     {{ include('backoffice/instance/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 {% endblock %}

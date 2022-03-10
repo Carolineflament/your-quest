@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EnigmaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -149,6 +150,16 @@ class Enigma
     public function getAnswers(): Collection
     {
         return $this->answers;
+    }
+
+    /**
+     * @return Collection<int, Answer>
+     */
+    public function getUnTrashedAnswers(): Collection
+    {
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->eq('isTrashed', false));
+        return $this->answers->matching($criteria);
     }
 
     public function addAnswer(Answer $answer): self

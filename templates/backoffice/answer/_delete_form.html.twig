@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_backoffice_answer_trash', {'id': answer.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la réponse {{ answer.answer }}?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('trash' ~ answer.id) }}">
+    <button class="btn btn-danger " style="width:100%">Supprimer</button>
+</form>

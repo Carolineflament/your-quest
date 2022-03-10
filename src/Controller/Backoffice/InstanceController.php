@@ -37,7 +37,8 @@ class InstanceController extends AbstractController
         // Get parent Game
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
 
-        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
@@ -57,7 +58,8 @@ class InstanceController extends AbstractController
         // Get parent Game
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
 
-        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
+        // Organizer or Admin can modify this game
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
 
         $instance = new Instance();
         $form = $this->createForm(InstanceType::class, $instance);
@@ -76,7 +78,7 @@ class InstanceController extends AbstractController
                 'L\'instance '.$instance->getTitle().' a bien été créée !'
             );
 
-            return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $gameSlug], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $gameSlug], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
@@ -101,13 +103,10 @@ class InstanceController extends AbstractController
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('VIEW_INSTANCE', $instance);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $instance);
 
         // Get parent Game
         $game = $instance->getGame();
-       
-
-        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
@@ -129,12 +128,10 @@ class InstanceController extends AbstractController
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('EDIT_INSTANCE', $instance);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $instance);
 
         // Get parent Game
-         $game = $instance->getGame();
-
-        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
+        $game = $instance->getGame();
 
         $form = $this->createForm(InstanceType::class, $instance);
         $form->handleRequest($request);
@@ -148,7 +145,7 @@ class InstanceController extends AbstractController
                 'L\'instance '.$instance->getTitle().' a bien été éditée !'
             );
 
-            return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
@@ -169,7 +166,7 @@ class InstanceController extends AbstractController
     public function delete(Request $request, Instance $instance, EntityManagerInterface $entityManager): Response
     {
         // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('DELETE_INSTANCE', $instance);
+        $this->denyAccessUnlessGranted('IS_MY_GAME', $instance);
 
         if ($this->isCsrfTokenValid('delete'.$instance->getId(), $request->request->get('_token'))) {
             $instance->setIsTrashed(true);
@@ -185,10 +182,7 @@ class InstanceController extends AbstractController
         // Get parent Game
         $game = $instance->getGame();
 
-
-        // TODO Vérifier que l'utilisateur en cours est le propriétaire du jeu
-
-        return $this->redirectToRoute('app_backoffice_instance_index', ['gameSlug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
     }
 
     /**

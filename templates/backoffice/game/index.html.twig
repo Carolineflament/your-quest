@@ -4,11 +4,9 @@
 
 {% block back_body %}
 
-    <div class="d-flex flex-column align-items-end">
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
         <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary mb-3">Créer un nouveau jeu</a>
     </div>
-    <div class="clearfix"></div>
-    {{ include('front/_notice_message.html.twig') }}
 
     {# NAV BACKOFFICE GAME #}
 

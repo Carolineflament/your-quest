@@ -3,9 +3,8 @@
 {% block title %}Créer un nouveau jeu{% endblock %}
 
 {% block back_body %}
-    <div class="d-flex flex-column align-items-end">
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
         <a href="{{ path('app_backoffice_game_index') }}" class="btn btn-primary">Mes jeux</a>
     </div>
-    <div class="clearfix"></div>
     {{ include('backoffice/game/_form.html.twig') }}
 {% endblock %}

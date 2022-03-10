@@ -1,14 +1,13 @@
 {% extends 'backoffice/back_base.html.twig' %}
 
-{% block title %}Checkpoint {{ checkpoint.title }} du jeu {{ game.title }}{% endblock %}
+{% block title %}Checkpoint {{ checkpoint.title }} du jeu {{ checkpoint.game.title }}{% endblock %}
 
 {% block back_body %}
-    <div class="d-flex flex-column align-items-end">
-        <a href="{{ path('app_backoffice_enigma_index', {'id': checkpoint.id}) }}" class="btn btn-primary mb-2">Voir l'énigme</a>
-        <a href="{{ path('app_backoffice_game_show', {'slug': game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
+        <a href="{{ path('app_backoffice_game_show', {'slug': checkpoint.game.slug }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+        {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
+        <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary btn-sm me-3">Modifier</a>
     </div>
-
-    <div class="clearfix"></div>
 
     <table class="table">
         <tbody>
@@ -35,12 +34,42 @@
             </tr>
         </tbody>
     </table>
-            <div class="text-center">
-                <img src="{{ asset('assets/Qrcode/'~checkpoint.id~'qrcode.png') }}" alt="QR code">
+
+    <div id="enigmas-cards-ic" class="d-flex bd-highlight">
+        <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <h2 class="p-2 align-self-center flex-grow-1">Les énigmes</h2>
+                <a class="btn btn-primary m-3" href="{{ path('app_backoffice_enigma_new', {'id': checkpoint.id}) }}">Créer une énigme</a>
             </div>
-
-    <a href="{{ path('app_backoffice_checkpoint_edit', {'id': checkpoint.id}) }}" class="btn btn-primary mb-2">Modifier</a>
-        
-
-    {{ include('backoffice/checkpoint/_delete_form.html.twig') }}
+            <div class="accordion" id="ac-enigmas">
+                {% for enigma in checkpoint.unTrashedEnigmas %}
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="instance-head-{{loop.index}}">
+                            <button class="accordion-button text-white bg-gradient bg-primary collapsed" 
+                            type="button" data-bs-toggle="collapse" data-bs-target="#enigmas-{{loop.index}}" 
+                            aria-expanded="false" 
+                            aria-controls="enigmas-{{loop.index}}">
+                                Enigme {{enigma.orderEnigma}}
+                            </button>
+                        </h2>
+                        <div id="enigmas-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="enigma-head-{{loop.index}}" data-bs-parent="#ac-enigmas">
+                            <div class="accordion-body">
+                                <div class="">
+                                    <strong>{{enigma.question}}</strong>
+                                </div>
+                                <div class="d-grid gap-2 ">
+                                    <a href="{{ path('app_backoffice_enigma_edit',{'id': enigma.id}) }}" class="btn btn-primary mb-3">Modifier</a>
+                                    <a href="{{ path('app_backoffice_enigma_show', {'id': enigma.id}) }}" class="btn btn-primary mb-3">Voir</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <img src="{{ asset('assets/Qrcode/'~checkpoint.id~'qrcode.png') }}" alt="QR code">
+    </div>
 {% endblock %}
