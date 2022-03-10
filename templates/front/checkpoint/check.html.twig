@@ -6,12 +6,31 @@
 
 
 <div class="row mt-5">
-    <div class="col text-center">
-        <h1>Check OK</h1>
+    <div class="col">
+        <h1 class=" text-center">Check OK</h1>
         {{ include('front/_notice_message.html.twig') }}
-       
-        {{message}}
 
+        {% if enigmas|length == 0 %}
+            <section class="w-100 p-4 d-flex justify-content-center pb-4">
+                {{message}}
+            </section>
+        {% else %}
+            {% for enigma in enigmas %}
+                <h3 class=" text-center">{{enigma.question}}</h3>
+                <section class="w-100 p-4 d-flex justify-content-center pb-4">
+                    <form method="post" action="{{ path('front_checkpoint_response', {'id': enigma.id}) }}">
+                        {% for answer in enigma.unTrashedAnswers %}
+                            <div class="form-check form-switch mb-3">
+                                <input type="radio" id="{{ answer.id }}" name="enigma-{{enigma.id}}" value="{{ answer.answer }}" class="form-check-input" />
+                                <label for="{{ answer.id }}" class="form-check-label">{{ answer.answer }}</label>
+                            </div>
+                        {% endfor %}
+                        <input type="hidden" name="_token" value="{{ csrf_token('response' ~ enigma.id) }}">
+                        <button class="btn btn-success text-center">Envoyer</button>
+                    </form>
+                </section>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 

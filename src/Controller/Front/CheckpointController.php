@@ -3,9 +3,11 @@
 namespace App\Controller\Front;
 
 use App\Entity\Checkpoint;
+use App\Entity\Enigma;
 use App\Entity\Instance;
 use App\Entity\Round;
 use App\Entity\ScanQR;
+use App\Repository\AnswerRepository;
 use App\Repository\CheckpointRepository;
 use App\Repository\RoundRepository;
 use App\Repository\ScanQRRepository;
@@ -162,7 +164,7 @@ class CheckpointController extends AbstractController
         else
         {
             /* This is a way to get the last checkpoint scanned by the user. */
-            $lastScanAt = $scanQRRepos->findOneBy(['user' => $user, 'round' => $round], ['scanAt' => 'DESC']);
+            $lastScanAt = $scanQRRepos->findOneBy(['round' => $round], ['scanAt' => 'DESC']);
             $checkpointScan = $lastScanAt->getCheckpoint();
             
             $this->addFlash(
@@ -176,19 +178,59 @@ class CheckpointController extends AbstractController
         {
             $round->setEndAt(new \DateTimeImmutable());
             $entityManager->persist($round);
-            $this->addFlash(
-                'notice-success',
-                'Bravo vous avez terminé le jeu :) !'
-            );
+            if(count($checkpointScan->getUnTrashedEnigmas()) == 0)
+            {
+                $this->addFlash(
+                    'notice-success',
+                    'Bravo vous avez terminé le jeu :) !'
+                );
+            }
+            else
+            {
+                $this->addFlash(
+                    'notice-success',
+                    'Dernière énigme :) !'
+                );
+            }
         }
         $entityManager->flush();
 
-        // TODO on récup les énigmes associées au checkpoint
-
-        
         return $this->render('front/checkpoint/check.html.twig', [
-            'controller_name' => 'CheckpointController',
+            'enigmas' => $checkpointScan->getUnTrashedEnigmas(),
             'message' => $checkpointScan->getSuccessMessage()
+        ]);
+    }
+
+    /**
+     * @Route("/checkpoint/enigma/{id}", name="_response", methods={"POST"}, requirements={"id"="\d+"})
+     */
+    public function response(Enigma $enigma, AnswerRepository $answerRepository): Response
+    {
+        $checkpoint = $enigma->getCheckpoint();
+        $good_answer = $answerRepository->findOneBy(['enigma' => $enigma, 'status' => true, 'isTrashed' => false]);
+
+        $type_response = '';
+        if($good_answer->getAnswer() == $_POST['enigma-'.$enigma->getId()])
+        {
+            $type_response = 'good';
+            $this->addFlash(
+                'notice-success',
+                'Bravo c\'était la bonne réponse :) !'
+            );
+        }
+        else
+        {
+            $type_response = 'wrong';
+            $this->addFlash(
+                'notice-danger',
+                'Loupé pour cette fois, la bonne réponse était : '.$good_answer->getAnswer().', mais comme on est sympa tu peux continuer !'
+            );
+        }
+
+        return $this->render('front/checkpoint/check.html.twig', [
+            'type_response' => $type_response,
+            'message' => $checkpoint->getSuccessMessage(),
+            'enigmas' => array(),
         ]);
     }
 }
