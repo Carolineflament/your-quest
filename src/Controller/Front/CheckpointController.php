@@ -203,13 +203,22 @@ class CheckpointController extends AbstractController
         if($good_answer->getAnswer() == $_POST['enigma-'.$enigma->getId()])
         {
             $type_response = 'good';
+            $this->addFlash(
+                'notice-success',
+                'Bravo c\'était la bonne réponse :) !'
+            );
         }
         else
         {
             $type_response = 'wrong';
+            $this->addFlash(
+                'notice-danger',
+                'Loupé pour cette fois, la bonne réponse était : '.$good_answer->getAnswer().', mais comme on est sympa tu peux te rendre au prochain checkpoint dont voici l\indice !'
+            );
         }
 
         return $this->render('front/checkpoint/check.html.twig', [
+            'type_response' => $type_response,
             'message' => $checkpoint->getSuccessMessage(),
             'enigmas' => array(),
         ]);
