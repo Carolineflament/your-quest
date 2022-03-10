@@ -39,7 +39,9 @@
         <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <h2 class="p-2 align-self-center flex-grow-1">Les énigmes</h2>
-                <a class="btn btn-primary m-3" href="{{ path('app_backoffice_enigma_new', {'id': checkpoint.id}) }}">Créer une énigme</a>
+                {% if checkpoint.unTrashedEnigmas|length == 0 %}
+                    <a class="btn btn-primary m-3" href="{{ path('app_backoffice_enigma_new', {'id': checkpoint.id}) }}">Créer une énigme</a>
+                {% endif %}
             </div>
             <div class="accordion" id="ac-enigmas">
                 {% for enigma in checkpoint.unTrashedEnigmas %}
