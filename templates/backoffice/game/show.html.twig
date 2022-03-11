@@ -37,16 +37,18 @@
             </div>
             <div class="accordion" id="ac-instances">
                 {% for instance in instances %}
-                    
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="instance-head-{{loop.index}}">
                             <button class="accordion-button text-white bg-gradient
                             {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') > instance.endAt|date('c') %} 
                                 bg-secondary  
+                                {% set libelle_instance = "Instance terminée" %}
                             {% elseif "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') < instance.endAt|date('c') %} 
                                 bg-success  
+                                {% set libelle_instance = "Instance en cours" %}
                             {% else %}
                                 bg-primary
+                                {% set libelle_instance = "Instance future" %}
                             {% endif %}
                             collapsed" 
                             
@@ -54,7 +56,7 @@
                             
                                 aria-expanded="false" 
                             aria-controls="instances-{{loop.index}}">
-                                Instace en cours : Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}}
+                                {{libelle_instance}} : Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}}
                             </button>
                         </h2>
                         <div id="instances-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="instance-head-{{loop.index}}" data-bs-parent="#ac-instances">
