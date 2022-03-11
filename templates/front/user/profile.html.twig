@@ -81,9 +81,10 @@
             <h2>Mes jeux</h2>            
             {% for round in rounds %}
                 {{ include('front/user/_game_card.html.twig') }}
-            {% else %}
-                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas encore joué pour le moment !</div>
             {% endfor %} 
+            {% if rounds == null %}
+                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas encore joué pour le moment !</div>
+            {% endif %} 
         </div>
         <div>
             <img src="{{ asset('assets/images/profilePicture/cell-phone.png') }}" class="img-profile" alt="..." >
