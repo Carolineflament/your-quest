@@ -72,11 +72,17 @@ class Enigma
      */
     private $isTrashed;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserAnswer::class, mappedBy="enigma")
+     */
+    private $userAnswers;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->isTrashed = false;
+        $this->userAnswers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,6 +214,36 @@ class Enigma
     public function setIsTrashed(bool $isTrashed): self
     {
         $this->isTrashed = $isTrashed;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserAnswer>
+     */
+    public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswer $userAnswer): self
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers[] = $userAnswer;
+            $userAnswer->setEnigma($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): self
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getEnigma() === $this) {
+                $userAnswer->setEnigma(null);
+            }
+        }
 
         return $this;
     }

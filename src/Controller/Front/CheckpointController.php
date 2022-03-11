@@ -7,10 +7,12 @@ use App\Entity\Enigma;
 use App\Entity\Instance;
 use App\Entity\Round;
 use App\Entity\ScanQR;
+use App\Entity\UserAnswer;
 use App\Repository\AnswerRepository;
 use App\Repository\CheckpointRepository;
 use App\Repository\RoundRepository;
 use App\Repository\ScanQRRepository;
+use App\Repository\UserAnswerRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,7 +46,7 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/checkpoint/{id}/{token}", name="_check", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function check(Checkpoint $checkpointScan, string $token, SessionInterface $session, CheckpointRepository $checkpointRepos, RoundRepository $roundRepos, EntityManagerInterface $entityManager, ScanQRRepository $scanQRRepos) : Response
+    public function check(Checkpoint $checkpointScan, string $token, SessionInterface $session, CheckpointRepository $checkpointRepos, RoundRepository $roundRepos, EntityManagerInterface $entityManager, ScanQRRepository $scanQRRepos, UserAnswerRepository $userAnswerRepository) : Response
     {
         /* This is a way to check if the user is trying to cheat. */
         if(sha1($checkpointScan->getTitle()) !== $token)
@@ -145,13 +147,35 @@ class CheckpointController extends AbstractController
                     'notice-danger',
                     'Tentative de triche ! :) Vous n\'avez pas scanné les checkpoints précédent, revenez sur vos pas !'
                 );
-                return $this->redirectToRoute('front_main', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('front_checkpoint', [], Response::HTTP_SEE_OTHER);
+            }
+            else
+            {
+                $enigmas = $checkpoints[$i]->getUnTrashedEnigmas();
+                $enigma_non_response = null;
+                foreach($enigmas AS $enigma)
+                {
+                    $userAnswer = $userAnswerRepository->findBy(['user' => $user, 'enigma' => $enigma, 'isGood' => true]);
+                    if(count($userAnswer) === 0)
+                    {
+                        $enigma_non_response = $enigma;
+                        $this->addFlash(
+                            'notice-warning',
+                            'Vous avez scanné le checkpoint '.$checkpointScan->getTitle().' mais vous n\'avez pas répondu à la question du checkpoint '.$checkpoints[$i]->getTitle().', vous grillez les étapes :) !'
+                        );
+                        return $this->render('front/checkpoint/check.html.twig', [
+                            'enigma' => $enigma_non_response,
+                            'message' => $checkpointScan->getSuccessMessage()
+                        ]);
+                    }
+                }
             }
         }
 
         /** This is a way to check if the user has already scanned the checkpoint. 
         * if not we create the scan at the time
         */
+        $has_already_flash = false;
         $scan = $scanQRRepos->findOneBy(['round' => $round, 'checkpoint' => $checkpointScan]);
         if($scan === null)
         {
@@ -166,9 +190,9 @@ class CheckpointController extends AbstractController
             /* This is a way to get the last checkpoint scanned by the user. */
             $lastScanAt = $scanQRRepos->findOneBy(['round' => $round], ['scanAt' => 'DESC']);
             $checkpointScan = $lastScanAt->getCheckpoint();
-            
+            $has_already_flash = true;
             $this->addFlash(
-                'notice-danger',
+                'notice-success',
                 'Vous avez déjà flashé ce checkpoint !'
             );
         }
@@ -195,8 +219,29 @@ class CheckpointController extends AbstractController
         }
         $entityManager->flush();
 
+        
+        $enigmas = $checkpointScan->getUnTrashedEnigmas();
+        $enigma_non_response = null;
+        foreach($enigmas AS $enigma)
+        {
+            $userAnswer = $userAnswerRepository->findBy(['user' => $user, 'enigma' => $enigma, 'isGood' => true]);
+            if(count($userAnswer) === 0)
+            {
+                $enigma_non_response = $enigma;
+                if($has_already_flash)
+                {
+                    $this->addFlash(
+                        'notice-warning',
+                        'Mais vous n\'avez pas répondu à la question :) !'
+                    );
+                }
+                break;
+            }
+        }
+
+
         return $this->render('front/checkpoint/check.html.twig', [
-            'enigmas' => $checkpointScan->getUnTrashedEnigmas(),
+            'enigma' => $enigma_non_response,
             'message' => $checkpointScan->getSuccessMessage()
         ]);
     }
@@ -204,14 +249,22 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/checkpoint/enigma/{id}", name="_response", methods={"POST"}, requirements={"id"="\d+"})
      */
-    public function response(Enigma $enigma, AnswerRepository $answerRepository): Response
+    public function response(Enigma $enigma, AnswerRepository $answerRepository, EntityManagerInterface $entityManager): Response
     {
         $checkpoint = $enigma->getCheckpoint();
         $good_answer = $answerRepository->findOneBy(['enigma' => $enigma, 'status' => true, 'isTrashed' => false]);
 
         $type_response = '';
+        $enigma_response = null;
+
+        $userAnswer = new UserAnswer();
+        $userAnswer->setEnigma($enigma);
+        $userAnswer->setAnswer($good_answer);
+        $userAnswer->setUser($this->getUser());
+
         if($good_answer->getAnswer() == $_POST['enigma-'.$enigma->getId()])
         {
+            $userAnswer->setIsGood(true);
             $type_response = 'good';
             $this->addFlash(
                 'notice-success',
@@ -220,17 +273,22 @@ class CheckpointController extends AbstractController
         }
         else
         {
+            $userAnswer->setIsGood(false);
+            $enigma_response = $enigma;
             $type_response = 'wrong';
             $this->addFlash(
                 'notice-danger',
-                'Loupé pour cette fois, la bonne réponse était : '.$good_answer->getAnswer().', mais comme on est sympa tu peux continuer !'
+                'Mauvaise réponse, mais tu peux retenter ta chance !'
             );
         }
 
+        $entityManager->persist($userAnswer);
+        $entityManager->flush();
+        
         return $this->render('front/checkpoint/check.html.twig', [
             'type_response' => $type_response,
             'message' => $checkpoint->getSuccessMessage(),
-            'enigmas' => array(),
+            'enigma' => $enigma_response,
         ]);
     }
 }
