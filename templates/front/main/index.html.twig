@@ -46,7 +46,6 @@
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title"><a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a></h5>
-                                        <p class="card-text">{{ game.summary }}</p>
                                     </div>
                                     <div class="card-footer">
                                         <small class="text-muted">{{ game.createdAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})</small>
