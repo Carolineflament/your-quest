@@ -18,7 +18,7 @@ class MainController extends AbstractController
      */
     public function index(GameRepository $gameRepository, Request $request): Response
     {    
-        $games = $gameRepository->findBy(['isTrashed' => 0, 'status' => 1], ['createdAt' => 'ASC']);        
+        $games = $gameRepository->findNextGame();
 
         return $this->render('front/main/index.html.twig', [
             'games' => $games,

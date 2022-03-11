@@ -30,6 +30,36 @@ class GameRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findNextGame()
+    {
+        $entityManagerConnexion = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT g.id FROM `game` g 
+                    INNER JOIN instance i ON i.game_id = g.id AND (
+                    (
+                        (
+                            i.start_at <= cast(now() as date) OR 
+                            (
+                                i.start_at > cast(now() as date) 
+                                AND i.start_at < cast((now() + interval 30 day) as date)
+                            )
+                        )
+                        AND i.end_at >= cast(now() as date)
+                    )
+                )
+                WHERE g.is_trashed = 0 AND g.status = 1 GROUP BY g.id;';
+        $query = $entityManagerConnexion->executeQuery($sql); 
+        $results = $query->fetchAllAssociative();
+        $ids = array();
+        foreach($results AS $result)
+        {
+            $ids[] = $result['id'];
+        }
+        
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery('SELECT g FROM App\Entity\Game g WHERE g.id IN('.implode(',', $ids).')');
+        return $query->getResult();
+    }
+
     // /**
     //  * @return Game[] Returns an array of Game objects
     //  */
