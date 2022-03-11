@@ -260,7 +260,7 @@ class GameController extends AbstractController
         /***** On génére le document PDF *****/
 
         // On récupère la liste des checkpoints dans l'ordre de l'utilisateur
-        $checkpointsList = $game->getCheckpoints();
+        $checkpointsList = $game->getUnTrashedCheckpoints();
 
         // Création d'un nouvel objet (document PDF)
         $pdf = new \FPDF();
