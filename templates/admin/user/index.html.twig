@@ -63,21 +63,33 @@
     
     <script>
         var columns = {
-            'id':'#',
-            'email':'Email',
-            'role':'Rôle',
-            'pseudo':'Pseudo',
-            'lastname':'Nom',
-            'firstname':'Prénom',
-            'status':'Actif / Inactif',
-            'createdAt':'Créer le',
-            'updatedAt':'Mis à jour le',
-            'actions':'Actions'
+            id:'#',
+            email:'Email',
+            role:'Rôle',
+            pseudo:'Pseudo',
+            lastname:'Nom',
+            firstname:'Prénom',
+            status:'Actif / Inactif',
+            createdAt:'Créer le',
+            updatedAt:'Mis à jour le',
+            actions:'Actions'
         }
         $(document).ready(function() {
             var table = $('#table-sortable').tableSortable({
                 data: [],
-                columns: columns,
+                columns,
+                responsive: {
+                    1100: {
+                        columns: {
+                            id: '#',
+                            email: 'Email',
+                            status:'Actif / Inactif',
+                            actions:'Actions',
+                        },
+                    },
+                    
+                },
+                
                 rowsPerPage: 5,
                 pagination: true,
                 searchField : $('#searchField'),
@@ -98,10 +110,10 @@
             })
             .done(function( data ) {
                 // Push data into existing data
-                table.setData(data, null, true);
+                //table.setData(data, null, true);
 
                 // or Set new data on table, columns is optional.
-                table.setData(data, columns);
+                table.setData(data, null);
             });
         });
     </script>
