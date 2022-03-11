@@ -10,7 +10,7 @@
     <title>{% block title %}YourQuest{% endblock %}</title>
 
     <!-- Favicon -->
-    <link href={{ asset('assets/woodyTPL/img/favicon.ico') }} rel="icon">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,6 +31,9 @@
 
     <!-- Template Stylesheet -->
     <link href={{ asset('assets/woodyTPL/css/style.css') }} rel="stylesheet">
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('assets/css/table-sortable.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('assets/css/postcard.css') }}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -194,6 +197,8 @@
 
     <!-- Template Javascript -->
     <script src={{ asset('assets/woodyTPL/js/main.js') }}></script>
+    <script src="{{ asset('assets/js/script.js') }}" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/table-sortable.js') }}" crossorigin="anonymous"></script>
 </body>
 
 </html>

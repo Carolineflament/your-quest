@@ -52,7 +52,7 @@
                 <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item">
                         <div class="overflow-hidden">
-                            <img class="img-fluid" src={{ asset('assets/woodyTPL/img/service-1.jpg') }} alt="">
+                            <img class="img-fluid" src="{{ asset(app_games_images_directory~game.image) }}" alt="{{game.slug}}">
                         </div>
                         <div class="p-4 text-center border border-5 border-light border-top-0">
                             <h4 class="mb-3"><a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a></h4>

@@ -74,7 +74,7 @@
             updatedAt:'Mis à jour le',
             actions:'Actions'
         }
-        $(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function(event) {
             var table = $('#table-sortable').tableSortable({
                 data: [],
                 columns,
