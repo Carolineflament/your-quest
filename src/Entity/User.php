@@ -171,12 +171,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $rounds;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserAnswer::class, mappedBy="user")
+     */
+    private $userAnswers;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
         $this->rounds = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->status = true;
+        $this->userAnswers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -467,5 +473,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @return Collection<int, UserAnswer>
+     */
+    public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswer $userAnswer): self
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers[] = $userAnswer;
+            $userAnswer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): self
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getUser() === $this) {
+                $userAnswer->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

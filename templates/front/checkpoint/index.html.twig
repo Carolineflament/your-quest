@@ -9,6 +9,7 @@
 <div class="row mt-5">
     <div class="col text-center">
         <h1>Veuillez scanner le QR code du checkpoint</h1>
+        {{ include('front/_notice_message.html.twig') }}
 
         {# Scanner #}        
         <div style="width: 300px; margin: 50px auto;" id="reader"></div>     
