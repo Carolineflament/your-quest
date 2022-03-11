@@ -24,13 +24,8 @@
                 Entrez dans une aventure connectée en créant votre jeu de piste dans le monde réel.
                 </div>
 
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <a href="{{ path('app_backoffice_game_new')}}" type="button" class="btn btn-lg btn-primary fw-bold"> Créer votre jeu </a>
-                {% elseif is_granted('ROLE_JOUEUR') %}
-                    <a href="{{ path('front_main')}}" type="button" class="btn btn-lg btn-primary fw-bold"> Créer votre jeu </a>
-                {% endif %}
-                
-
+                <a href="{{ path('front_message')}}" type="button" class="btn btn-lg btn-primary fw-bold"> Créer votre jeu </a>
+               
             </div>
         </div>
     </div>
