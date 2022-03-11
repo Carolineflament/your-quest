@@ -277,6 +277,11 @@ label.required:after {
 		width:50%;
 		margin:1rem;
 	}
+
+	.form-floating.mb-3
+	{
+		margin:1rem;
+	}
 }
 
 /* errors pages */
