@@ -20,6 +20,12 @@ class MainController extends AbstractController
     {    
         $games = $gameRepository->findBy(['isTrashed' => 0, 'status' => 1], ['createdAt' => 'ASC']);
 
+        // Message
+        $this->addFlash(
+            "notice-danger",
+            "Il faut vour inscrire comme organisateur pour pouvoir créer un jeu ! Pour cela vous pouvez nous contacter à l'adresse admin@yourquest.fr"
+        );
+
         return $this->render('front/main/index.html.twig', [
             'games' => $games,
         ]);
