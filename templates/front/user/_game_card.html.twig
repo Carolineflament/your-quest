@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="score d-flex flex-column  align-items-center">
-            <p class="score d-flex flex-column  align-items-center mt-1 mb-1">Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}, et <a href="{{ path('app_front_instance_score')}}"> tu peux voir ton classement ici </a></p>
+            <p class="score d-flex flex-column  align-items-center mt-1 mb-1">Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}, et <a href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}"> tu peux voir ton classement ici </a></p>
         </div>
     </div>
 </div>
