@@ -47,11 +47,6 @@ label.required:after {
 	color:red;
 }
 
-#reader__dashboard
-{
-	/*display:none;*/
-}
-
 /* Barre de navigation */
 .nav-link {
 	cursor: pointer;
@@ -98,6 +93,12 @@ label.required:after {
 	transition: transform 0.3s;
 	height:4px;
 	background-color: #7eb5a6;
+}
+
+/* Formulaire inscription */
+#registration_form_beOrganisateur, #registration_form_agreeTerms
+{
+	float:none;
 }
 
 /* Carte pour la liste des jeux */
