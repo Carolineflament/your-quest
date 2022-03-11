@@ -12,8 +12,10 @@
         <div class="score d-flex flex-column  align-items-center">
             {% if round.endAt is not same as null %}
                 <p class="score d-flex flex-column  align-items-center mt-1 mb-1">Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}, et <a href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}"> tu peux voir ton classement ici </a></p>
-            {% else %}
+            {% elseif "now"|date('c') > round.instance.startAt|date('c') and "now"|date('Y-m-d') < round.instance.endAt|date('c') %}
                 <p class="score d-flex flex-column  align-items-center mt-1 mb-1">La partie est en cours, tu n'as pas encore terminé, mais <a href="{{ path('app_front_instance_realtime', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}"> tu peux voir ton classement ici </a></p>
+            {% else %}
+                <p class="score d-flex flex-column  align-items-center mt-1 mb-1">La partie est terminée, malheuresement tu n'es pas allé jusqu'au bout, mais <a href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}"> tu peux voir ton classement ici </a></p>
             {% endif %}
         </div>
     </div>
