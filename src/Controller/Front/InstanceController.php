@@ -196,12 +196,15 @@ class InstanceController extends AbstractController
                 ['round' => $round],
                 ['scanAt'=> 'DESC']                        
             );
-
-            // Je récupère le checkpoint de ce dernier scan
-            $lastCheckpoint = $lastScanQR->getCheckpoint();
-
-            // Au tableau général, j'inscris le joueur du round dans le tableau de joueur de ce checkpoint
-            $checkpointsArray[$lastCheckpoint->getTitle()][] = $round->getUser();
+            
+            if($lastScanQR !== null)
+            {
+                // Je récupère le checkpoint de ce dernier scan
+                $lastCheckpoint = $lastScanQR->getCheckpoint();
+            
+                // Au tableau général, j'inscris le joueur du round dans le tableau de joueur de ce checkpoint
+                $checkpointsArray[$lastCheckpoint->getTitle()][] = $round->getUser();
+            }
         }
         
         return $this->render('front/instance/realtime.html.twig', [

@@ -1,7 +1,7 @@
 <div class="card mb-3" >
     <div class="row g-0">
         <div class="col-md-4">
-            <img src="{{ asset(app_games_images_directory~round.instance.game.image) }}" class="card-img-top" alt="..." >
+            <img src="{{ asset(app_games_images_directory~round.instance.game.image) }}" class="card-img-top" alt="{{round.instance.game.slug}}" >
         </div>
         <div class="col-md-8 d-flex flex-column justify-content-evenly align-items-center">
             <div class="card-body d-flex flex-column justify-content-evenly align-items-center">
@@ -10,7 +10,11 @@
             </div>
         </div>
         <div class="score d-flex flex-column  align-items-center">
-            <p class="score d-flex flex-column  align-items-center mt-1 mb-1">Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}, et <a href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}"> tu peux voir ton classement ici </a></p>
+            {% if round.endAt is not same as null %}
+                <p class="score d-flex flex-column  align-items-center mt-1 mb-1">Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }}, et <a href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}"> tu peux voir ton classement ici </a></p>
+            {% else %}
+                <p class="score d-flex flex-column  align-items-center mt-1 mb-1">La partie est en cours, tu n'as pas encore terminé, mais <a href="{{ path('app_front_instance_realtime', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}"> tu peux voir ton classement ici </a></p>
+            {% endif %}
         </div>
     </div>
 </div>
