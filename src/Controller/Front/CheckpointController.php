@@ -4,6 +4,7 @@ namespace App\Controller\Front;
 
 use App\Entity\Checkpoint;
 use App\Entity\Enigma;
+use App\Entity\Game;
 use App\Entity\Instance;
 use App\Entity\Round;
 use App\Entity\ScanQR;
@@ -81,23 +82,12 @@ class CheckpointController extends AbstractController
         else
         {
             $has_instance = false;
-            $current_instance = new Instance();
-            $date = new DateTime();
-            $date = $date->getTimestamp();
-            /* This is a way to check if the user is in the right instance.
-                    If the user is in the right instance, we check if the game is finished.
-                    If the game is finished, we redirect the user to the main page.
-                    If the game is not finished, we create a new round. */
-            foreach($checkpointScan->getGame()->getInstances() AS $instance)
+            $current_instance = $this->getCurrentInstance($checkpointScan->getGame());
+            if($current_instance->getId() !== null)
             {
-                if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
-                {
-                    $has_instance = true;
-                    $current_instance = $instance;
-                    break;
-                }
+                $has_instance = true;
             }
-
+            
             if(!$has_instance)
             {
                 $this->addFlash(
@@ -189,7 +179,7 @@ class CheckpointController extends AbstractController
         {
             /* This is a way to get the last checkpoint scanned by the user. */
             $lastScanAt = $scanQRRepos->findOneBy(['round' => $round], ['scanAt' => 'DESC']);
-            $checkpointScan = $lastScanAt->getCheckpoint();
+            //$checkpointScan = $lastScanAt->getCheckpoint();
             $has_already_flash = true;
             $this->addFlash(
                 'notice-success',
@@ -200,7 +190,7 @@ class CheckpointController extends AbstractController
         // Check si c'est le dernier checkPoint pour mettre le EndAt
         if($key_checkpointScan[0] === count($checkpoints)-1)
         {
-            $round->setEndAt(new \DateTimeImmutable());
+            //$round->setEndAt(new \DateTimeImmutable());
             $entityManager->persist($round);
             if(count($checkpointScan->getUnTrashedEnigmas()) == 0)
             {
@@ -249,7 +239,7 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/checkpoint/enigma/{id}", name="_response", methods={"POST"}, requirements={"id"="\d+"})
      */
-    public function response(Enigma $enigma, AnswerRepository $answerRepository, EntityManagerInterface $entityManager): Response
+    public function response(Enigma $enigma, AnswerRepository $answerRepository, EntityManagerInterface $entityManager, CheckpointRepository $checkpointRepos, RoundRepository $roundRepos): Response
     {
         $checkpoint = $enigma->getCheckpoint();
         $good_answer = $answerRepository->findOneBy(['enigma' => $enigma, 'status' => true, 'isTrashed' => false]);
@@ -270,6 +260,18 @@ class CheckpointController extends AbstractController
                 'notice-success',
                 'Bravo c\'était la bonne réponse :) !'
             );
+
+            $current_instance = $this->getCurrentInstance($checkpoint->getGame());
+            
+            $round = $roundRepos->findOneBy(['user' => $this->getUser(), 'instance' => $current_instance]);
+            $checkpoints = $checkpointRepos->findBy(['game' => $checkpoint->getGame()], ['orderCheckpoint' => 'ASC']);
+            $key_checkpointScan = array_keys($checkpoints, $checkpoint);
+
+            if($key_checkpointScan[0] === count($checkpoints)-1)
+            {
+                $round->setEndAt(new \DateTimeImmutable());
+                $entityManager->persist($round);
+            }
         }
         else
         {
@@ -290,5 +292,22 @@ class CheckpointController extends AbstractController
             'message' => $checkpoint->getSuccessMessage(),
             'enigma' => $enigma_response,
         ]);
+    }
+
+    private function getCurrentInstance(Game $game): Instance
+    {
+        $current_instance = new Instance();
+        $date = new DateTime();
+        $date = $date->getTimestamp();
+        foreach($game->getInstances() AS $instance)
+        {
+            if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
+            {
+                $current_instance = $instance;
+                break;
+            }
+        }
+
+        return $current_instance;
     }
 }
