@@ -35,7 +35,7 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({scrollTop: 0}, 0, 'easeInOutExpo');
         return false;
     });
 
@@ -51,6 +51,8 @@
     $(".header-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 1500,
+        animateOut: 'fadeOut',
+        animateIn: 'fadeIn',
         items: 1,
         dots: true,
         loop: true,
@@ -66,6 +68,7 @@
     $(".testimonial-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 1000,
+        lazyLoad:true,
         center: true,
         dots: false,
         loop: true,
