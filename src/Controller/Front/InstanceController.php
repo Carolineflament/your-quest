@@ -57,7 +57,6 @@ class InstanceController extends AbstractController
                 'Cette instance n\'a pas encore débuté, impossible d\'afficher le classement des joueurs pour l\'instant.'
             );
             return $this->redirectToRoute('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
-            
         }
 
         // Is instance is active now
@@ -65,37 +64,66 @@ class InstanceController extends AbstractController
 
             // Redirect to realtime page
             return $this->redirectToRoute('app_front_instance_realtime', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
-            
         }
 
         // Je récupére la liste des rounds terminés et non-terminés d'une instance
         $roundsList = $roundRepository->findBy(['instance' => $instance]);
 
-        // Pour chaque round je calcul la durée de celui-ci, et je l'inscrit dans un tableau
+        // Pour chaque round terminé, je calcule la durée de celui-ci, et je l'inscris dans un tableau
         $DurationsArray = [];
 
         foreach ($roundsList as $key => $round) {
-            // if endAt is not null
+            // Work only on finished rounds (endAt is not null)
             if ($round->getEndAt()) {
-                // Duration
-                $roundDuration = $round->getEndAt()->diff($round->getStartAt());
+
+                // Convert to seconds
+                $timestampEndAt = $round->getEndAt()->getTimestamp();
+                $timestampStartAt = $round->getStartAt()->getTimestamp();
+
+                // Duration in seconds
+                $roundDuration = $timestampEndAt - $timestampStartAt;
                 
-                // Send to array, with a type change to string in order to use array sort function later
-                $DurationsArray[$key] = $roundDuration->format('%Hh%im%Ss');
+                // Send to array
+                $DurationsArray[$key] = $roundDuration;
             }
         }
 
-        // Je tri le tableau des durées
+        // Je tri le tableau des durées dans l'ordre ASC
         asort($DurationsArray);
-        // dd($DurationsArray);
 
-        
+        // Je crée un nouveau tableau où je transorme les durées en secondes en J-H-M-S
+        $formatedDurationsArray = [];
+
+        foreach ($DurationsArray as $round => $duration) {
+            if ($duration < 3600) {
+                $heures = 0;
+                
+                if ($duration < 60) {
+                    $minutes = 0;
+                } else {
+                    $minutes = round($duration / 60);
+                }
+                
+                $secondes = floor($duration % 60);
+            } else {
+                $heures = round($duration / 3600);
+                $secondes = round($duration % 3600);
+                $minutes = floor($secondes / 60);
+            }
+                
+            $secondes2 = round($secondes % 60);
+               
+            $formatedDuration  = "$heures heures $minutes min $secondes2 sec";
+
+            // J'envoie au tableau
+            $formatedDurationsArray[$round] = $formatedDuration;
+        }
 
         return $this->render('front/instance/score.html.twig', [
             'instance' => $instance,
             'game' => $game,
             'roundsList' => $roundsList,
-            'orderedDurations' => $DurationsArray,
+            'orderedDurations' => $formatedDurationsArray,
         ]);
 
     }
