@@ -32,9 +32,7 @@
             <div class="d-grid gap-2 justify-content-md-center">
             {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
             <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
-
-            {% elseif "now"|date('c') < instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c')%}
-            <p>Il n' a pas de encore de score</p>
+            
             {% else %}
             <a href="{{ path('app_front_instance_score', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les scores</a>
 
