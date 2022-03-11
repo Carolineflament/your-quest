@@ -224,23 +224,55 @@ class InstanceController extends AbstractController
         // Je récupére la liste des rounds terminés et non-terminés d'une instance
         $roundsList = $roundRepository->findBy(['instance' => $instance]);
 
-        // Pour chaque round je calcul la durée de celui-ci, et je l'inscrit dans un tableau
+        // Pour chaque round terminé, je calcule la durée de celui-ci, et je l'inscris dans un tableau
         $DurationsArray = [];
 
         foreach ($roundsList as $key => $round) {
-            // if endAt is not null
+            // Work only on finished rounds (endAt is not null)
             if ($round->getEndAt()) {
-                // Duration
-                $roundDuration = $round->getEndAt()->diff($round->getStartAt());
+
+                // Convert to seconds
+                $timestampEndAt = $round->getEndAt()->getTimestamp();
+                $timestampStartAt = $round->getStartAt()->getTimestamp();
+
+                // Duration in seconds
+                $roundDuration = $timestampEndAt - $timestampStartAt;
                 
-                // Send to array, with a type change to string in order to use array sort function later
-                $DurationsArray[$key] = $roundDuration->format('%Hh%im%Ss');
+                // Send to array
+                $DurationsArray[$key] = $roundDuration;
             }
         }
 
-        // Je tri le tableau des durées
+        // Je tri le tableau des durées dans l'ordre ASC
         asort($DurationsArray);
-        // dd($DurationsArray);
+
+        // Je crée un nouveau tableau où je transorme les durées en secondes en J-H-M-S
+        $formatedDurationsArray = [];
+
+        foreach ($DurationsArray as $round => $duration) {
+            if ($duration < 3600) {
+                $heures = 0;
+                
+                if ($duration < 60) {
+                    $minutes = 0;
+                } else {
+                    $minutes = round($duration / 60);
+                }
+                
+                $secondes = floor($duration % 60);
+            } else {
+                $heures = round($duration / 3600);
+                $secondes = round($duration % 3600);
+                $minutes = floor($secondes / 60);
+            }
+                
+            $secondes2 = round($secondes % 60);
+               
+            $formatedDuration  = "$heures heures $minutes min $secondes2 sec";
+
+            // J'envoie au tableau
+            $formatedDurationsArray[$round] = $formatedDuration;
+        }
 
         // Datas for breadcrumb
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
@@ -254,7 +286,7 @@ class InstanceController extends AbstractController
             'instance' => $instance,
             'game' => $game,
             'roundsList' => $roundsList,
-            'orderedDurations' => $DurationsArray,
+            'orderedDurations' => $formatedDurationsArray,
             'breadcrumbs' => $this->breadcrumb,
         ]);
     }

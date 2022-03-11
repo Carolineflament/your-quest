@@ -26,7 +26,7 @@
           <tbody>
               {% for key, duration in orderedDurations %}
               <tr scope="row">
-                    <td>{{ key + 1 }}</td>
+                    <td>{{ loop.index }}</td>
                     <td>{{ roundsList[key].user.pseudo }}</td>                   
                     <td>{{ duration }}</td>
               {% endfor %} 
