@@ -37,7 +37,7 @@ class MainController extends AbstractController
             /* Adding a flash message */
             $message = $this->addFlash(
                 "notice-danger",
-                "Il faut vour inscrire comme organisateur pour pouvoir créer un jeu, vous pouvez remplir ce formulaire !"
+                "Il faut vous inscrire comme organisateur pour pouvoir créer un jeu, vous pouvez remplir ce formulaire !"
             );
 
             return $this->redirectToRoute('app_register');
