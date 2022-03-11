@@ -40,10 +40,21 @@ class GameController extends AbstractController
     {
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
-       
+
+        if(in_array('ROLE_ADMIN', $this->getUser()->getRoles()))
+        {
+            $show_active_games = $gameRepository->findBy(['status' => 1, 'isTrashed' => 0], ['createdAt' => 'DESC']);
+            $show_inactive_games = $gameRepository->findBy(['status' => 0, 'isTrashed' => 0], ['createdAt' => 'DESC']);
+        }
+        else
+        {
+            $show_active_games = $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']);
+            $show_inactive_games = $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']);
+        }
+
         return $this->render('backoffice/game/index.html.twig', [
-            'actives_games' => $gameRepository->findBy(['status' => 1, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
-            'inactives_games' => $gameRepository->findBy(['status' => 0, 'isTrashed' => 0, 'user' => $userConnected], ['createdAt' => 'DESC']),
+            'actives_games' => $show_active_games,
+            'inactives_games' => $show_inactive_games,
             'breadcrumbs' => $this->breadcrumb
         ]);
     }
@@ -179,7 +190,6 @@ class GameController extends AbstractController
                 'notice-danger',
                 'Impossible de supprimer le jeu '.$game->getTitle().', token invalide !'
             );
-
         }
 
         return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
@@ -250,7 +260,7 @@ class GameController extends AbstractController
         /***** On génére le document PDF *****/
 
         // On récupère la liste des checkpoints dans l'ordre de l'utilisateur
-        $checkpointsList = $game->getCheckpoints();
+        $checkpointsList = $game->getUnTrashedCheckpoints();
 
         // Création d'un nouvel objet (document PDF)
         $pdf = new \FPDF();

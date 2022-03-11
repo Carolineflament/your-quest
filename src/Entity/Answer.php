@@ -144,10 +144,10 @@ class Answer
     /**
      * @ORM\PrePersist
      */
-    /*public function setCreatedAtValue(): void
+    public function setCreatedAtValue(): void
     {
         $this->createdAt = new \DateTimeImmutable();
-    }*/
+    }
 
     /**
      * @ORM\PreUpdate
