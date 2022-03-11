@@ -35,7 +35,7 @@ class MainController extends AbstractController
 
         if ($this->getUser() == null) {
             /* Adding a flash message */
-            $this->addFlash(
+            $message = $this->addFlash(
                 "notice-danger",
                 "Il faut vour inscrire comme organisateur pour pouvoir créer un jeu, vous pouvez remplir ce formulaire !"
             );
@@ -51,7 +51,7 @@ class MainController extends AbstractController
 
             return $this->redirectToRoute('front_main');
 
-        } else if ($this->getUser() !== null && in_array("ROLE_ORGANISATEUR", $this->getUser()->getRoles())) {
+        } else if ($this->getUser() !== null && in_array("ROLE_ORGANISATEUR", $this->getUser()->getRoles()) || in_array("ROLE_ADMIN", $this->getUser()->getRoles()) ) {
             return $this->redirectToRoute('app_backoffice_game_new');
         }        
     }

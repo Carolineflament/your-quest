@@ -7,6 +7,10 @@
         <div class="col-xl-6  text-center">
             <h1>Inscription</h1>
 
+            {# Message d'alerte #}
+            {{ include('front/_notice_message.html.twig') }}
+            {# End message d'alerte #}
+
             {{ form_start(registrationForm) }}
                 <div class="form-error mb-3">
                     {{ form_errors(registrationForm.email) }}
