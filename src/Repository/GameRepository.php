@@ -49,15 +49,23 @@ class GameRepository extends ServiceEntityRepository
                 WHERE g.is_trashed = 0 AND g.status = 1 GROUP BY g.id;';
         $query = $entityManagerConnexion->executeQuery($sql); 
         $results = $query->fetchAllAssociative();
-        $ids = array();
-        foreach($results AS $result)
-        {
-            $ids[] = $result['id'];
+
+        if ($results) {
+            
+            $ids = array();
+            foreach($results AS $result)
+            {
+                $ids[] = $result['id'];
+            }
+            
+            $entityManager = $this->getEntityManager();
+            $query = $entityManager->createQuery('SELECT g FROM App\Entity\Game g WHERE g.id IN('.implode(',', $ids).')');
+
+            return $query->getResult();
+
+        } else {
+            return null;
         }
-        
-        $entityManager = $this->getEntityManager();
-        $query = $entityManager->createQuery('SELECT g FROM App\Entity\Game g WHERE g.id IN('.implode(',', $ids).')');
-        return $query->getResult();
     }
 
     // /**
