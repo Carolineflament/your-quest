@@ -232,7 +232,9 @@ class CheckpointController extends AbstractController
 
         return $this->render('front/checkpoint/check.html.twig', [
             'enigma' => $enigma_non_response,
-            'message' => $checkpointScan->getSuccessMessage()
+            'message' => $checkpointScan->getSuccessMessage(),
+            'checkpoint' => $checkpointScan,
+            'instance' => $current_instance
         ]);
     }
 
@@ -291,6 +293,8 @@ class CheckpointController extends AbstractController
             'type_response' => $type_response,
             'message' => $checkpoint->getSuccessMessage(),
             'enigma' => $enigma_response,
+            'checkpoint' => $checkpoint,
+            'instance' => $current_instance
         ]);
     }
 
