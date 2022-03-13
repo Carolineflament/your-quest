@@ -1,18 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Check ok{% endblock %}
+{% block title %}Checkpoint {{ checkpoint.title }}{% endblock %}
 
 {% block body %}
 
 
 <div class="row mt-5">
     <div class="col">
-        <h1 class=" text-center">Check OK</h1>
+        <h1 class=" text-center">Checkpoint {{ checkpoint.title }}</h1>
         {{ include('front/_notice_message.html.twig') }}
 
         {% if enigma is same as null %}
-            <section class="w-100 p-4 d-flex justify-content-center pb-4">
-                {{message}}
+            <section class="w-100 p-4 text-center pb-4">
+                <div class="pb-4">{{message}}</div>
+                <div>
+                    <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary btn-sm me-3">Voir la dernière position des joueurs</a>
+                    <a href="{{ path('front_checkpoint') }}" class="btn btn-primary btn-sm me-3">Retour au scanner de QR codes</a>
+                </div>
             </section>
         {% else %}
             <h3 class=" text-center">{{enigma.question}}</h3>
