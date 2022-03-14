@@ -25,6 +25,26 @@
     z-index: 99;
 }
 
+/*** Logo Front ***/
+.logo
+{
+    max-height: 64px;
+}
+
+@media (max-width: 991.98px) {
+    .logo
+    {
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 400px) {
+    .logo
+    {
+        max-width: 100px;
+    }
+}
+
 
 /*** Spinner ***/
 #spinner {
