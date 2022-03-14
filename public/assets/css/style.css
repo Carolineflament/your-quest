@@ -939,3 +939,11 @@ label.required:after {
 		width: 30%;
 	}
 }
+
+.align-img
+{
+    display: flex;
+    align-items: center;
+    max-height: 155px;
+    justify-content: center;
+}
