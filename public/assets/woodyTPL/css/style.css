@@ -458,7 +458,7 @@
 
 
 /*** Testimonial ***/
-.testimonial-carousel::before {
+.testimonial-carousel::before, .instances-next-carousel::before, .instances-prev-carousel::before {
     position: absolute;
     content: "";
     top: 0;
@@ -469,7 +469,7 @@
     z-index: 1;
 }
 
-.testimonial-carousel::after {
+.testimonial-carousel::after, .instances-next-carousel::after, .instances-prev-carousel::after {
     position: absolute;
     content: "";
     top: 0;
@@ -482,29 +482,43 @@
 
 @media (min-width: 768px) {
     .testimonial-carousel::before,
-    .testimonial-carousel::after {
+    .testimonial-carousel::after, 
+    .instances-next-carousel::before,
+    .instances-next-carousel::after, 
+    .instances-prev-carousel::before,
+    .instances-prev-carousel::after {
         width: 200px;
     }
 }
 
 @media (min-width: 992px) {
     .testimonial-carousel::before,
-    .testimonial-carousel::after {
+    .testimonial-carousel::after,
+    .instances-next-carousel::before,
+    .instances-next-carousel::after,
+    .instances-prev-carousel::before,
+    .instances-prev-carousel::after {
         width: 300px;
     }
 }
 
-.testimonial-carousel .owl-item .testimonial-text {
+.testimonial-carousel .owl-item .testimonial-text, 
+.instances-next-carousel .owl-item .instances-next-text, 
+.instances-prev-carousel .owl-item .instances-prev-text {
     border: 5px solid var(--light);
     transform: scale(.8);
     transition: .5s;
 }
 
-.testimonial-carousel .owl-item.center .testimonial-text {
+.testimonial-carousel .owl-item.center .testimonial-text, 
+.instances-next-carousel .owl-item.center .instances-next-text, 
+.instances-prev-carousel .owl-item.center .instances-prev-text {
     transform: scale(1);
 }
 
-.testimonial-carousel .owl-nav {
+.testimonial-carousel .owl-nav, 
+.instances-next-carousel .owl-nav, 
+.instances-prev-carousel .owl-nav {
     position: absolute;
     width: 350px;
     top: 10px;
@@ -517,13 +531,24 @@
     z-index: 1;
 }
 
-.testimonial-carousel:hover .owl-nav {
+.instances-next-carousel .owl-nav, 
+.instances-prev-carousel .owl-nav {
+    top: 120px;
+}
+
+.testimonial-carousel:hover .owl-nav, 
+.instances-next-carousel:hover .owl-nav, 
+.instances-prev-carousel:hover .owl-nav {
     width: 300px;
     opacity: 1;
 }
 
 .testimonial-carousel .owl-nav .owl-prev,
-.testimonial-carousel .owl-nav .owl-next {
+.testimonial-carousel .owl-nav .owl-next,
+.instances-next-carousel .owl-nav .owl-prev,
+.instances-next-carousel .owl-nav .owl-next,
+.instances-prev-carousel .owl-nav .owl-prev,
+.instances-prev-carousel .owl-nav .owl-next {
     position: relative;
     color: var(--primary);
     font-size: 45px;
@@ -531,7 +556,11 @@
 }
 
 .testimonial-carousel .owl-nav .owl-prev:hover,
-.testimonial-carousel .owl-nav .owl-next:hover {
+.testimonial-carousel .owl-nav .owl-next:hover,
+.instances-next-carousel .owl-nav .owl-prev:hover,
+.instances-next-carousel .owl-nav .owl-next:hover,
+.instances-prev-carousel .owl-nav .owl-prev:hover,
+.instances-prev-carousel .owl-nav .owl-next:hover {
     color: var(--dark);
 }
 
