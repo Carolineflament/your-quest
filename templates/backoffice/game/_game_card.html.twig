@@ -1,19 +1,21 @@
-<div class="card mb-3" >
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="..." >
+<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
+    <div class="service-item">
+        <div class="overflow-hidden align-img">
+            <img  class="img-fluid" src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="{{game.slug}}" >
         </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h5 class="card-title">{{ game.title }}
+        <div class="p-4 text-center border border-5 border-light border-top-0">
+            <h4>{{ game.title }}
                 {% if is_granted('ROLE_ADMIN') %}
-                <i>(créé par {{ (game.user.pseudo) }})</i></h5>
+                    <i>(créé par {{ (game.user.pseudo) }})</i>
                 {% endif %}
-                <p class="card-text">{{ game.city }} ({{ game.postalCode }})</p>
-                <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
-                {{ include('backoffice/game/_status_form.html.twig', {"method": ''}) }}
-                {{ include('backoffice/game/_delete_form.html.twig', {"method": ''}) }}
+            </h4>
+            <div class="small mb-3">
+                <address class="mb-0">{{ game.city }} ({{ game.postalCode }})</address>
             </div>
+            <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
+            {{ include('backoffice/game/_status_form.html.twig', {"method": ''}) }}
+            {{ include('backoffice/game/_delete_form.html.twig', {"method": ''}) }}
+
         </div>
     </div>
 </div>

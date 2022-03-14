@@ -1,52 +1,84 @@
-{% extends 'backoffice/back_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Liste de vos jeux{% endblock %}
 
-{% block back_body %}
+{% block body %}
 
-    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
-        <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary mb-3">Créer un nouveau jeu</a>
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header py-5 mb-5">
+        <div class="container py-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Liste de vos jeux</h1>
+            {{ include('_breadcrumb.html.twig') }}
+        </div>
     </div>
+    <!-- Page Header End -->
+
+    {# Flash message #}
+    {{ include('front/_notice_message.html.twig') }}
 
     {# NAV BACKOFFICE GAME #}
 
-    <ul class="nav nav-tabs">
-        <li class="nav-item ">
-            <a class="nav-link active" data-bs-toggle="tab" href="#active_games">Mes jeux actifs</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#inactive_games">Mes jeux désactivés</a>
-        </li>
-    </ul>
+    <div class="container-xxl">
+        <div class="container">
+            <ul class="nav nav-tabs" style="justify-content:center;border:none;">
+                <li class="nav-item ">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#active_games">Mes jeux actifs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#inactive_games">Mes jeux désactivés</a>
+                </li>
+                <li class="nav-item" style="align-self:end;">
+                    <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary">Créer un nouveau jeu</a>
+                </li>
+            </ul>
+            
+        </div>
+    </div>
 
     {# END NAV BACKOFFICE #}
 
     {# CARDS #}
+    <div class="container-xxl py-5">
+        <div class="container">
+            
 
-    {% if is_granted('ROLE_ORGANISATEUR') %}
-    
-        <div class="tab-content">
-            <div class="tab-pane active" id="active_games">
-                {% for game in actives_games %}
-                    {{ include('backoffice/game/_game_card.html.twig') }}
-                {% else %}
-                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment...</div>
-                {% endfor %}
+            {% if is_granted('ROLE_ORGANISATEUR') %}
+                {% set delay = [0.1, 0.3, 0.5] %}
+                <div class="tab-content">
+                    <div class="tab-pane active" id="active_games">
+                        <div class="row g-4">
+                            {% for game in actives_games %}
+                                {% set counter = ( counter | default(-1) ) + 1 %}
+                                {% if counter == 3 %}
+                                    {% set counter = 0 %}
+                                {% endif %}
+                                {{ include('backoffice/game/_game_card.html.twig') }}
+                            {% else %}
+                                <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment...</div>
+                            {% endfor %}
+                        </div>
+                    </div>
 
-            </div>
 
 
-            <div class="tab-pane fade" id="inactive_games">
-                {% for game in inactives_games %}
-                    {{ include('backoffice/game/_game_card.html.twig') }}
-                {% else %}
-                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu désactivé pour le moment...</div>
-                {% endfor %}
-            </div>
+                    <div class="tab-pane fade" id="inactive_games">
+                        <div class="row g-4">
+                            {% for game in inactives_games %}
+                                {% set counter = ( counter | default(-1) ) + 1 %}
+                                {% if counter == 3 %}
+                                    {% set counter = 0 %}
+                                {% endif %}
+                                {{ include('backoffice/game/_game_card.html.twig') }}
+                            {% else %}
+                                <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu désactivé pour le moment...</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
         </div>
-
-
-    {% endif %}
+    </div>
 
     {# END CARDS #}
 
