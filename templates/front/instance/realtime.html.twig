@@ -1,28 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ instance.title }}{% endblock %}
-
 {% block body %}
-<div class="container-xl p-5">
-      <div class="row">
-        <h1 class="text-muted fw-bold mb-4 text-center h1"> {{game.title}}</h1>
-        <h2 class="text-muted fw-bold mb-4 text-center h2"> Instance {{ instance.title }}</h2>
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header py-5 mb-5">
+        <div class="container py-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Position des joueurs</h1>
+            {{ include('_breadcrumb.html.twig') }}
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+    <!-- Feature Start -->
+    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="margin: 6rem 0;">
+        <div class="container-xl p-5">
+          <div class="section-title text-center mt-4">
+          <h1 class="display-5 mb-2"> {{game.title}}</h1>
+          <h2 class="display-7 mb-2"> Instance {{ instance.title }} du {{ instance.startAt|date('d-m-Y')}}</h2>
           {{ include('front/_notice_message.html.twig') }}
-      </div>
-      <h4 class="text-dark fw-bold">Dernière position des joueurs</h4>
-    <div class="card-list mt-2">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Checkpoint</th>
-              <th scope="col">Joueurs</th>
-            </tr>
-          </thead>
-         <tbody> 
+          </div>
+        </div>
 
-        {# Boucle sur les checkpoints du jeu #}
+            <div class="card-list mt-4 ">
+            <h3 class="display-7 ms-2">Derniére position des joueurs</h3>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">Checkpoint</th>
+                      <th scope="col">Joueurs</th>
+                    </tr>
+                  </thead>
+                <tbody> 
 
-        {% for key, value in checkpointsDatas %}     
+                {# Boucle sur les checkpoints du jeu #}
+
+            {% for key, value in checkpointsDatas %}     
                 <tr>
                     <td>N° {{ loop.index }} - {{ key }}</td>
 
