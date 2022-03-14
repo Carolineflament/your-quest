@@ -60,8 +60,6 @@
                                 <div class="p-4 text-center border border-5 border-light border-top-0">
                                     <h4 class="mb-3">
                                         <a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a>
-                                        {% dump("now"|date('c')) %}
-                                        {% dump(game.nextInstance.startAt|date('c')) %}
                                         {% if "now"|date('c') > game.nextInstance.startAt|date('c') and "now"|date('c') < game.nextInstance.endAt|date('c') %}
                                             <span class="badge bg-danger ms-2">En cours</span>
                                         {% endif %}
