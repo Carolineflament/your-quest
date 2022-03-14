@@ -31,22 +31,6 @@ class CheckpointController extends AbstractController
     }
 
     /**
-     * @Route("/jeux/{gameSlug}", name="index", methods={"GET"})
-     */
-    public function index($gameSlug, GameRepository $gameRepository, CheckpointRepository $checkpointRepository): Response
-    {
-        $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
-
-        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
-
-        return $this->render('backoffice/checkpoint/index.html.twig', [
-            'checkpoints' => $checkpointRepository->findBy(['game' => $game,'isTrashed' => false]),
-            'game' =>$game,
-            'breadcrumbs' => $this->breadcrumb,
-        ]);
-    }
-
-    /**
      * @Route("/jeux/{gameSlug}/nouveau", name="new", methods={"GET", "POST"})
      */
     public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager,QrcodeService $qrcodeService): Response
