@@ -15,7 +15,7 @@
             <a class="nav-link active" data-bs-toggle="tab" href="#active_games">Mes jeux actifs</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#inactive_games">Mes jeux archivés</a>
+            <a class="nav-link" data-bs-toggle="tab" href="#inactive_games">Mes jeux désactivés</a>
         </li>
     </ul>
 
@@ -30,7 +30,7 @@
                 {% for game in actives_games %}
                     {{ include('backoffice/game/_game_card.html.twig') }}
                 {% else %}
-                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
+                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment...</div>
                 {% endfor %}
 
             </div>
@@ -40,7 +40,7 @@
                 {% for game in inactives_games %}
                     {{ include('backoffice/game/_game_card.html.twig') }}
                 {% else %}
-                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu pour le moment !</div>
+                    <div class="d-flex p-2 bd-highlight">Vous n'avez aucun jeu désactivé pour le moment...</div>
                 {% endfor %}
             </div>
         </div>
