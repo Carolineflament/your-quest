@@ -1,11 +1,16 @@
-{% extends 'backoffice/back_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle instance pour le jeu {{ game.title }}{% endblock %}
+{% block title %}Nouvelle session pour le jeu {{ game.title }}{% endblock %}
 
-{% block back_body %}
-    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
-        <a href="{{ path('app_backoffice_game_show', {'slug': game.slug})  }}"  class="btn btn-outline-secondary btn-sm">Retour au jeu</a>
+{% block body %}
+    {{ include('_header_start.html.twig', {'title': 'Nouvelle session'}) }}
+    <div class="container-xxl pb-5">
+        <div class="container">
+            <div class="d-flex flex-row-reverse bd-highlight align-items-start">
+                <a href="{{ path('app_backoffice_game_show', {'slug': game.slug})  }}"  class="btn btn-outline-secondary btn-sm">Retour au jeu</a>
+            </div>
+
+            {{ include('backoffice/instance/_form.html.twig') }}
+        </div>
     </div>
-
-    {{ include('backoffice/instance/_form.html.twig') }}
 {% endblock %}
