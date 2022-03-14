@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
             $this->addFlash(
                 'notice-success',
-                'Votre compte a été ajouté !'
+                'Votre compte a été créé !'
             );
 
             $userAuthenticator->authenticateUser(
