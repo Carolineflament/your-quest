@@ -3,71 +3,71 @@
 {% block title %}{{ instance.title }}{% endblock %}
 
 {% block body %}
-<div class="container-fluid mb-3">
-<div class="float-start">
-  {{ include('backoffice/_breadcrumb.html.twig') }}
-</div>
 
-<div class="container-xl p-5">
+ <!-- Page Header Start -->
+    <div class="container-fluid page-header py-5 mb-5">
+        <div class="container py-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">{{game.title}}</h1>
+            {{ include('_breadcrumb.html.twig') }}
+        </div>
+    </div>
+    <!-- Page Header End -->
 
-      <div class="row">
 
-        <h1 class="text-muted fw-bold mb-4 text-center h1">Résultat du jeu {{game.title}}</h1>
+<!-- Feature Start -->
+    <div class="container-fluid bg-light px-lg-0" style="margin: 3rem 0;">
+        <div class="container-xl p-5">
+            <div class="section-title text-center mt-4">
+                <h1 class="display-5 mb-2">Classement pour la session {{instance.title}}</h1> 
+                <h2 class="display-7 mb-2">terminée le {{ instance.endAt|date('d-m-Y') }}</h2>  
+            </div> 
+        </div>  
+        <div class="container m-auto">
+                <div class="card-list mt-4">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Classement</th>
+                                <th scope="col">Nom du joueur</th>
+                                <th scope="col">Email du joueur</th>
+                                <th scope="col">Temps réalisé</th>
+                            </tr>
+                        </thead>
 
-      </div>  
+                        <tbody>
+                            {% for key, duration in orderedDurations %}
+                            <tr scope="row">
+                                <td>{{ loop.index }}</td>
+                                <td>{{ roundsList[key].user.pseudo }}</td>
+                                <td>{{ roundsList[key].user.email }}</td>                              
+                                <td>{{ duration }}</td>
+                            {% endfor %} 
+                            </tr>  
+                        </tbody> 
+                    </table>          
+                </div>
+        </div>    
+                                  
+        <div class="container m-auto">
+            <div class="card-list mt-4">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">Liste des joueurs ayant participé, mais sans terminer le parcours</th>
+                        </tr>
+                    </thead>
 
-      <div class="row">
-            <h3 class="text-muted fw-bold mb-4 text-center h3">Instance {{instance.title}} du {{ instance.startAt|date('d-m-Y')}}</h3>
-      </div>      
-
-      <div class="card-list mt-4">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Classement</th>
-              <th scope="col">Nom du joueur</th>
-              <th scope="col">Email du joueur</th>
-              <th scope="col">Temps réalisé</th>
-            </tr>
-          </thead>
-
-          <tbody>
-              {% for key, duration in orderedDurations %}
-              <tr scope="row">
-                    <td>{{ loop.index }}</td>
-                    <td>{{ roundsList[key].user.firstname }} {{  roundsList[key].user.lastname }}</td>
-                    <td>{{ roundsList[key].user.email }}</td>
-                    <td>{{ duration }}</td>
-              {% endfor %} 
-              </tr>  
-          </tbody> 
-        </table>          
-      </div>
-
-      <div class="card-list mt-4">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Joueurs ayant participé, mais sans terminer le parcours</th>
-            </tr>
-          </thead>
-
-          <tbody>
-              {% for round in roundsList %}
-              <tr scope="row">
-                {% if round.endAt is same as(null) %}
-                    <td>{{ round.user.pseudo }}</td>                   
-                {% endif %}
-              {% endfor %} 
-              </tr>  
-          </tbody> 
-        </table>          
-      </div>              
-               
-        
-
-   
-</div>
-</div>
-     
-{% endblock %}  
+                    <tbody>
+                        {% for round in roundsList %}
+                        <tr scope="row">
+                        {% if round.endAt is same as(null) %}
+                            <td>{{ round.user.pseudo }} - {{ round.user.email }}</td>                   
+                        {% endif %}
+                        {% endfor %} 
+                        </tr>  
+                    </tbody> 
+                </table>          
+            </div>
+        </div>  
+  </div>                
+{% endblock %}
