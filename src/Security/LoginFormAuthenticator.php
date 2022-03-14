@@ -44,7 +44,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         $user_test = $this->userRepository->findOneBy(['email' => $email]);
-        if(!$user_test->getStatus())
+        if($user_test !== null && !$user_test->getStatus())
         {
             $request->getSession()->getFlashBag()->add(
                 'notice-danger',

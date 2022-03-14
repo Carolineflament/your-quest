@@ -5,7 +5,10 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title">{{ game.title }}</h5>
+                <h5 class="card-title">{{ game.title }}
+                {% if is_granted('ROLE_ADMIN') %}
+                <i>(créé par {{ (game.user.pseudo) }})</i></h5>
+                {% endif %}
                 <p class="card-text">{{ game.city }} ({{ game.postalCode }})</p>
                 <a href="{{ path('app_backoffice_game_show', {'slug': game.slug}) }}" class="btn btn-primary mp-3 mb-2">Voir le jeu</a>
                 {{ include('backoffice/game/_status_form.html.twig', {"method": ''}) }}

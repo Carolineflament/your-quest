@@ -164,7 +164,7 @@ class InstanceController extends AbstractController
             // + flash message
             $this->addFlash(
                 'notice-danger',
-                'Cette instance est terminée, impossible d\'afficher la position des joueurs en tant réel, mais voici le tableau des scores.'
+                'Cette instance est terminée, impossible d\'afficher la position des joueurs en temps réel, mais voici le classement final.'
             );
             return $this->redirectToRoute('app_front_instance_score', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
         }

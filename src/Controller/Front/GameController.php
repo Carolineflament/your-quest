@@ -67,10 +67,15 @@ class GameController extends AbstractController
         $previous_instances = $instances->filter(function(Instance $instance){
             return $instance->getEndAt() <= new \DateTimeImmutable();
         });
+
+        array_push($this->breadcrumb, array('libelle' => 'Les jeux', 'libelle_url' => 'front_games', 'url' => $this->urlGenerator->generate('front_games')));
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'front_games_show', 'url' => $this->urlGenerator->generate('front_games_show', ['slug' => $game->getSlug()])));
+
         return $this->render('front/game/show.html.twig', [
             'game' => $game,
             'next_instances' => $next_instances,
-            'previous_instances' => $previous_instances
+            'previous_instances' => $previous_instances,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 }

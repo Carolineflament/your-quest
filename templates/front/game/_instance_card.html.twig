@@ -1,24 +1,22 @@
-<div class="row mt-2">
-    <div class="card-list">
-        <div class="card-list-head">
-            <h3 class="text-muted fw-bold mb-4 text-center h3">{{title}}</h3>
+<div class="container-xxl {% if label is same as "prev" %}py-5 {% else %}pb-5{% endif %}">
+    <div class="container">
+        <div class="section-title text-center">
+            <h3 class="display-5 mb-5">{{title}}</h3>
         </div>
-        <div class="card-list-body">
+
+        <div class="owl-carousel instances-{{label}}-carousel">
             {% for instance in instances %}
-                    <div class="card card-task">
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h6>
-                                    <a href="{{ path('app_front_instance_show', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}">{{instance.title}}</a>
-                                    {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %}
-                                        <span class="badge bg-danger ms-2">En cours</span>
-                                    {% endif %}
-                                </h6>
-                                <span class="small">De {{instance.startAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} à {{instance.endAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} : {{ game.address~' '~game.postalCode~' '~game.city }}</span>
-                            </div>
-                        </div>
+                <div class="instances-{{label}}-item text-center">
+                    <div class="instances-{{label}}-text text-center p-4">
+                        <h6>
+                            <a href="{{ path('app_front_instance_show', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}">{{instance.title}}</a>
+                            {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %}
+                                <span class="badge bg-danger ms-2">En cours</span>
+                            {% endif %}
+                        </h6>
+                        <span class="small">De {{instance.startAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} à {{instance.endAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} : {{ game.address~' '~game.postalCode~' '~game.city }}</span>
                     </div>
-                
+                </div>
             {% endfor %}
         </div>
     </div>

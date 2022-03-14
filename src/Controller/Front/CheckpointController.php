@@ -75,7 +75,7 @@ class CheckpointController extends AbstractController
         {
             $this->addFlash(
                 'notice-danger',
-                'Le jeu n\'est pas ouvert, merci de revenir lorsque le jeu sera ouvert !'
+                'Désolé, ce jeu a été désactivé par l\'organisateur, ou par un administrateur.'
             );
             return $this->redirectToRoute('front_main', [], Response::HTTP_SEE_OTHER);
         }
@@ -92,7 +92,7 @@ class CheckpointController extends AbstractController
             {
                 $this->addFlash(
                     'notice-danger',
-                    'Aucune instance ouverte, merci de revenir lorsque le jeu sera ouvert !'
+                    'Malheureusement aucune session de ce jeu n\'est en cours actuellement, renseignez-vous sur les prochaines sessions prévues.'
                 );
                 return $this->redirectToRoute('front_main', [], Response::HTTP_SEE_OTHER);
             }
@@ -135,7 +135,7 @@ class CheckpointController extends AbstractController
             {
                 $this->addFlash(
                     'notice-danger',
-                    'Tentative de triche ! :) Vous n\'avez pas scanné les checkpoints précédent, revenez sur vos pas !'
+                    'Tentative de triche ou accident ? :) Vous n\'avez pas scanné certains checkpoints précédents, veuillez revenir sur vos pas !'
                 );
                 return $this->redirectToRoute('front_checkpoint', [], Response::HTTP_SEE_OTHER);
             }
@@ -151,7 +151,7 @@ class CheckpointController extends AbstractController
                         $enigma_non_response = $enigma;
                         $this->addFlash(
                             'notice-warning',
-                            'Vous avez scanné le checkpoint '.$checkpointScan->getTitle().' mais vous n\'avez pas répondu à la question du checkpoint '.$checkpoints[$i]->getTitle().', vous grillez les étapes :) !'
+                            'Vous avez scanné le checkpoint '.$checkpointScan->getTitle().', mais vous n\'avez pas répondu à l\'énigme du checkpoint '.$checkpoints[$i]->getTitle().', vous grillez les étapes :) !'
                         );
                         return $this->render('front/checkpoint/check.html.twig', [
                             'enigma' => $enigma_non_response,
@@ -190,20 +190,20 @@ class CheckpointController extends AbstractController
         // Check si c'est le dernier checkPoint pour mettre le EndAt
         if($key_checkpointScan[0] === count($checkpoints)-1)
         {
-            $entityManager->persist($round);
             if(count($checkpointScan->getUnTrashedEnigmas()) == 0)
             {
                 $round->setEndAt(new \DateTimeImmutable());
+                $entityManager->persist($round);
                 $this->addFlash(
                     'notice-success',
-                    'Bravo vous avez terminé le jeu :) !'
+                    'Bravo vous avez terminé le jeu :) ! Vous pourrez consulter le classement une fois la session terminée'
                 );
             }
             else
             {
                 $this->addFlash(
                     'notice-success',
-                    'Dernière énigme :) !'
+                    'Ceci est la dernière énigme :) !'
                 );
             }
         }
@@ -282,7 +282,7 @@ class CheckpointController extends AbstractController
             $type_response = 'wrong';
             $this->addFlash(
                 'notice-danger',
-                'Mauvaise réponse, mais tu peux retenter ta chance !'
+                'Mauvaise réponse, mais vous pouvez retenter votre chance !'
             );
         }
 
