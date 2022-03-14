@@ -28,21 +28,6 @@ class AnswerController extends AbstractController
     }
 
     /**
-     * @Route("/enigme/{id}", name="index", methods={"GET"}, requirements={"id"="\d+"})
-     */
-    public function index(Enigma $enigma, AnswerRepository $answerRepository): Response
-    {
-        array_push($this->breadcrumb, array('libelle' => $enigma->getCheckpoint()->getGame()->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $enigma->getCheckpoint()->getGame()->getSlug()])));
-
-        array_push($this->breadcrumb, array('libelle' => $enigma->getCheckpoint()->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $enigma->getCheckpoint()->getId()])));
-
-        return $this->render('backoffice/answer/index.html.twig', [
-            'answers' => $answerRepository->findBy(['enigma' => $enigma, 'isTrashed' => false]),
-            'breadcrumbs' => $this->breadcrumb,
-        ]);
-    }
-
-    /**
      * @Route("/enigme/{id}/nouveau", name="new", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager, Enigma $enigma): Response
@@ -76,28 +61,6 @@ class AnswerController extends AbstractController
             'answer' => $answer,
             'form' => $form,
             'enigma' => $enigma,
-            'breadcrumbs' => $this->breadcrumb,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
-     */
-    public function show(Answer $answer): Response
-    {
-        // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('IS_MY_GAME', $answer);
-
-        array_push($this->breadcrumb, array('libelle' => $answer->getEnigma()->getCheckpoint()->getGame()->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $answer->getEnigma()->getCheckpoint()->getGame()->getSlug()])));
-
-        array_push($this->breadcrumb, array('libelle' => $answer->getEnigma()->getCheckpoint()->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $answer->getEnigma()->getCheckpoint()->getId()])));
-
-        array_push($this->breadcrumb, array('libelle' => 'Enigme '.$answer->getEnigma()->getOrderEnigma(), 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_show', ['id' => $answer->getEnigma()->getId()])));
-
-        array_push($this->breadcrumb, array('libelle' => 'Réponse : '.$answer->getAnswer(), 'libelle_url' => 'app_backoffice_answer_show', 'url' => $this->urlGenerator->generate('app_backoffice_answer_show', ['id' => $answer->getId()])));
-
-        return $this->render('backoffice/answer/show.html.twig', [
-            'answer' => $answer,
             'breadcrumbs' => $this->breadcrumb,
         ]);
     }
