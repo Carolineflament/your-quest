@@ -190,10 +190,10 @@ class CheckpointController extends AbstractController
         // Check si c'est le dernier checkPoint pour mettre le EndAt
         if($key_checkpointScan[0] === count($checkpoints)-1)
         {
-            $entityManager->persist($round);
             if(count($checkpointScan->getUnTrashedEnigmas()) == 0)
             {
                 $round->setEndAt(new \DateTimeImmutable());
+                $entityManager->persist($round);
                 $this->addFlash(
                     'notice-success',
                     'Bravo vous avez terminé le jeu :) ! Vous pourrez consulter le classement une fois la session terminée'
