@@ -259,24 +259,38 @@ class GameController extends AbstractController
 
         /***** On génére le document PDF *****/
 
-        // On récupère la liste des checkpoints dans l'ordre de l'utilisateur
+        // On récupère la liste des checkpoints non mis à la poubelle
+        // et dans l'ordre choisi par l'utilisateur grâce à @ORM\OrderBy({"orderCheckpoint" = "ASC"}) sur la propriété dans l'entité.
         $checkpointsList = $game->getUnTrashedCheckpoints();
 
         // Création d'un nouvel objet (document PDF)
         $pdf = new \FPDF();
+
+        $i = 1;
 
         // On boucle sur la liste des checkpoints
         foreach ($checkpointsList as $checkpoint) {
             // Ajout d'une nouvelle page, avec ses header et footer
             $pdf->AddPage();
 
-            // Réglage de la police
-            $pdf->SetFont('Arial', 'B', 60);
+            // Réglage de la police du titre
+            $pdf->SetFont('Arial', 'B', 30);
 
             // Titre en haut de page, dans une cellule avec passage à la ligne et création d'une nouvelle cellule si trop long (MultiCell)
             $pdf->MultiCell(0, 20, $title, 0, 'C');
             // Saut de ligne
             $pdf->Ln();
+
+            // Réglage de la police du nom du checkpoint
+            $pdf->SetFont('Arial', 'B', 45);
+
+            // Nom du checkpoint
+            $pdf->MultiCell(0, 20, 'Checkpoint '.$i , 0, 'C');
+            // Saut de ligne
+            $pdf->Ln();
+            // Increment
+            $i++;
+
             // Déplacement du curseur sur axe X pour centrage du QR code
             $pdf->SetX(45);
             // Insertion du QR code
@@ -293,7 +307,7 @@ class GameController extends AbstractController
             'Content-Type' => 'application/pdf'));
 
         // On retourne le PDF en forçant son téléchargement 
-        return new Response($pdf->Output('D', 'YourQuest-'.$game->getSlug().'.pdf'), 200, array(
-            'Content-Type' => 'application/pdf'));
+        // return new Response($pdf->Output('D', 'YourQuest-'.$game->getSlug().'.pdf'), 200, array(
+        //     'Content-Type' => 'application/pdf'));
     }
 }
