@@ -4,17 +4,7 @@
 
 {% block body %}
 
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Liste de vos jeux</h1>
-            {{ include('_breadcrumb.html.twig') }}
-        </div>
-    </div>
-    <!-- Page Header End -->
-
-    {# Flash message #}
-    {{ include('front/_notice_message.html.twig') }}
+    {{ include('_header_start.html.twig', {'title': 'Liste de vos jeux'}) }}
 
     {# NAV BACKOFFICE GAME #}
 
@@ -40,8 +30,6 @@
     {# CARDS #}
     <div class="container-xxl py-5">
         <div class="container">
-            
-
             {% if is_granted('ROLE_ORGANISATEUR') %}
                 {% set delay = [0.1, 0.3, 0.5] %}
                 <div class="tab-content">
@@ -59,8 +47,6 @@
                         </div>
                     </div>
 
-
-
                     <div class="tab-pane fade" id="inactive_games">
                         <div class="row g-4">
                             {% for game in inactives_games %}
@@ -76,7 +62,6 @@
                     </div>
                 </div>
             {% endif %}
-            
         </div>
     </div>
 

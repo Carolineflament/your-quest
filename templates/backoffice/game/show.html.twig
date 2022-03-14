@@ -4,17 +4,7 @@
 
 {% block body %}
 
-<!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">{{game.title}}</h1>
-            {{ include('_breadcrumb.html.twig') }}
-        </div>
-    </div>
-<!-- Page Header End -->
-
-{# Flash message #}
-{{ include('front/_notice_message.html.twig') }}
+{{ include('_header_start.html.twig', {'title': game.title}) }}
 
 <!-- Feature Start -->
 <div class="container-fluid bg-light px-lg-0" style="margin: 3rem 0;">
