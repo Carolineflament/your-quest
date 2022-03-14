@@ -1,0 +1,16 @@
+{% set route = app.request.get('_route') %}
+{% if breadcrumbs is defined %}
+    <nav aria-label="breadcrumb animated slideInDown">
+        <ol class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+                <li class="breadcrumb-item {% if route is same as breadcrumb.libelle_url %}text-white active{% endif %}" {% if route is same as breadcrumb.libelle_url %}aria-current="page"{% endif %}>
+                    {% if route is same as breadcrumb.libelle_url %}
+						{{breadcrumb.libelle}}
+					{% else %}
+						<a class="text-white" href="{{ breadcrumb.url }}">{{breadcrumb.libelle}}</a>
+					{% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </nav>
+{% endif %}
