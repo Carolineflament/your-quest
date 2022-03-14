@@ -37,11 +37,11 @@
             </tr>
             <tr>
                 <th>Créée le</th>
-                <td>{{ enigma.createdAt ? enigma.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ enigma.createdAt ? enigma.createdAt|date('d/m/Y H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>Modifié le</th>
-                <td>{{ enigma.updatedAt ? enigma.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ enigma.updatedAt ? enigma.updatedAt|date('d/m/Y H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>

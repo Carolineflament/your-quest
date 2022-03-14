@@ -41,11 +41,11 @@
             </tr>
             <tr>
                 <th>Créé le</th>
-                <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('d-m-Y à H:i:s') : '' }}</td>
+                <td>{{ checkpoint.createdAt ? checkpoint.createdAt|date('d/m/Y H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>Modifié le</th>
-                <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('d-m-Y à H:i:s') : '' }}</td>
+                <td>{{ checkpoint.updatedAt ? checkpoint.updatedAt|date('d/m/Y H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
