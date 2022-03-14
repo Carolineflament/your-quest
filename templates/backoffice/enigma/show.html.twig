@@ -4,90 +4,81 @@
 
 {% block body %}
 
-<!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Enigme {{ enigma.orderEnigma }}</h1>
-            {{ include('_breadcrumb.html.twig') }}
+{{ include('_header_start.html.twig', {'title': 'Enigme '~enigma.orderEnigma }) }}
+
+<div class="container-xxl pb-5">
+    <div class="container">
+        <div class="d-flex flex-row-reverse bd-highlight align-items-start">
+            <a href="{{ path('app_backoffice_checkpoint_show', {'id': enigma.checkpoint.id }) }}" class="btn btn-outline-secondary btn-sm">Retourner au checkpoint</a>
+            {{ include('backoffice/enigma/_delete_form.html.twig') }}
+            <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}" class="btn btn-primary btn-sm me-3">Modifier</a>
         </div>
-    </div>
-<!-- Page Header End -->
 
-{# Flash message #}
-{{ include('front/_notice_message.html.twig') }}
+        <table class="table">
+            <tbody>
 
-<div class="container m-auto">
+                <tr>
+                    <th>Enigme</th>
+                    <td>{{ enigma.question }}</td>
+                </tr>
+                <tr>
+                    <th>Ordre de l'énigme</th>
+                    <td>{{ enigma.orderEnigma }}</td>
+                </tr>
+                <tr>
+                    <th>Créée le</th>
+                    <td>{{ enigma.createdAt ? enigma.createdAt|date('d/m/Y H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Modifié le</th>
+                    <td>{{ enigma.updatedAt ? enigma.updatedAt|date('d/m/Y H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
-        <a href="{{ path('app_backoffice_checkpoint_show', {'id': enigma.checkpoint.id }) }}" class="btn btn-outline-secondary btn-sm">Retourner au checkpoint</a>
-        {{ include('backoffice/enigma/_delete_form.html.twig') }}
-        <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}" class="btn btn-primary btn-sm me-3">Modifier</a>
-    </div>
-
-    <table class="table">
-        <tbody>
-
-            <tr>
-                <th>Enigme</th>
-                <td>{{ enigma.question }}</td>
-            </tr>
-            <tr>
-                <th>Ordre de l'énigme</th>
-                <td>{{ enigma.orderEnigma }}</td>
-            </tr>
-            <tr>
-                <th>Créée le</th>
-                <td>{{ enigma.createdAt ? enigma.createdAt|date('d/m/Y H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Modifié le</th>
-                <td>{{ enigma.updatedAt ? enigma.updatedAt|date('d/m/Y H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div id="answers-cards-ic" class="d-flex bd-highlight">
-        <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <h2 class="p-2 align-self-center flex-grow-1">Les réponses</h2>
-                <a class="btn btn-primary m-3" href="{{ path('app_backoffice_answer_new', {'id': enigma.id}) }}">Créer une réponse</a>
-            </div>
-            <div class="accordion" id="ac-answers">
-                {% for answer in enigma.unTrashedAnswers %}
-                    
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="instance-head-{{loop.index}}">
-                            <button class="accordion-button text-white bg-gradient 
-                            {% if answer.status %}
-                                bg-success 
-                            {% else %}
-                                bg-warning
-                            {% endif %}
-                                collapsed" 
-                            type="button" data-bs-toggle="collapse" data-bs-target="#answers-{{loop.index}}" 
-                            aria-expanded="false" 
-                            aria-controls="answers-{{loop.index}}">
-                                Réponse {{answer.answer}} 
-                                    ({% if answer.status %}
-                                        La bonne réponse
-                                    {% else %}
-                                        Une mauvaise réponse
-                                    {% endif %})
-                            </button>
-                        </h2>
-                        <div id="answers-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="answer-head-{{loop.index}}" data-bs-parent="#ac-answers">
-                            <div class="accordion-body">
-                                <div class="mb-3">
-                                    <strong>{{answer.answer}}</strong>
-                                </div>
-                                <div class="d-flex bd-highlight align-items-start">
-                                    <a href="{{ path('app_backoffice_answer_edit',{'id': answer.id}) }}" class="btn btn-warning btn-sm me-3">Modifier</a>
-                                    {{ include('backoffice/answer/_delete_form.html.twig') }}
+        <div id="answers-cards-ic" class="d-flex bd-highlight">
+            <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <h2 class="p-2 align-self-center flex-grow-1">Les réponses</h2>
+                    <a class="btn btn-primary m-3" href="{{ path('app_backoffice_answer_new', {'id': enigma.id}) }}">Créer une réponse</a>
+                </div>
+                <div class="accordion" id="ac-answers">
+                    {% for answer in enigma.unTrashedAnswers %}
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="instance-head-{{loop.index}}">
+                                <button class="accordion-button text-white bg-gradient 
+                                {% if answer.status %}
+                                    bg-success 
+                                {% else %}
+                                    bg-warning
+                                {% endif %}
+                                    collapsed" 
+                                type="button" data-bs-toggle="collapse" data-bs-target="#answers-{{loop.index}}" 
+                                aria-expanded="false" 
+                                aria-controls="answers-{{loop.index}}">
+                                    Réponse {{answer.answer}} 
+                                        ({% if answer.status %}
+                                            La bonne réponse
+                                        {% else %}
+                                            Une mauvaise réponse
+                                        {% endif %})
+                                </button>
+                            </h2>
+                            <div id="answers-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="answer-head-{{loop.index}}" data-bs-parent="#ac-answers">
+                                <div class="accordion-body">
+                                    <div class="mb-3">
+                                        <strong>{{answer.answer}}</strong>
+                                    </div>
+                                    <div class="d-flex bd-highlight align-items-start">
+                                        <a href="{{ path('app_backoffice_answer_edit',{'id': answer.id}) }}" class="btn btn-warning btn-sm me-3">Modifier</a>
+                                        {{ include('backoffice/answer/_delete_form.html.twig') }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-            {% endfor %}
+                {% endfor %}
+                </div>
             </div>
         </div>
     </div>
