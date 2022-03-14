@@ -21,6 +21,10 @@ class EnigmaType extends AbstractType
             ->add('orderEnigma', NumberType::class,[
                 'label' => 'Ordre de l\' énigme :',
                 'html5' => true,
+                // TODO The 3 next line need to be delete if we have more than 1 enigma
+                'data' => 1,
+                'attr' => ['style' => 'display:none'],
+                'label_attr' => ['style' => 'display:none'],
             ])
         ;
     }
