@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Game;
 use App\Entity\Instance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,6 +26,18 @@ class InstanceRepository extends ServiceEntityRepository
             ->andWhere('i.slug = :slug AND i.id != :id')
             ->setParameter('slug', $slug)
             ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findBetweenDates($startAt, $endAt, Game $game)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('((i.startAt <= :startAt AND i.endAt >= :startAt) OR (i.startAt <= :endAt AND i.endAt >= :endAt)) AND i.game = :id')
+            ->setParameter('startAt', $startAt)
+            ->setParameter('endAt', $endAt)
+            ->setParameter('id', $game)
             ->getQuery()
             ->getResult()
         ;

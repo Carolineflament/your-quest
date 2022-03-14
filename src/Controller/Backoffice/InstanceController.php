@@ -54,7 +54,7 @@ class InstanceController extends AbstractController
      * Create new instance that belongs to game = {gameId}
      * @Route("/jeux/{gameSlug}/nouveau", name="new", methods={"GET", "POST"})
      */
-    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager, InstanceRepository $instanceRepository): Response
     {
         // Get parent Game
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
@@ -70,6 +70,23 @@ class InstanceController extends AbstractController
         $instance->setGame($game);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $has_instance = $instanceRepository->findBetweenDates($instance->getStartAt(), $instance->getEndAt(), $instance->getGame());
+            if(count($has_instance) > 0)
+            {
+                // Message
+                $this->addFlash(
+                    'notice-danger',
+                    'Des instances sont déjà plannifiées entre les dates du '.$instance->getStartAt()->format('d/m/Y').' au '.$instance->getEndAt()->format('d/m/Y').' !'
+                );
+                return $this->renderForm('backoffice/instance/new.html.twig', [
+                    'instance' => $instance,
+                    'form' => $form,
+                    'game' => $game,
+                    'breadcrumbs' => $this->breadcrumb,
+                ]);
+            }
+
             $entityManager->persist($instance);
             $entityManager->flush();
 

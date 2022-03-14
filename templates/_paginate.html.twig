@@ -9,7 +9,7 @@
     {% endif %}
     {% set nextPage = currentPage + 1 %}
     
-    <nav>
+    <nav class="mt-4">
         <ul class="pagination justify-content-end">
             <li class="page-item {% if currentPage <= 1 %} disabled {% endif %}">
                 <a class="page-link" {% if currentPage > 1 %} href="{{currentPath ~ '?page=' ~ prevPage}}" {% endif %}>&laquo;</a>
