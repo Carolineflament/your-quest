@@ -275,19 +275,17 @@ class GameController extends AbstractController
 
             // Réglage de la police du titre
             $pdf->SetFont('Arial', 'B', 30);
-
             // Titre en haut de page, dans une cellule avec passage à la ligne et création d'une nouvelle cellule si trop long (MultiCell)
-            $pdf->MultiCell(0, 20, $title, 0, 'C');
+            $pdf->MultiCell(0, 10, $title, 0, 'C');
             // Saut de ligne
-            $pdf->Ln();
+            $pdf->Ln(10);
 
-            // Réglage de la police du nom du checkpoint
+            // Réglage de la police du numéro d'ordre du checkpoint
             $pdf->SetFont('Arial', 'B', 45);
-
-            // Nom du checkpoint
-            $pdf->MultiCell(0, 20, 'Checkpoint '.$i , 0, 'C');
+            // Numéro d'ordre du checkpoint
+            $pdf->MultiCell(0, 10, 'CHECKPOINT '.$i , 0, 'C');
             // Saut de ligne
-            $pdf->Ln();
+            $pdf->Ln(25);
             // Increment
             $i++;
 
@@ -295,6 +293,14 @@ class GameController extends AbstractController
             $pdf->SetX(45);
             // Insertion du QR code
             $pdf->Image($this->paramBag->get('app.game_qrcode_directory').$checkpoint->getId().'qrcode.png', null, null, 120);
+            // Saut de ligne
+             $pdf->Ln(25);
+
+            // Réglage de la police du nom du checkpoint
+            $pdf->SetFont('Arial', 'B', 30);
+            // Nom du checkpoint
+            $pdf->MultiCell(0, 10, $checkpoint->getTitle(), 0, 'C');
+            
         }
 
         /***** On traite le document PDF généré *****/

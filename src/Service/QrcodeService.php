@@ -49,7 +49,7 @@ class QrcodeService
         //     ->setResizeToWidth(50);
 
         // Create generic label
-        $label = Label::create('QR code du checkpoint n° ' . $checkpoint->getOrderCheckpoint())
+        $label = Label::create('Checkpoint ID : '.$checkpoint->getId())
             ->setTextColor(new Color(0, 0, 0));
 
         $result = $writer->write($qrCode, null, $label);
