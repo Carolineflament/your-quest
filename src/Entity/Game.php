@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\GameRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -317,6 +318,31 @@ class Game
         }
 
         return $this;
+    }
+
+    public function getNextInstance(): Instance
+    {
+        $date = new DateTime();
+        $date = $date->getTimestamp();
+            
+        foreach($this->instances AS $instance)
+        {
+            if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
+            {
+                return $instance;
+            }
+        }
+
+        $instance_return = new Instance();
+        foreach($this->instances AS $instance)
+        {
+            if($date < $instance->getStartAt()->getTimestamp())
+            {
+                $instance_return = $instance;
+            }
+        }
+
+        return $instance_return;
     }
 
     /**
