@@ -44,11 +44,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         $user_test = $this->userRepository->findOneBy(['email' => $email]);
-        if(!$user_test->getStatus())
+        if($user_test !== null && !$user_test->getStatus())
         {
             $request->getSession()->getFlashBag()->add(
                 'notice-danger',
-                'Votre utilisateur a été désactivé par un administrateur, vous pouvez conctacter un administrateur via le formulaire de contact'
+                'Votre utilisateur a été désactivé par un administrateur, vous pouvez conctacter un admin@yourquest.fr'
             );
             
             return new Passport(new UserBadge(''), new PasswordCredentials(''));

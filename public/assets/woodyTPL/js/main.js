@@ -35,7 +35,7 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({scrollTop: 0}, 0, 'easeInOutExpo');
         return false;
     });
 
@@ -51,6 +51,8 @@
     $(".header-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 1500,
+        animateOut: 'fadeOut',
+        animateIn: 'fadeIn',
         items: 1,
         dots: true,
         loop: true,
@@ -61,29 +63,30 @@
         ]
     });
 
-
-    // Testimonials carousel
-    $(".testimonial-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        center: true,
-        dots: false,
-        loop: true,
-        nav : true,
-        navText : [
-            '<i class="bi bi-arrow-left"></i>',
-            '<i class="bi bi-arrow-right"></i>'
-        ],
-        responsive: {
-            0:{
-                items:1
-            },
-            768:{
-                items:2
+    // Instances carousel
+    $(".owl-carousel").each(function(){
+        $(this).owlCarousel({
+            autoplay: true,
+            smartSpeed: 1000,
+            lazyLoad:true,
+            center: true,
+            dots: false,
+            loop: true,
+            nav : true,
+            navText : [
+                '<i class="bi bi-arrow-left"></i>',
+                '<i class="bi bi-arrow-right"></i>'
+            ],
+            responsive: {
+                0:{
+                    items:1
+                },
+                768:{
+                    items:2
+                }
             }
-        }
+        });
     });
-
 
     // Portfolio isotope and filter
     var portfolioIsotope = $('.portfolio-container').isotope({

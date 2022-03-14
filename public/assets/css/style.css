@@ -1,36 +1,3 @@
-body {
-	background-color: #e8d0b359;
-	color: #86340A;
-}
-
-a{
-	color:#7EB5A6;
-}
-.btn-primary:hover
-{
-	background-color: #7eb5a6;
-	border-color: #7eb5a6;
-}
-
-.btn-primary
-{
-	background-color: #7eb5a6c4;
-	border-color: #7eb5a6c4;
-}
-
-.btn-primary:active
-{
-	background-color: #7eb5a6;
-	border-color: #7eb5a6;
-}
-
-.container
-{
-	/*background-color: #E8D0B3;
-	border-radius:35px;
-	box-shadow: 0px 15px 50px 0px rgb(0 0 0 / 10%);*/
-}
-
 .p-6
 {
 	padding: 2.5rem;
@@ -39,7 +6,6 @@ a{
 .logo-lost-password
 {
 	filter: invert(1) sepia(1) saturate(5) hue-rotate(258deg);
-
 }
 
 label.required:after {
@@ -58,9 +24,8 @@ label.required:after {
 .nav-link::before {
 	position: absolute;
 	width: 100%;
-	height: 1px;
 	background: currentColor;
-	top: 100%;
+	top: 95%;
 	left: 0;
 	pointer-events: none;
 	content: '';
@@ -69,7 +34,7 @@ label.required:after {
 	transform: scale3d(0, 1, 1);
 	transition: transform 0.3s;
 	height:4px;
-	background-color: #7eb5a6;
+	background-color: #AB7442;
 }
 
 .nav-link:hover::before {
@@ -81,9 +46,8 @@ label.required:after {
 {
 	position: absolute;
 	width: 100%;
-	height: 1px;
 	background: currentColor;
-	top: 100%;
+	top: 95%;
 	left: 0;
 	pointer-events: none;
 	content: '';
@@ -92,7 +56,7 @@ label.required:after {
 	transform: scale3d(1, 1, 1);
 	transition: transform 0.3s;
 	height:4px;
-	background-color: #7eb5a6;
+	background-color: #AB7442;
 }
 
 /* Formulaire inscription */
@@ -236,11 +200,11 @@ label.required:after {
 	display:none;
 }
 
-.form-control
+/*.form-control
 {
 	background-color: #e8d0b359;
   	border: none;
-}
+}*/
 
 .score
 {

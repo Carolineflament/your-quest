@@ -75,7 +75,7 @@ class EnigmaController extends AbstractController
 
             $this->addFlash(
                 'notice-success',
-                'L\' énigme a été ajouté !');
+                'L\'énigme a été ajoutée !');
 
             return $this->redirectToRoute('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
         }
@@ -136,7 +136,7 @@ class EnigmaController extends AbstractController
 
             $this->addFlash(
                 'notice-success',
-                'L\' énigme a été modifié !');
+                'L\'énigme a été modifiée !');
             
             return $this->redirectToRoute('app_backoffice_checkpoint_show', [
                 'id' => $checkpoint->getId()
@@ -170,7 +170,7 @@ class EnigmaController extends AbstractController
             $cascadeTrashed->trashEnigma($enigma);
             $this->addFlash(
                 'notice-success',
-                'L\' énigme a été mis à la poubelle !'
+                'L\' énigme a été mise à la poubelle !'
             );
         }
         else

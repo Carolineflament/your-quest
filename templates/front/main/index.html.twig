@@ -4,28 +4,80 @@
 
 {% block body %}
 
-    {# Message d'alerte #}
-    {{ include('front/_notice_message.html.twig') }}
-    {# End message d'alerte #}
-
-    {# Carousel #}
-
-    {{ include('_homeCarousel.html.twig') }}
-
-    {# End Carousel #}
-
-    {# Presentation #}
-    <div class="align-items-start mt-3">
-        <div class="col">
-            <div class="container flex-column align-items-center d-flex justify-content-evenly" style="height: 600px;">
-                <h2>Bienvenue sur YourQuest! </h2>
-                
-                <div>
-                Entrez dans une aventure connectée en créant votre jeu de piste dans le monde réel.
+    <!-- Carousel Start -->
+    <div class="container-fluid p-0 pb-5">
+        <div class="owl-carousel header-carousel position-relative">
+            <div class="owl-carousel-item position-relative">
+                <img class="img-fluid" src={{ asset('assets/images/QuestCarousel1-450px.jpg') }} alt="">
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(53, 53, 53, .7);">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-lg-8 text-center">
+                                {# <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome To WooDY</h5> #}
+                                <h1 class="display-3 text-white animated slideInDown mb-4">Bienvenue sur YourQuest !</h1>
+                                <h2 class="text-white">Vous êtes au point de départ d'un jeu ?</h2>
+                                <p class="fs-5 fw-medium text-white mb-4 pb-2">Scannez le 1er QR code et suivez les indications. En scannant ensuite le QR code de chaque checkpoint, votre temps sera enregistré et permettra de vous classer !</p>
+                                <a href="{{ path('front_checkpoint') }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Commencer à jouer</a>
+                                {# <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Free Quote</a> #}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="owl-carousel-item position-relative">
+                <img class="img-fluid" src={{ asset('assets/images/QuestCarousel2-450px.jpg') }} alt="">
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(53, 53, 53, .7);">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-lg-8 text-center">
+                                <h1 class="display-3 text-white animated slideInDown mb-4">Bienvenue sur YourQuest !</h1>
+                                <h2 class="text-white">Vous souhaitez créer votre propre jeu ?</h2>
+                                <p class="fs-5 fw-medium text-white mb-4 pb-2">Organisez votre propre jeu de piste, ses étapes et ses énigmes ! YourQuest va générer des QR codes pour chaque checkpoint, imprimez les et affichez les sur le site de votre jeu.</p>
+                                <a href="{{ path('app_backoffice_game_new')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Créer votre jeu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Carousel End -->
 
-                <a href="{{ path('front_message')}}" type="button" class="btn btn-lg btn-primary fw-bold"> Créer votre jeu </a>
-               
+    <!-- Service Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="section-title text-center">
+                <h1 class="display-5 mb-5">Les prochains jeux </h1>
+            </div>
+            <div class="row g-4">
+                {% if games %}
+                    {% for game in games %}
+                        <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="service-item">
+                                <div class="overflow-hidden">
+                                    <img class="img-fluid" src="{{ asset(app_games_images_directory~game.image) }}" alt="{{game.slug}}">
+                                </div>
+                                <div class="p-4 text-center border border-5 border-light border-top-0">
+                                    <h4 class="mb-3">
+                                        <a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a>
+                                        {% if "now"|date('c') > game.nextInstance.startAt|date('c') and "now"|date('c') < game.nextInstance.endAt|date('c') %}
+                                            <span class="badge bg-danger ms-2">En cours</span>
+                                        {% endif %}
+                                    </h4>
+                                    <p>
+                                        <a href="{{ path('app_front_instance_show', {'gameSlug' : game.slug, 'instanceSlug' : game.nextInstance.slug}) }}">
+                                            {{ game.nextInstance.startAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})
+                                        </a>
+                                    </p>
+                                    {# <a class="fw-medium" href="">Voir le jeu<i class="fa fa-arrow-right ms-2"></i></a> #}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                <p>Aucune future instance de jeu n'est prévue pour l'instant...</p>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -33,27 +85,71 @@
 
     {# Next Games #}
 
-    <div class="container-xl mt-3 mb-3">
-        <div class="row mx-auto my-auto justify-content-center">
-            <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner carousel-inner-multiple" role="listbox">
-                    {% for game in games %}
-                        <div class="carousel-item">
-                            <div class="col-md-3">
-                                <div class="card">
-                                    <div class="card-img">
-                                        <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top">
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title"><a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a></h5>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">{{ game.createdAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})</small>
-                                    </div>
-                                </div>
+
+
+    <!-- Team Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="section-title text-center">
+                <h1 class="display-5 mb-5">Membres de l'équipe</h1>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-item">
+                        <div class="overflow-hidden position-relative">
+                            <img class="img-fluid" src={{ asset('assets/images/Team/Caroline.jpg') }} alt="Caroline">
+                            <div class="team-social">
+                                <a class="btn btn-square" href="https://www.linkedin.com/in/carolineflament"><i class="fab fa-linkedin-in"></i></a>
                             </div>
                         </div>
-                    {% endfor %}
+                        <div class="text-center border border-5 border-light border-top-0 p-4">
+                            <h5 class="mb-0">Caroline</h5>
+                            <small>SCRUM Master</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="team-item">
+                        <div class="overflow-hidden position-relative">
+                            <img class="img-fluid" src={{ asset('assets/images/Team/sebastiengeraudie.jpeg') }} alt="">
+                            <div class="team-social">
+                                <a class="btn btn-square" href="https://fr.linkedin.com/in/s%C3%A9bastien-g%C3%A9raudie-64858724"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center border border-5 border-light border-top-0 p-4">
+                            <h5 class="mb-0">Sébastien</h5>
+                            <small>GIT Master</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="team-item">
+                        <div class="overflow-hidden position-relative">
+                            <img class="img-fluid" src={{ asset('assets/woodyTPL/img/team-3.jpg') }} alt="">
+                            <div class="team-social">
+                                <a class="btn btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center border border-5 border-light border-top-0 p-4">
+                            <h5 class="mb-0">Damien</h5>
+                            <small>Lead Dev Back</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="team-item">
+                        <div class="overflow-hidden position-relative">
+                            <img class="img-fluid" src={{ asset('assets/woodyTPL/img/team-1.jpg') }} alt="">
+                            <div class="team-social">
+                                <a class="btn btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center border border-5 border-light border-top-0 p-4">
+                            <h5 class="mb-0">Emmanuel</h5>
+                            <small>Product Owner / Lead Dev Front</small>
+                        </div>
+                    </div>
+
                 </div>
                 <!--<a class="carousel-control-prev bg-transparent" href="#recipeCarousel" role="button" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

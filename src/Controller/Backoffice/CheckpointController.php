@@ -71,8 +71,8 @@ class CheckpointController extends AbstractController
                 'Le checkpoint '.$checkpoint->getTitle().' a été ajouté !'
             );
 
-            return $this->redirectToRoute('app_backoffice_game_show', [
-                'slug' => $game->getSlug()
+            return $this->redirectToRoute('app_backoffice_checkpoint_show', [
+                'id' => $checkpoint->getId()
             ], Response::HTTP_SEE_OTHER);
         }
 
