@@ -65,7 +65,9 @@
                                         {% endif %}
                                     </h4>
                                     <p>
-                                        {{ game.nextInstance.startAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})
+                                        <a href="{{ path('app_front_instance_show', {'gameSlug' : game.slug, 'instanceSlug' : game.nextInstance.slug}) }}">
+                                            {{ game.nextInstance.startAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})
+                                        </a>
                                     </p>
                                     {# <a class="fw-medium" href="">Voir le jeu<i class="fa fa-arrow-right ms-2"></i></a> #}
                                 </div>
@@ -108,9 +110,9 @@
                 <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                     <div class="team-item">
                         <div class="overflow-hidden position-relative">
-                            <img class="img-fluid" src={{ asset('assets/woodyTPL/img/team-2.jpg') }} alt="">
+                            <img class="img-fluid" src={{ asset('assets/images/Team/sebastiengeraudie.jpeg') }} alt="">
                             <div class="team-social">
-                                <a class="btn btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
+                                <a class="btn btn-square" href="https://fr.linkedin.com/in/s%C3%A9bastien-g%C3%A9raudie-64858724"><i class="fab fa-linkedin-in"></i></a>
                             </div>
                         </div>
                         <div class="text-center border border-5 border-light border-top-0 p-4">
