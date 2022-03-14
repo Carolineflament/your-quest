@@ -143,7 +143,7 @@ class InstanceController extends AbstractController
             // Message
             $this->addFlash(
                 'notice-success',
-                'L\'instance '.$instance->getTitle().' a bien été éditée !'
+                'L\'instance '.$instance->getTitle().' a bien été modifiée !'
             );
 
             return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);

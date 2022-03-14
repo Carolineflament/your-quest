@@ -58,7 +58,7 @@ class AnswerController extends AbstractController
 
             $this->addFlash(
                 'notice-success',
-                'La réponse '.$answer->getAnswer().' a été créé !'
+                'La réponse '.$answer->getAnswer().' a été créée !'
             );
 
             return $this->redirectToRoute('app_backoffice_enigma_show', ['id' => $enigma->getId()], Response::HTTP_SEE_OTHER);
@@ -118,7 +118,7 @@ class AnswerController extends AbstractController
 
             $this->addFlash(
                 'notice-success',
-                'La réponse '.$answer->getAnswer().' a été modifié !'
+                'La réponse '.$answer->getAnswer().' a été modifiée !'
             );
 
             return $this->redirectToRoute('app_backoffice_enigma_show', ['id' => $answer->getEnigma()->getId()], Response::HTTP_SEE_OTHER);
@@ -149,7 +149,7 @@ class AnswerController extends AbstractController
             $answer->setIsTrashed(true);
             $this->addFlash(
                 'notice-success',
-                'La réponse '.$answer->getAnswer().' a été supprimé !'
+                'La réponse '.$answer->getAnswer().' a été supprimée !'
             );
             $entityManager->flush();
         }
