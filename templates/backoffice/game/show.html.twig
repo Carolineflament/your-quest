@@ -1,39 +1,67 @@
-{% extends 'backoffice/back_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ game.title }}{% endblock %}
 
-{% block back_body %}
-    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
-        <a href="{{ path('app_backoffice_game_index') }}" class="btn btn-primary mb-3">Mes jeux</a>
+{% block body %}
+
+ <!-- Page Header Start -->
+    <div class="container-fluid page-header py-5 mb-5">
+        <div class="container py-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">{{game.title}}</h1>
+            {{ include('_breadcrumb.html.twig') }}
+        </div>
     </div>
+    <!-- Page Header End -->
 
-    {# CARD GAME #}
-
-    <div class="d-flex justify-content-center ">
-        <div class="card mb-3">
-            <img src="{{ asset(app_games_images_directory~game.image) }}" class="card-img-top" alt="{{game.slug}}" style="max-width:600px">
-            <div class="card-body">
-                <h5 class="card-title">{{ game.title }}</h5>
-                <p class="card-text">{{ game.summary }}</p>
-                <p class="card-text"><small class="text-muted">Lieu: {{ game.address }} - {{ game.postalCode }} {{ game.city }}</small></p>
-                <div class="d-grid gap-2">
-                    <a href="{{ path('app_backoffice_game_edit',{'slug': game.slug}) }}" class="btn btn-primary mb-3">Modifier</a>
-                    {{ include('backoffice/game/_status_form.html.twig', {"method": 'show'}) }}
-                    {{ include('backoffice/game/_delete_form.html.twig', {"method": 'show'}) }}
+    <!-- Feature Start -->
+    <div class="container-fluid bg-light overflow-hidden px-lg-0" style="margin: 3rem 0;">
+        <div class="container feature px-lg-0">
+            <div class="row g-0 mx-lg-0">
+                <div class="col-lg-6 feature-text py-5 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="p-lg-5 ps-lg-0">
+                        <div class="section-title text-start">
+                            {# <h1 class="display-5 mb-4">{{ game.title }}</h1> #}
+                        </div>
+                            <p class="mb-2 pb-2">{{ game.summary }}</p>
+                            <p class="mb-4 pb-2"><small class="text-muted">Lieu: {{ game.address }} - {{ game.postalCode }} {{ game.city }}</small></p>
+                        <div class="row g-4">
+                            <div class="col-4">
+                                <div class="d-flex align-items-center">
+                                   <a href="{{ path('app_backoffice_game_edit',{'slug': game.slug}) }}" class="btn btn-warning mb-3">Modifier</a>
+                                </div>
+                            </div>
+                            
+                            <div class="col-4">
+                                <div class="d-flex align-items-center">
+                                   {{ include('backoffice/game/_status_form.html.twig', {"method": 'show'}) }}
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="d-flex align-items-center">
+                                    {{ include('backoffice/game/_delete_form.html.twig', {"method": 'show'}) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 pe-lg-0" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="position-absolute img-fluid w-100 h-100" src="{{ asset(app_games_images_directory~game.image) }}" style="object-fit: cover;" alt="">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Feature End -->
 
-    {# END CARD GAME #}
-
-    {# CARD CHECKPOINTS #}
+    {# GAME INSTANCES AND CHECKPOINTS #}
     
     <div id="games-cards-ic" class="d-flex bd-highlight">
+        {# INSTANCES #}
         <div class="card mb-3 flex-grow-1" style="flex-basis:min-content;" >
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <h2 class="p-2 align-self-center flex-grow-1">Les instances</h2>
-                <a class="btn btn-primary m-3" href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}">Créer une instance</a>
+                <h2 class="p-2 align-self-center flex-grow-1">Les sessions</h2>
+                <a class="btn btn-primary m-3" href="{{ path('app_backoffice_instance_new', {'gameSlug': game.slug}) }}">Créer une session</a>
             </div>
             <div class="accordion" id="ac-instances">
                 {% for instance in instances %}
@@ -42,13 +70,13 @@
                             <button class="accordion-button text-white bg-gradient
                             {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') > instance.endAt|date('c') %} 
                                 bg-secondary  
-                                {% set libelle_instance = "Instance terminée" %}
+                                {% set libelle_instance = "Terminée" %}
                             {% elseif "now"|date('c') > instance.startAt|date('c') and "now"|date('Y-m-d') < instance.endAt|date('c') %} 
                                 bg-success  
-                                {% set libelle_instance = "Instance en cours" %}
+                                {% set libelle_instance = "En cours" %}
                             {% else %}
                                 bg-primary
-                                {% set libelle_instance = "Instance future" %}
+                                {% set libelle_instance = "A venir" %}
                             {% endif %}
                             collapsed" 
                             
@@ -56,17 +84,22 @@
                             
                                 aria-expanded="false" 
                             aria-controls="instances-{{loop.index}}">
-                                {{libelle_instance}} : Le {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} de {{instance.startAt|date('H:i')}} à {{instance.endAt|date('H:i')}}, à {{game.city}}
+                                {{libelle_instance}} : {{ instance.title }} , du {{instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} à {{instance.startAt|date('H:i')}} au {{instance.endAt|format_datetime(pattern="dd LLLL Y", locale='fr')}} à {{instance.endAt|date('H:i')}}
                             </button>
                         </h2>
                         <div id="instances-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="instance-head-{{loop.index}}" data-bs-parent="#ac-instances">
                             <div class="accordion-body">
-                                <div class="">
+                                <div class="mb-3">
                                     <strong>{{instance.message}}</strong>
                                 </div>
-                                <div class="d-grid gap-2 ">
-                                    <a href="{{ path('app_backoffice_instance_edit',{'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-3">Modifier</a>
-                                    <a href="{{ path('app_backoffice_instance_show', {'instanceSlug': instance.slug}) }}" class="btn btn-primary mb-3">Voir</a>
+                                <div class="d-flex bd-highlight align-items-start">
+                                    {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
+                                        <a href="{{ path('app_front_instance_realtime', {'gameSlug': instance.game.slug, 'instanceSlug': instance.slug}) }}" class="btn btn-primary btn-sm me-3">Voir les positions des joueurs</a>
+                                    {% else %}
+                                    <a href="{{ path('app_backoffice_instance_score', {'instanceSlug' : instance.slug}) }}" class="btn btn-primary btn-sm me-3">Voir les scores</a>
+                                    {% endif %}
+                                    <a href="{{ path('app_backoffice_instance_edit',{'instanceSlug': instance.slug}) }}" class="btn btn-warning btn-sm me-3">Modifier</a>
+                                    {{ include('backoffice/instance/_delete_form.html.twig') }}
                                 </div>
                             </div>
                         </div>
@@ -74,7 +107,7 @@
             {% endfor %}
             </div>
         </div>
-
+        {# CHECKPOINTS #}
         <div class="card mb-3 flex-grow-1"  style="flex-basis:min-content;">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <h2 class="p-2 align-self-center flex-grow-1">Les checkpoints</h2>
@@ -93,12 +126,15 @@
                         </h2>
                         <div id="checkpoints-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="checkpoint-head-{{loop.index}}" data-bs-parent="#ac-checkpoints">
                             <div class="accordion-body">
-                                <div class="">
+                                <div class="mb-3">
                                     <strong>{{checkpoint.successMessage}}</strong>
                                 </div>
-                                <div class="d-grid gap-2 ">
-                                    <a href="{{ path('app_backoffice_checkpoint_edit',{'id': checkpoint.id}) }}" class="btn btn-primary mb-3">Modifier</a>
-                                    <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-primary mb-3">Voir</a>
+                                <div class="d-flex bd-highlight align-items-start">
+                                    <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-primary btn-sm me-3">Voir</a>
+                                    {% if checkpoint.unTrashedEnigmas|length == 0 %}
+                                        <a class="btn btn-primary btn-sm me-3" href="{{ path('app_backoffice_enigma_new', {'id': checkpoint.id}) }}">Créer une énigme</a>
+                                    {% endif %}
+                                    <a href="{{ path('app_backoffice_checkpoint_edit',{'id': checkpoint.id}) }}" class="btn btn-warning btn-sm me-3">Modifier</a>
                                 </div>
                             </div>
                         </div>
