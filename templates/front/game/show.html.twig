@@ -34,7 +34,7 @@
 
 
     {% if next_instances is not empty %}
-        {{ include ('front/game/_instance_card.html.twig', {"instances": next_instances, "title": "Prochaines sessions de jeu", "label": "next"} ) }}
+        {{ include ('front/game/_instance_card.html.twig', {"instances": next_instances|reverse, "title": "Prochaines sessions de jeu", "label": "next"} ) }}
     {% endif %}
 
     {% if previous_instances is not empty %}
