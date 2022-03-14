@@ -30,27 +30,6 @@ class InstanceController extends AbstractController
     }
     
     /**
-     * List all instances that belong to game = {gameSlug}
-     * @Route("/jeux/{gameSlug}", name="index", methods={"GET"})
-     */
-    public function index($gameSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository): Response
-    {
-        // Get parent Game
-        $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
-
-        // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
-
-        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
-
-        return $this->render('backoffice/instance/index.html.twig', [
-            'instances' => $instanceRepository->findBy(['game' => $game, 'isTrashed' => false]),
-            'game' => $game,
-            'breadcrumbs' => $this->breadcrumb,
-        ]);
-    }
-
-    /**
      * Create new instance that belongs to game = {gameId}
      * @Route("/jeux/{gameSlug}/nouveau", name="new", methods={"GET", "POST"})
      */
