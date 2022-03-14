@@ -5,7 +5,7 @@
 {% block back_body %}
 
     <div class="d-flex flex-row-reverse bd-highlight align-items-start">
-        <a href="{{ path('app_backoffice_checkpoint_show', {'id': enigma.checkpoint.id }) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+        <a href="{{ path('app_backoffice_checkpoint_show', {'id': enigma.checkpoint.id }) }}" class="btn btn-outline-secondary btn-sm">Retourner au checkpoint</a>
         {{ include('backoffice/enigma/_delete_form.html.twig') }}
         <a href="{{ path('app_backoffice_enigma_edit', {'id': enigma.id}) }}" class="btn btn-primary btn-sm me-3">Modifier</a>
     </div>

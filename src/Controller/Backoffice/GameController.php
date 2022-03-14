@@ -87,7 +87,7 @@ class GameController extends AbstractController
                 'Le jeu '.$game->getTitle().' a été créé !'
             );
 
-            return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => 'Nouveau jeu', 'libelle_url' => 'app_backoffice_game_new', 'url' => $this->urlGenerator->generate('app_backoffice_game_new')));
@@ -156,7 +156,7 @@ class GameController extends AbstractController
                 'Le jeu '.$game->getTitle().' a été modifié !'
             );
 
-            return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_edit', 'url' => $this->urlGenerator->generate('app_backoffice_game_edit', ['slug' => $game->getSlug()])));
