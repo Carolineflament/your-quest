@@ -591,7 +591,7 @@
 
 /*** Footer ***/
 .footer {
-    background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url(../img/footer.jpg) center center no-repeat;
+    background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url(../images/footer.jpg) center center no-repeat;
     background-size: cover;
 }
 
@@ -852,12 +852,6 @@ label.required:after {
 {
 	display:none;
 }
-
-/*.form-control
-{
-	background-color: #e8d0b359;
-  	border: none;
-}*/
 
 .score
 {
