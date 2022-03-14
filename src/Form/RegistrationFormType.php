@@ -97,14 +97,14 @@ class RegistrationFormType extends AbstractType
             $builder->add('beOrganisateur', CheckboxType::class, [
                 'required' => false,
                 'mapped' => false,
-                'label' => 'Vous êtes organisateur.',
+                'label' => 'Vous souhaitez avoir le statut d\'Organisateur pour créer vos propres jeux.',
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'Vous devez accepter les conditions d\'utilisation.',
+                'label' => 'Vous devez accepter les ',
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'Vous devez accepter les conditions d\'utilisation.',
+                        'message' => 'Vous devez accepter les conditions générales d\'utilisation.',
                     ]),
                 ],
             ]);
