@@ -77,7 +77,7 @@ class EnigmaController extends AbstractController
                 'notice-success',
                 'L\'énigme a été ajoutée !');
 
-            return $this->redirectToRoute('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_enigma_show', ['id' => $enigma->getId()], Response::HTTP_SEE_OTHER);
         }
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
@@ -138,8 +138,8 @@ class EnigmaController extends AbstractController
                 'notice-success',
                 'L\'énigme a été modifiée !');
             
-            return $this->redirectToRoute('app_backoffice_checkpoint_show', [
-                'id' => $checkpoint->getId()
+            return $this->redirectToRoute('app_backoffice_enigma_show', [
+                'id' => $enigma->getId()
             ], Response::HTTP_SEE_OTHER);
         }
 
