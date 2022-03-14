@@ -5,11 +5,11 @@
 {% block body %}
 {# Carousel #}
 
-{{ include('_homeCarousel.html.twig') }}
+{{ include('_header_start.html.twig', {'title': 'Connexion'}) }}
 
 {# End Carousel #}
-<div class="d-flex justify-content-center align-items-center h-100 mt-3">
-    <div class="col-xl-6  text-center">
+<div class="container-xxl pb-5">
+    <div class="container">
         <form method="post"  class="form-inline">
             
             {% if app.user %}
@@ -18,7 +18,6 @@
                 </div>
             {% endif %}
 
-            <h2 class="h3 mb-3 font-weight-normal">Connexion</h2>
             <p class="mb-3">Merci d'entrer votre e-mail et votre mot de passe</p>
 
             {% if error %}

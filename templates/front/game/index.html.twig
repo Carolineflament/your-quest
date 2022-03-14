@@ -2,18 +2,11 @@
 
 {% block body %}
 
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Les jeux</h1>
-            {{ include('_breadcrumb.html.twig') }}
-        </div>
-    </div>
-    <!-- Page Header End -->
+    {{ include('_header_start.html.twig', {'title': 'Les jeux'}) }}
 
     <!-- Service Start -->
     {% set delay = [0.1, 0.3, 0.5] %}
-    <div class="container-xxl py-5">
+    <div class="container-xxl pb-5">
         <div class="container">
             <div class="row g-4">
                 {% for game in games %}

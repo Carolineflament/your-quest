@@ -3,43 +3,44 @@
 {% block title %}{{ instance.title }}{% endblock %}
 
 {% block body %}
-<div class="container-xl p-5">
-    <div class="row">
-        <h1 class="text-muted fw-bold mb-4 text-center h1">{{game.title}}</h1>
-        {{ include('front/_notice_message.html.twig') }}
-    </div>
+    {{ include('_header_start.html.twig', {'title': instance.title}) }}
+    <div class="container-xxl pb-5">
+        <div class="container">
+            <div class="row g-4">
 
-    <div class="row">
-        <img src="{{ asset(app_games_images_directory~game.image) }}" alt="{{instance.title}}" />
-    </div>
+                <div class="row">
+                    <img src="{{ asset(app_games_images_directory~game.image) }}" alt="{{instance.title}}" />
+                </div>
 
-    <div class="card-list mt-4">
+                <div class="card-list mt-4">
 
-    <h3 class="text-muted fw-bold mb-4 text-center h3">{{instance.title}}</h3>
-        <div class="card card-task text-center">
-            <p class="mt-4 mb-4">
-                {{ instance.message }}
-            </p><br>
-            {% if  "now"|date('c') > instance.startAt|date('c') and "now"|date('c') > instance.endAt|date('c') %}
-            <p>Cette instance a débutée le {{ instance.startAt|date('d-m-Y à H:i:s')}} et s'est terminée le {{ instance.endAt|date('d-m-Y à H:i:s')}}
-            </p>
+                    <h3 class="text-muted fw-bold mb-4 text-center h3">{{instance.title}}</h3>
+                    <div class="card card-task text-center">
+                        <p class="mt-4 mb-4">
+                            {{ instance.message }}
+                        </p><br>
+                        {% if  "now"|date('c') > instance.startAt|date('c') and "now"|date('c') > instance.endAt|date('c') %}
+                        <p>Cette instance a débutée le {{ instance.startAt|date('d-m-Y à H:i:s')}} et s'est terminée le {{ instance.endAt|date('d-m-Y à H:i:s')}}
+                        </p>
 
-            {% else %}
-            <p>Cette instance débute le {{ instance.startAt|date('d-m-Y à H:i:s')}} et se termine le {{ instance.endAt|date('d-m-Y à H:i:s')}}
+                        {% else %}
+                        <p>Cette instance débute le {{ instance.startAt|date('d-m-Y à H:i:s')}} et se termine le {{ instance.endAt|date('d-m-Y à H:i:s')}}
 
-            {% endif %}
+                        {% endif %}
 
-            <div class="d-grid gap-2 justify-content-md-center">
-            {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
-            <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
-            
-            {% else %}
-            <a href="{{ path('app_front_instance_score', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les scores</a>
+                        <div class="d-grid gap-2 justify-content-md-center">
+                        {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
+                        <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
+                        
+                        {% else %}
+                        <a href="{{ path('app_front_instance_score', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les scores</a>
 
-            {% endif %}
-            
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>        
 {% endblock %}
