@@ -77,20 +77,8 @@
             {{ form_end(form) }}
         </div>
     </div>
-    <div id="game-play" class="d-flex justify-content-evenly align-items-center mt-3 mb-3">
-        <div class="col-xl-6  text-center" id="game-play">
-            <h2>Mes jeux</h2>            
-            {% for round in rounds %}
-                {{ include('front/user/_game_card.html.twig') }}
-            {% endfor %} 
-            {% if rounds == null %}
-                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas encore joué pour le moment !</div>
-            {% endif %} 
-        </div>
-        <div id="img-game">
-            <img src="{{ asset('assets/images/profilePicture/cell-phone.png') }}" class="img-profile" alt="YourQuestGame" >
-        </div>
-    </div>
+
+    {{ include('front/user/_game_card.html.twig') }}
 </div>
 
 {% endblock %}
