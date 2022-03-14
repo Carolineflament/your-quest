@@ -50,7 +50,7 @@ class ApiController extends AbstractController
                 <form method="post" action="'.$deleteUrl.'" ';
             if($user['status'])
             {
-                $users[$key]['actions'] .= 'onsubmit="return confirm(\'Êtes-vous sûr de vouloir désactiver l\\\'utilisateur '.$user['email'].' ?\nSes jeux / checkpoints / questions seront mis à la poubelle !\');"';
+                $users[$key]['actions'] .= 'onsubmit="return confirm(\'Êtes-vous sûr de vouloir désactiver l\\\'utilisateur '.$user['email'].' ?\nSes jeux, checkpoints et énigmes seront mis à la poubelle !\');"';
             }
             $users[$key]['actions'] .= '>
                 <input type="hidden" name="_token" value="'.$token.'">
