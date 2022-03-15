@@ -9,7 +9,6 @@ parameters:
     app.game_images_directory: '%env(GAME_IMAGES_DIRECTORY)%'
     app.game_qrcode_directory: '%env(GAME_QRCODE_DIRECTORY)%'
     app.game_pdf_directory: '%env(GAME_PDF_DIRECTORY)%'
-    app.default_local: 'fr'
 
 services:
     # default configuration for services in *this* file

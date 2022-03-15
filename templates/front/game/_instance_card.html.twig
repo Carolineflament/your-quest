@@ -14,7 +14,7 @@
                                 <span class="badge bg-danger ms-2">En cours</span>
                             {% endif %}
                         </h6>
-                        <span class="small">De {{instance.startAt|format_datetime(pattern="EEEE dd LLLL yyyy", locale='{{app.default_local}}')}} à {{instance.endAt|format_datetime(pattern="EEEE dd LLLL yyyy", locale='{{app.default_local}}')}} : {{ game.postalCode~' '~game.city }}</span>
+                        <span class="small">De {{instance.startAt|format_datetime(pattern="EEEE dd LLLL yyyy", locale='{{app_default_local}}')}} à {{instance.endAt|format_datetime(pattern="EEEE dd LLLL yyyy", locale='{{app_default_local}}')}} : {{ game.postalCode~' '~game.city }}</span>
                     </div>
                 </div>
             {% endfor %}
