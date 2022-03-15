@@ -10,7 +10,7 @@
                     <div class="instances-{{label}}-text text-center p-4">
                         <h6>
                             <a href="{{ path('app_front_instance_show', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}">{{instance.title}}</a>
-                            {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %}
+                            {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
                                 <span class="badge bg-danger ms-2">En cours</span>
                             {% endif %}
                         </h6>

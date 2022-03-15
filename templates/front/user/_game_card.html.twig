@@ -23,7 +23,7 @@
                                         </address>
                                     </div>
                                     <a class="fw-medium" href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
-                                {% elseif "now"|date('c') > round.instance.startAt|date('c') and "now"|date('Y-m-d') < round.instance.endAt|date('c') %}
+                                {% elseif "now"|date('c') > round.instance.startAt|date('c') and "now"|date('c') < round.instance.endAt|date('c') %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
                                             <p class="card-text">La partie est en cours, tu n'as pas encore terminé</p>
