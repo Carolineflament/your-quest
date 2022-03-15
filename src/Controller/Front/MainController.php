@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -84,7 +85,7 @@ class MainController extends AbstractController
     /**
      * @Route("/contact-send", name="contact_send", methods={"POST"})
      */
-    public function contact_send(MailerInterface $mailer, TranslatorInterface $translator): Response
+    public function contact_send(MailerInterface $mailer, TranslatorInterface $translator)
     {
         $emailll = (new TemplatedEmail())
             ->from(new Address('sgeraudie@gmail.com', 'Your Quest'))
@@ -104,6 +105,6 @@ class MainController extends AbstractController
         $this->addFlash('notice-success', sprintf(
             'L\'email a été envoyé'
         ));
-        return $this->render('front/main/contact.html.twig', []);
+        return $this->redirectToRoute('front_contact');
     }
 }
