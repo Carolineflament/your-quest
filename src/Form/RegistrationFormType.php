@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -24,15 +25,18 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
-    private $security;
+    private Security $security;
+    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(Security $security)
+    public function __construct(UrlGeneratorInterface $urlGenerator, Security $security)
     {
+        $this->urlGenerator = $urlGenerator;
         $this->security = $security;
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $current_user = $this->security->getUser();
+        $cgu_url = $this->urlGenerator->generate('front_cgu');
         
         if ($current_user === null) {
             $builder
@@ -101,7 +105,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'Vous devez accepter les <a href="#">conditions générales d\'utilisation.</a>',
+                'label' => 'Vous devez accepter les <a href="'.$cgu_url.'">conditions générales d\'utilisation.</a>',
                 'label_html' => true,
                 'constraints' => [
                     new IsTrue([
