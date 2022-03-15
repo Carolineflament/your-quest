@@ -52,7 +52,7 @@
                             </div>
                             <div class="p-4 text-center border border-5 border-light border-top-0">
 
-                                <h4>{{ round.instance.title }}</h4>
+                                <h4><a class="fw-medium" href="{{ path('app_front_instance_show', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">{{ round.instance.title }}</a></h4>
                         
                                     <span class="badge bg-primary ms-2">Session en cours</span>
 
@@ -76,7 +76,7 @@
                             </div>
                             <div class="p-4 text-center border border-5 border-light border-top-0">
 
-                                <h4>{{ round.instance.title }}</h4>
+                                <h4><a class="fw-medium" href="{{ path('app_front_instance_show', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">{{ round.instance.title }}</a></h4>
 
                                 {% if round.endAt is not same as null %}
                                     <div class="small mb-3">
@@ -97,7 +97,7 @@
                                 {% else %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
-                                            <p class="card-text">La partie est terminée, malheuresement tu n'es pas allé jusqu'au bout</p>
+                                            <p class="card-text">La partie est terminée, malheureusement tu n'es pas allé jusqu'au bout</p>
                                         </address>
                                     </div>
                                     <p>{{ round.instance.game.summary}}</p>
