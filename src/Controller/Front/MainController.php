@@ -11,10 +11,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
+/**
+ * @Route("/",name="front_")
+ */
 class MainController extends AbstractController
 {    
     /**
-     * @Route("/", name="front_main", methods={"GET"})
+     * @Route("/", name="main", methods={"GET"})
      */
     public function index(GameRepository $gameRepository, Request $request): Response
     {    
@@ -26,7 +29,7 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/message", name="front_message", methods={"GET"})
+     * @Route("/message", name="message", methods={"GET"})
      */
     public function message(GameRepository $gameRepository, Request $request): Response
     {    
@@ -54,5 +57,13 @@ class MainController extends AbstractController
         } else if ($this->getUser() !== null && in_array("ROLE_ORGANISATEUR", $this->getUser()->getRoles()) || in_array("ROLE_ADMIN", $this->getUser()->getRoles()) ) {
             return $this->redirectToRoute('app_backoffice_game_new');
         }        
+    }
+
+    /**
+     * @Route("/cgu", name="cgu", methods={"GET"})
+     */
+    public function cgu(): Response
+    {
+        return $this->render('front/main/cgu.html.twig', []);
     }
 }

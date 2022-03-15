@@ -43,8 +43,8 @@ class ApiController extends AbstractController
 
             $users[$key]['email'] = '<a href="'.$showUrl.'">'.$user['email'].'</a>';
             $users[$key]['status'] = $user['status'] ? 'Actif' : 'Inactif';
-            $users[$key]['createdAt'] = $user['createdAt'] ? date('d-m-Y à H:i:s', date_timestamp_get($user['createdAt'])) : '';
-            $users[$key]['updatedAt'] = $user['updatedAt'] ? date('d-m-Y à H:i:s', date_timestamp_get($user['updatedAt'])) : '';
+            $users[$key]['createdAt'] = $user['createdAt'] ? date('d/m/Y à H:i:s', date_timestamp_get($user['createdAt'])) : '';
+            $users[$key]['updatedAt'] = $user['updatedAt'] ? date('d/m/Y à H:i:s', date_timestamp_get($user['updatedAt'])) : '';
             $users[$key]['actions'] = '<div class="d-grid gap-2 justify-content-md-center">
                 <a href="'.$updateUrl.'" class="btn btn-primary">Modifier</a>
                 <form method="post" action="'.$deleteUrl.'" ';

@@ -34,6 +34,7 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
     <link href="{{ asset('assets/css/table-sortable.css') }}" rel="stylesheet"/>
     <link href="{{ asset('assets/css/postcard.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -44,7 +45,6 @@
         </div>
     </div>
     <!-- Spinner End -->
-
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
@@ -96,7 +96,7 @@
                 <div class="col">
                     <ul class="nav justify-content-center">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">CGU</a>
+                            <a class="nav-link" href="{{ path('front_cgu') }}">CGU</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contact</a>
@@ -141,6 +141,31 @@
     <script src={{ asset('assets/js/main.js') }}></script>
     <script src="{{ asset('assets/js/script.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/table-sortable.js') }}" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+    <script>
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": {
+                "background": "#efefef",
+                "text": "#404040"
+                },
+                "button": {
+                "background": "#ab7442"
+                }
+            },
+            "theme": "classic",
+            "position": "bottom-left",
+            "type": "opt-out",
+            "content": {
+                "message": "Le site utilise des Cookies pour vous assurer de la meilleure expérience utilisateur sur notre site.",
+                "allow": "Accepter",
+                "deny": "Refuser",
+                "link": "Condition générales d'utilisation",
+                "href": window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/cgu"
+            }
+        });
+    </script>
 </body>
 
 </html>
