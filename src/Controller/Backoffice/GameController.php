@@ -250,13 +250,6 @@ class GameController extends AbstractController
         // Organizer or Admin can modify this game
         $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
         
-        /***** On prépare les données à insérer dans le PDF *****/
-
-        // Titre des pages
-        $title = $game->getTitle();
-        // On converti de utf-8 vers ISO-8859-1 pour gérer les accents
-        $title = utf8_decode($title);
-
         /***** On génére le document PDF *****/
 
         // On récupère la liste des checkpoints non mis à la poubelle
@@ -276,7 +269,8 @@ class GameController extends AbstractController
             // Réglage de la police du titre
             $pdf->SetFont('Arial', 'B', 30);
             // Titre en haut de page, dans une cellule avec passage à la ligne et création d'une nouvelle cellule si trop long (MultiCell)
-            $pdf->MultiCell(0, 10, $title, 0, 'C');
+            // On converti les strings utilisés de utf-8 vers ISO-8859-1 pour gérer les accents
+            $pdf->MultiCell(0, 10, utf8_decode($game->getTitle()), 0, 'C');
             // Saut de ligne
             $pdf->Ln(10);
 
@@ -299,7 +293,7 @@ class GameController extends AbstractController
             // Réglage de la police du nom du checkpoint
             $pdf->SetFont('Arial', 'B', 30);
             // Nom du checkpoint
-            $pdf->MultiCell(0, 10, $checkpoint->getTitle(), 0, 'C');
+            $pdf->MultiCell(0, 10, utf8_decode($checkpoint->getTitle()), 0, 'C');
             
         }
 
