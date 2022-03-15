@@ -14,37 +14,48 @@
                         <div class="section-title text-start">
                             <h1 class="display-5 mb-4">Nous contacter</h1>
                         </div>
-                        <form method="post" action="{{ path('front_contact_send') }}">
+                        {{ form_start(form) }}
                             <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Votre nom">
-                                        <label for="name">Votre nom</label>
-                                    </div>
+                                <div class="form-error mb-3">
+                                    {{ form_errors(form.name) }}
+                                    {{ form_errors(form.email) }}
+                                    {{ form_errors(form.subject) }}
+                                    {{ form_errors(form.message) }}
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Votre Email">
-                                        <label for="email">Votre Email</label>
+                                        {{ form_widget(form.name) }}
+                                        {{ form_label(form.name) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {{ form_widget(form.email) }}
+                                        {{ form_label(form.email) }}
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Sujet">
-                                        <label for="subject">Sujet</label>
+                                        {{ form_widget(form.subject) }}
+                                        {{ form_label(form.subject) }}
                                     </div>
                                 </div>
+                                    
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Laissez un message ici" id="message" name="message" style="height: 100px"></textarea>
-                                        <label for="message">Laissez un message ici</label>
+                                        {{ form_widget(form.message) }}
+                                        {{ form_label(form.message) }}
                                     </div>
                                 </div>
+                                    
                                 <div class="col-12">
                                     <button class="btn btn-primary w-100 py-3">Envoyer</button>
                                 </div>
                             </div>
-                        </form>
+                        {{ form_end(form) }}
+
+                        
                     </div>
                 </div>
                 <div class="col-lg-6 pe-lg-0" style="min-height: 400px;">

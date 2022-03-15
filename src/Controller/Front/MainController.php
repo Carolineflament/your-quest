@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -73,38 +77,61 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/contact", name="contact", methods={"GET"})
+     * @Route("/contact", name="contact", methods={"GET", "POST"})
      *
      * @return Response
      */
-    public function contact(): Response
+    public function contact(Request $request, MailerInterface $mailer): Response
     {
-        return $this->render('front/main/contact.html.twig', []);
-    }
-
-    /**
-     * @Route("/contact-send", name="contact_send", methods={"POST"})
-     */
-    public function contact_send(MailerInterface $mailer, TranslatorInterface $translator)
-    {
-        $emailll = (new TemplatedEmail())
-            ->from(new Address('sgeraudie@gmail.com', 'Your Quest'))
-            ->to($_POST['email'])
-            ->subject('Demande de contact YourQuest')
-            ->htmlTemplate('front/main/_contact_email.html.twig')
-            ->context([
-                'name' => $_POST['name'],
-                'subject' => $_POST['subject'],
-                'message' => $_POST['message'],
-                'contact_email' => $_POST['email']
+        $form = $this->createFormBuilder()
+            ->add('name', TextType::class, [
+                'required' => true,
+                'label' => 'Votre nom : ',
+                'attr' => ['placeholder' => 'Votre nom']
             ])
-        ;
-        
-        $mailer->send($emailll);
+            ->add('email', EmailType::class, [
+                'required' => true,
+                'label' => 'Votre E-mail : ',
+                'attr' => ['placeholder' => 'Votre E-mail']
+            ])
+            ->add('subject', TextType::class, [
+                'required' => true,
+                'label' => 'Sujet : ',
+                'attr' => ['placeholder' => 'Sujet']
+            ])
+            ->add('message', TextareaType::class, [
+                'required' => true,
+                'label' => 'Laissez votre message : ',
+                'attr' => ['placeholder' => 'Message', 'style' => 'height:100px']
+            ])
+            ->getForm();
 
-        $this->addFlash('notice-success', sprintf(
-            'L\'email a été envoyé'
-        ));
-        return $this->redirectToRoute('front_contact');
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
+                $data = $form->getData();
+                $email = (new TemplatedEmail())
+                ->from(new Address('sgeraudie@gmail.com', 'Your Quest'))
+                ->to($data['email'])
+                ->subject('Demande de contact YourQuest')
+                ->htmlTemplate('front/main/_contact_email.html.twig')
+                ->context([
+                    'name' => $data['name'],
+                    'subject' => $data['subject'],
+                    'message' => $data['message'],
+                    'contact_email' => $data['email']
+                ])
+            ;
+            
+            $mailer->send($email);
+
+            $this->addFlash('notice-success', sprintf(
+                'L\'email a été envoyé'
+            ));
+        }
+
+        return $this->render('front/main/contact.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
