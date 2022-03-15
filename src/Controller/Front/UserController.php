@@ -50,21 +50,11 @@ class UserController extends AbstractController
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
         $rounds = $roundRepository->findBy(['user' => $userConnected]);
-        $roundInProgress = $roundRepository->findByRoundInProgress();
-        dump($roundInProgress);
-        
-        $roundId = $roundInProgress[0]['id'];
-        dump($roundId);
-        $roundInProgressForThisPlayer = $roundRepository->findBy(['id'=> $roundId]);
-        dump($roundInProgressForThisPlayer);
-        $thisRoundInProgressForThisPlayer = $roundInProgressForThisPlayer[0];
 
         return $this->renderForm('front/user/profile.html.twig', [
             'user' => $user,
             'form' => $form,
             'rounds' => $rounds,
-            'roundInProgress' => $roundInProgress,
-            'thisRoundInProgressForThisPlayer' => $thisRoundInProgressForThisPlayer,
         ]);
     }
 
