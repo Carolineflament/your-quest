@@ -10,6 +10,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/",name="front_")
@@ -65,5 +69,40 @@ class MainController extends AbstractController
     public function cgu(): Response
     {
         return $this->render('front/main/cgu.html.twig', []);
+    }
+
+    /**
+     * @Route("/contact", name="contact", methods={"GET"})
+     *
+     * @return Response
+     */
+    public function contact(): Response
+    {
+        return $this->render('front/main/contact.html.twig', []);
+    }
+
+    /**
+     * @Route("/contact-send", name="contact_send", methods={"POST"})
+     */
+    public function contact_send(MailerInterface $mailer, TranslatorInterface $translator): Response
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address('sgeraudie@gmail.com', 'Your Quest'))
+            ->to($_POST['email'])
+            ->subject($_POST['subject'])
+            ->htmlTemplate('front/main/_contact_email.html.twig')
+            ->context([
+                'name' => $_POST['name'],
+                'subject' => $_POST['subject'],
+                'message' => $_POST['message']
+            ])
+        ;
+
+        $mailer->send($email);
+
+        $this->addFlash('notice-success', sprintf(
+            'L\'email a été envoyé'
+        ));
+        return $this->render('front/main/contact.html.twig', []);
     }
 }
