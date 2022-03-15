@@ -3,7 +3,7 @@
 
 <form method="post" action="{{ path('app_backoffice_game_delete', {'id': game.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le jeu {{game.title}} ?\nSes checkpoints / questions seront mis à la poubelle !');" class="mb-2">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ game.id) }}">
-    <button title="Supprimer" class="btn btn-outline-dark btn-sm mp-3 mb-2 {% if method is same as 'show' %}w-100{% endif %}"><i class="display-6 bi bi-trash"></i></button>
+    <button title="Supprimer" class="btn btn-outline-dark btn-sm me-2 mb-3"><i class="display-6 bi bi-trash"></i></button>
 </form>
 
 {% endif %}
