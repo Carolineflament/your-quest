@@ -35,11 +35,11 @@
                         </tbody> 
                     </table>          
                 </div>
-        </div>    
-                                  
+        </div>  
+          
         <div class="container m-auto">
             <div class="table-responsive">
-                <table class="table mb-5">
+                <table class="table text-nowrap mb-5">
                     <thead>
                         <tr>
                             <th scope="col">Liste des joueurs ayant participé, mais sans terminer le parcours</th>
@@ -51,12 +51,12 @@
                         <tr scope="row">
                         {% if round.endAt is same as(null) %}
                             <td>{{ round.user.pseudo }}</td>                   
-                        {% endif %}
-                        {% endfor %} 
-                        </tr>  
+                        {% endif %} 
+                        </tr>
+                        {% endfor %}   
                     </tbody> 
                 </table>
             </div>             
-        </div>  
+        </div> 
   </div>                
 {% endblock %}
