@@ -4,12 +4,12 @@
 
 {% block body %}
 
+{{ include('_header_start.html.twig', {'title': 'Scanner un QR Code'}) }}
+
 <script src="{{ asset('assets/js/html5-qrcode.min.js') }}"></script>
 
-<div class="row mt-5">
-    <div class="col text-center">
-        <h1>Veuillez scanner le QR code du checkpoint</h1>
-        {{ include('front/_notice_message.html.twig') }}
+<div class="container-xxl pb-5">
+    <div class="container">
 
         {# Scanner #}        
         <div style="width: 300px; margin: 50px auto;" id="reader"></div>     
