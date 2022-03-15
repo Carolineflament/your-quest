@@ -24,8 +24,17 @@ class RoundRepository extends ServiceEntityRepository
     public function findByRoundInProgress()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql =  'SELECT * FROM `round` r
-                INNER JOIN instance i ON r.instance_id=i.id
+        $sql =  'SELECT r.id  AS round_id,
+                r.start_at AS round_start,
+                r.end_at AS round_end,
+                r.user_id AS round_user_id,
+                r.instance_id AS round_instance_id,
+                i.id AS id_instance,
+                i.start_at AS instance_start,
+                i.end_at AS instance_end,
+                i.title, i.slug, i.message, i.game_id, is_trashed 
+                FROM `round` AS r
+                INNER JOIN instance AS i ON i.id=r.instance_id 
                 WHERE i.end_at > NOW()
                 AND r.end_at IS NULL';
 
