@@ -19,6 +19,20 @@ class RoundRepository extends ServiceEntityRepository
         parent::__construct($registry, Round::class);
     }
 
+
+    // Trouver les rounds qui n'ont pas de endAT et qui ont une instance en cours
+    public function findByRoundInProgress()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql =  'SELECT * FROM `round` r
+                INNER JOIN instance i ON r.instance_id=i.id
+                WHERE i.end_at > NOW()
+                AND r.end_at IS NULL';
+
+        $results = $conn->executeQuery($sql);
+        return $results->fetchAllAssociative();
+    }
+
     // /**
     //  * @return Round[] Returns an array of Round objects
     //  */

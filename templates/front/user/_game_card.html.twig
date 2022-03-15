@@ -1,9 +1,8 @@
 {% set delay = [0.1, 0.3, 0.5] %}
-    <div class="container-xxl py-5">
+    {# <div class="container-xxl py-5">
         <div class="container">
-        <h2>Mes sessions de jeu</h2> 
+        <h2>Mes sessions en cours</h2> 
             <div class="row g-4">
-                {% for round in rounds %}
                     {% set counter = ( counter | default(-1) ) + 1 %}
                     {% if counter == 3 %}
                         {% set counter = 0 %}
@@ -11,14 +10,78 @@
                     <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
                         <div class="service-item">
                             <div class="overflow-hidden">
+                                <img class="img-fluid" src="{{ asset(app_games_images_directory~thisRoundInProgressForThisPlayer.instance.game.image) }}" alt="{{thisRoundInProgressForThisPlayer.instance.game.slug}}">
+                            </div>
+                            <div class="p-4 text-center border border-5 border-light border-top-0">
+
+                                <h4>{{ thisRoundInProgressForThisPlayer.instance.title }}</h4>
+                        
+                                    <span class="badge bg-primary ms-2">Session en cours</span>
+
+                                    <div class="small mb-3">
+                                        <address class="mb-0">
+                                            <p class="card-text">La partie est en cours, tu n'as pas encore terminé</p>
+                                        </address>
+                                    </div>
+                                    <p>{{ thisRoundInProgressForThisPlayer.instance.game.summary}}</p>
+                                    <a class="fw-medium" href="{{ path('app_front_instance_realtime', {'gameSlug': thisRoundInProgressForThisPlayer.instance.game.slug , 'instanceSlug': thisRoundInProgressForThisPlayer.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            {{ include('_paginate.html.twig') }}
+        </div>
+    </div> #}
+
+     <div class="container-xxl py-5">
+        <div class="container">
+        <h2>Mes sessions de jeu</h2> 
+            <div class="row g-4">
+                {% for round in rounds %}
+                {% if thisRoundInProgressForThisPlayer.id is same as (round.id) %}
+                    {% set counter = ( counter | default(-1) ) + 1 %}
+                    {% if counter == 3 %}
+                        {% set counter = 0 %}
+                    {% endif %}
+
+                    {# JEU EN COURS #}
+                    <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
+                        <div class="service-item">
+                            <div class="overflow-hidden">
                                 <img class="img-fluid" src="{{ asset(app_games_images_directory~round.instance.game.image) }}" alt="{{round.instance.game.slug}}">
                             </div>
                             <div class="p-4 text-center border border-5 border-light border-top-0">
+
                                 <h4>{{ round.instance.title }}</h4>
+                        
+                                    <span class="badge bg-primary ms-2">Session en cours</span>
+
+                                    <div class="small mb-3">
+                                        <address class="mb-0">
+                                            <p class="card-text">La partie est en cours, tu n'as pas encore terminé</p>
+                                        </address>
+                                    </div>
+                                    <p>{{ round.instance.game.summary}}</p>
+                                    <a class="fw-medium" href="{{ path('app_front_instance_realtime', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    {# END JEU EN COURS #}
+                
+                {% else %}
+                    <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
+                        <div class="service-item">
+                            <div class="overflow-hidden">
+                                <img class="img-fluid" src="{{ asset(app_games_images_directory~round.instance.game.image) }}" alt="{{round.instance.game.slug}}">
+                            </div>
+                            <div class="p-4 text-center border border-5 border-light border-top-0">
+
+                                <h4>{{ round.instance.title }}</h4>
+
                                 {% if round.endAt is not same as null %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
-                                            <p class="card-text">La session a eu lieu le {{ round.instance.startAt|format_datetime(pattern="dd LLLL Y", locale='fr')}}, à {{ round.instance.game.city }} ({{ round.instance.game.postalCode }}).</p>
+                                            <p class="card-text">La session s'est finie le {{ round.instance.endAt|format_datetime(pattern="dd LLLL Y", locale='fr')}}, à {{ round.instance.game.city }} ({{ round.instance.game.postalCode }}).</p>
                                             <p> <b>Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }} </b></p>
                                         </address>
                                     </div>
@@ -43,6 +106,7 @@
                             </div>
                         </div>
                     </div>
+                {% endif %}
                 {% endfor %}
             </div>
             {{ include('_paginate.html.twig') }}

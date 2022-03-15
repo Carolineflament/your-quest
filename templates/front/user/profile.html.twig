@@ -78,6 +78,13 @@
         </div>
     </div>
 
+{# {% if next_rounds is not empty %}
+    {{ include ('front/user/_instance_card.html.twig', {"roundss": next_rounds|reverse, "title": "Prochaines sessions de jeu", "label": "next"} ) }}
+{% endif %}
+
+{% if previous_rounds is not empty %}
+    {{ include ('front/user/_instance_card.html.twig', {"roundss": previous_rounds, "title": "Anciennes sessions de jeu", "label": "prev"} ) }}
+{% endif %} #}
     {{ include('front/user/_game_card.html.twig') }}
 </div>
 
