@@ -1,4 +1,4 @@
-{% if pages is defined %}
+{% if pages is defined and pages > 1 %}
     {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
     {% set currentPage = app.request.get('page') %}
     {% if currentPage == null %}
