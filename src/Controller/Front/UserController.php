@@ -3,19 +3,20 @@
 namespace App\Controller\Front;
 
 use App\Entity\Game;
+use App\Entity\Round;
+use App\Form\UserType;
 use App\Entity\Instance;
 use App\Form\RegistrationFormType;
-use App\Form\UserType;
 use App\Repository\GameRepository;
-use App\Repository\InstanceRepository;
-use App\Repository\RoundRepository;
 use App\Repository\UserRepository;
+use App\Repository\RoundRepository;
+use App\Repository\InstanceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("/user/",name="app_front_user_")
@@ -25,7 +26,7 @@ class UserController extends AbstractController
     /**
      * @Route("profil", name="profile", methods={"GET", "POST"})
      */
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, RoundRepository $roundRepository, GameRepository $gameRepository, InstanceRepository $instanceRepository)
+    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, RoundRepository $roundRepository)
     {
         $user = $this->getUser();
 
@@ -48,11 +49,22 @@ class UserController extends AbstractController
         
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
+        $rounds = $roundRepository->findBy(['user' => $userConnected]);
+        $roundInProgress = $roundRepository->findByRoundInProgress();
+        dump($roundInProgress);
+        
+        $roundId = $roundInProgress[0]['id'];
+        dump($roundId);
+        $roundInProgressForThisPlayer = $roundRepository->findBy(['id'=> $roundId]);
+        dump($roundInProgressForThisPlayer);
+        $thisRoundInProgressForThisPlayer = $roundInProgressForThisPlayer[0];
 
         return $this->renderForm('front/user/profile.html.twig', [
             'user' => $user,
             'form' => $form,
-            'rounds' => $roundRepository->findBy(['user' => $userConnected]),
+            'rounds' => $rounds,
+            'roundInProgress' => $roundInProgress,
+            'thisRoundInProgressForThisPlayer' => $thisRoundInProgressForThisPlayer,
         ]);
     }
 
