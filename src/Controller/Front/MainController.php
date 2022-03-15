@@ -86,19 +86,20 @@ class MainController extends AbstractController
      */
     public function contact_send(MailerInterface $mailer, TranslatorInterface $translator): Response
     {
-        $email = (new TemplatedEmail())
+        $emailll = (new TemplatedEmail())
             ->from(new Address('sgeraudie@gmail.com', 'Your Quest'))
             ->to($_POST['email'])
-            ->subject($_POST['subject'])
+            ->subject('Demande de contact YourQuest')
             ->htmlTemplate('front/main/_contact_email.html.twig')
             ->context([
                 'name' => $_POST['name'],
                 'subject' => $_POST['subject'],
-                'message' => $_POST['message']
+                'message' => $_POST['message'],
+                'contact_email' => $_POST['email']
             ])
         ;
-
-        $mailer->send($email);
+        
+        $mailer->send($emailll);
 
         $this->addFlash('notice-success', sprintf(
             'L\'email a été envoyé'
