@@ -23,7 +23,7 @@ class InstanceController extends AbstractController
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->breadcrumb = array(array('libelle' => 'Acceuil', 'libelle_url' => 'front_main', 'url' => $this->urlGenerator->generate('front_main')));
+        $this->breadcrumb = array(array('libelle' => 'Accueil', 'libelle_url' => 'front_main', 'url' => $this->urlGenerator->generate('front_main')));
     }
 
     /**

@@ -26,7 +26,7 @@ class GameController extends AbstractController
     {
         $this->paramBag = $paramBag;
         $this->urlGenerator = $urlGenerator;
-        $this->breadcrumb = array(array('libelle' => 'Acceuil', 'libelle_url' => 'front_main', 'url' => $this->urlGenerator->generate('front_main')));
+        $this->breadcrumb = array(array('libelle' => 'Accueil', 'libelle_url' => 'front_main', 'url' => $this->urlGenerator->generate('front_main')));
     }
     /**
      * @Route("/", name="games", methods={"GET"})
