@@ -49,7 +49,7 @@ class UserController extends AbstractController
         
         // It's getting the user id of the user connected.
         $userConnected = $this->getUser()->getId();
-        $rounds = $roundRepository->findBy(['user' => $userConnected]);
+        $rounds = $roundRepository->findBy(['user' => $userConnected], ['endAt' => 'ASC']);
 
         return $this->renderForm('front/user/profile.html.twig', [
             'user' => $user,

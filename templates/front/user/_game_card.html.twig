@@ -1,7 +1,7 @@
 {% set delay = [0.1, 0.3, 0.5] %}
     <div class="container-xxl py-5">
         <div class="container">
-        <h2>Mes sessions en cours</h2> 
+        <h2>Mes parties en cours</h2> 
             <div class="row g-4">
             {% for round in rounds %}                
                 {% set counter = ( counter | default(-1) ) + 1 %}
@@ -9,8 +9,6 @@
                     {% set counter = 0 %}
                 {% endif %}
 
-                {# GAMES IN PROGRESS #}
-                {% if round.endAt is same as null %}
                 <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
                     <div class="service-item">
                         <div class="overflow-hidden">
@@ -20,68 +18,27 @@
 
                             <h4><a class="fw-medium" href="{{ path('app_front_instance_show', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">{{ round.instance.title }}</a></h4>
                     
-                                {% if "now"|date('Y-m-d') > round.instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < round.instance.endAt|date('Y-m-d') and round.endAt is same as null %}
+                                {% if round.endAt is same as null and "now"|date('Y-m-d') > round.instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < round.instance.endAt|date('Y-m-d') and round.endAt is same as null %}
                                     <span class="badge bg-danger ms-2">Session cours</span>
                                 {% endif %}
-
-                                <div class="small mb-3">
-                                    <address class="mb-0">
-                                        <p class="card-text">La partie est en cours, tu n'as pas encore terminé</p>
-                                    </address>
-                                </div>
-                                <p>{{ round.instance.game.summary|u.truncate(80, '...', false)}}</p>
-                                <a class="fw-medium" href="{{ path('app_front_instance_realtime', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-                {# END GAMES IN PROGRESSS #}
-            {% else %}
-                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas de session en cours.</div>
-            {% endfor %}
-            </div>
-            {{ include('_paginate.html.twig') }}
-        </div>
-    </div>
-
-    <div class="container-xxl py-5">
-        <div class="container">
-        <h2>Mes sessions de jeu passées</h2> 
-            <div class="row g-4">
-            {% for round in rounds %}                
-                {% set counter = ( counter | default(-1) ) + 1 %}
-                {% if counter == 3 %}
-                    {% set counter = 0 %}
-                {% endif %}
-                
-                {# GAMES PAST #}
-                {% if round.endAt is not same as null %}
-                    <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
-                        <div class="service-item">
-                            <div class="overflow-hidden">
-                                <img class="img-fluid" src="{{ asset(app_games_images_directory~round.instance.game.image) }}" alt="{{round.instance.game.slug}}">
-                            </div>
-                            <div class="p-4 text-center border border-5 border-light border-top-0">
-
-                                <h4><a class="fw-medium" href="{{ path('app_front_instance_show', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">{{ round.instance.title }}</a></h4>
 
                                 {% if round.endAt is not same as null %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
-                                            <p class="card-text">La session s'est finie le {{ round.endAt|format_datetime(pattern="dd LLLL Y", locale='fr')}}, à {{ round.instance.game.city }} ({{ round.instance.game.postalCode }}).</p>
+                                            <p class="card-text">La partie s'est finie le {{ round.endAt|format_datetime(pattern="dd LLLL Y", locale='fr')}}, à {{ round.instance.game.city }} ({{ round.instance.game.postalCode }}).</p>
                                             <p> <b>Tu as fini le jeu en {{ round.endAt.diff(round.startAt)|date("%Hh%Imin%Ssec") }} </b></p>
                                         </address>
                                     </div>
                                     <a class="fw-medium" href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
-                                {% elseif "now"|date('c') > round.instance.startAt|date('c') and "now"|date('c') < round.instance.endAt|date('c') %}
+                                {% elseif "now"|date('c') > round.instance.startAt|date('c') and "now"|date('Y-m-d') < round.instance.endAt|date('c') and round.endAt is same as null %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
                                             <p class="card-text">La partie est en cours, tu n'as pas encore terminé</p>
                                         </address>
                                     </div>
-                                    <p>{{ round.instance.game.summary|u.truncate(80, '...', false)}}</p>
+                                    <p>{{ round.instance.game.summary}}</p>
                                     <a class="fw-medium" href="{{ path('app_front_instance_realtime', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
-                                {% else %}
+                                {% elseif "now"|date('Y-m-d') > round.instance.endAt|date('c') and round.endAt is same as null %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
                                             <p class="card-text">La partie est terminée, malheureusement tu n'es pas allé jusqu'au bout</p>
@@ -90,13 +47,11 @@
                                     <p>{{ round.instance.game.summary}}</p>
                                     <a class="fw-medium" href="{{ path('app_front_instance_score', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
                                 {% endif %}
-                            </div>
                         </div>
                     </div>
-                {% endif %}
-                {# END GAMES PAST #}
+                </div>
             {% else %}
-                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez joué à aucun jeu pour le moment !</div>
+                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas de partie en cours.</div>
             {% endfor %}
             </div>
             {{ include('_paginate.html.twig') }}
