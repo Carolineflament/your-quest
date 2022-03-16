@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Repository\ScanQRRepository;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,14 +28,16 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private UrlGeneratorInterface $urlGenerator;
     private UserRepository $userRepository;
     private SessionInterface $session;
-    private JWTTokenManagerInterface $JWTManager;    
+    private JWTTokenManagerInterface $JWTManager;  
+    private ScanQRRepository $scanQRRepository;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, SessionInterface $session, JWTTokenManagerInterface $JWTManager)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, SessionInterface $session, JWTTokenManagerInterface $JWTManager, ScanQRRepository $scanQRRepository)
     {
         $this->urlGenerator = $urlGenerator;
         $this->userRepository = $userRepository;
         $this->session = $session;
         $this->JWTManager = $JWTManager;
+        $this->scanQRRepository = $scanQRRepository;
     }
 
     public function authenticate(Request $request): Passport
@@ -67,6 +70,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
+        }
+
+        $lastScan = $this->scanQRRepository->findLastUserScan($token->getUser()->getId());
+        if($lastScan != null)
+        {
+            $this->session->set('last_scan_id', $lastScan['id']);
+            $this->session->set('last_scan_token', sha1($lastScan['title']));
         }
 
         $jwttoken = $this->JWTManager->create($token->getUser());

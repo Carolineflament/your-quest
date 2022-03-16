@@ -60,26 +60,29 @@
                 <a href="{{ path('front_main') }}" class="nav-item nav-link {% if route == 'front_main' %} active {% endif %}">Accueil</a>
                 <a href="{{ path('front_games') }}" class="nav-item nav-link {% if route == 'front_games' %} active {% endif %}">Liste des jeux</a>
                 <a href="{{ path('front_checkpoint') }}" class="nav-item nav-link {% if route == 'front_checkpoint' %} active {% endif %}">Scanner un QR code</a>
+                {% if app.session.get('last_scan_id') is not same as null and app.session.get('last_scan_token') %}
+                    <a href="{{ path('front_checkpoint_check', {'id': app.session.get('last_scan_id'), 'token': app.session.get('last_scan_token')}) }}" class="nav-item nav-link {% if route == 'front_checkpoint_check' %} active {% endif %}">Revoir mon indice</a>
+                {% endif %}
                 {# {% if app.user is not defined %}
                 <a href="{{ path('app_login') }}" class="nav-item nav-link">Se connecter</a>
                 {% endif %} #}
                 {% if app.user %}
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ app.user.pseudo }} ({{ app.user.role.name }})<i class="bi bi-person-square"></i></a>
-                    <div class="dropdown-menu fade-up m-0">
-                        <a href="{{ path('app_front_user_profile') }}" class="dropdown-item">Profil</a>
-                        {% if is_granted("ROLE_ORGANISATEUR") %}
-                        <a href="{{ path('app_backoffice_game_index') }}" class="dropdown-item">Backoffice</a>
-                        {% endif %}
-                        {% if is_granted("ROLE_ADMIN") %}
-                        <a href="{{ path('app_admin_user_index') }}" class="dropdown-item">Administration</a>
-                        {% endif %}
-                        <hr class="dropdown-divider">
-                        <a href="{{ path('app_logout') }}" class="dropdown-item">Déconnexion</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ app.user.pseudo }} ({{ app.user.role.name }})<i class="bi bi-person-square"></i></a>
+                        <div class="dropdown-menu fade-up m-0">
+                            <a href="{{ path('app_front_user_profile') }}" class="dropdown-item">Profil</a>
+                            {% if is_granted("ROLE_ORGANISATEUR") %}
+                            <a href="{{ path('app_backoffice_game_index') }}" class="dropdown-item">Backoffice</a>
+                            {% endif %}
+                            {% if is_granted("ROLE_ADMIN") %}
+                            <a href="{{ path('app_admin_user_index') }}" class="dropdown-item">Administration</a>
+                            {% endif %}
+                            <hr class="dropdown-divider">
+                            <a href="{{ path('app_logout') }}" class="dropdown-item">Déconnexion</a>
+                        </div>
                     </div>
-                </div>
                 {% else %}
-                <a href="{{ path('app_login') }}" class="nav-item nav-link">Se connecter</a>
+                    <a href="{{ path('app_login') }}" class="nav-item nav-link">Se connecter</a>
                 {% endif %}
             </div>
             {# <a href="{{ path('app_backoffice_game_new') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Créer un jeu<i class="fa fa-arrow-right ms-3"></i></a> #}

@@ -92,6 +92,11 @@ class Checkpoint
      */
     private $isTrashed;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $success_image;
+
     public function __construct()
     {
         $this->scanQRs = new ArrayCollection();
@@ -271,6 +276,18 @@ class Checkpoint
     public function setIsTrashed(bool $isTrashed): self
     {
         $this->isTrashed = $isTrashed;
+
+        return $this;
+    }
+
+    public function getSuccessImage(): ?string
+    {
+        return $this->success_image;
+    }
+
+    public function setSuccessImage(?string $success_image): self
+    {
+        $this->success_image = $success_image;
 
         return $this;
     }
