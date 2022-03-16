@@ -9,8 +9,6 @@
                     {% set counter = 0 %}
                 {% endif %}
 
-                {# GAMES IN PROGRESS #}
-                {# {% if round.endAt is same as null and "now"|date('Y-m-d') < round.instance.endAt|date('c') %} #}
                 <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
                     <div class="service-item">
                         <div class="overflow-hidden">
@@ -52,10 +50,8 @@
                         </div>
                     </div>
                 </div>
-                {# {% endif %} #}
-                {# END GAMES IN PROGRESSS #}
             {% else %}
-                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas de session en cours.</div>
+                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas de partie en cours.</div>
             {% endfor %}
             </div>
             {{ include('_paginate.html.twig') }}
