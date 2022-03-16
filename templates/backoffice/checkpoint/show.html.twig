@@ -26,6 +26,16 @@
                     <td>{{ checkpoint.successMessage }}</td>
                 </tr>
                 <tr>
+                    <th>Image de localisation du prochain checkpoint</th>
+                    <td>
+                        {% if checkpoint.successImage is not same as null %}
+                            <a href="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" data-lightbox="{{checkpoint.title}}"><img src="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" alt="{{checkpoint.title}}" style="max-width: 200px;max-height: 200px;"/></a>
+                        {% else %}
+                            <i>Aucune image</i>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
                     <th>Ordre du checkpoint</th>
                     <td>{{ checkpoint.orderCheckpoint }}</td>
                 </tr>

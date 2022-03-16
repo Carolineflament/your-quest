@@ -8,9 +8,11 @@ use App\Form\CheckpointType;
 use App\Repository\CheckpointRepository;
 use App\Repository\GameRepository;
 use App\Service\CascadeTrashed;
+use App\Service\MySlugger;
 use App\Service\QrcodeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,9 +25,11 @@ class CheckpointController extends AbstractController
 {
     private $breadcrumb;
     private $urlGenerator;
+    private $paramBag;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ParameterBagInterface $paramBag, UrlGeneratorInterface $urlGenerator)
     {
+        $this->paramBag = $paramBag;
         $this->urlGenerator = $urlGenerator;
         $this->breadcrumb = array(array('libelle' => 'Jeux', 'libelle_url' => 'app_backoffice_game_index', 'url' => $this->urlGenerator->generate('app_backoffice_game_index')));
     }
@@ -44,9 +48,19 @@ class CheckpointController extends AbstractController
         $checkpoint->setGame($game);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $entityManager->persist($checkpoint);
             $entityManager->flush();
+
+            $file = $form['successImage']->getData();
+            if($file !== null)
+            {
+                $filename = $game->getSlug().'-'.$checkpoint->getId().'.'.$file->guessExtension();
+                $file->move($this->paramBag->get('app.checkpoint_images_directory'), $filename);
+                $checkpoint->setSuccessImage($filename);
+                $entityManager->persist($checkpoint);
+                $entityManager->flush();
+            }
+            
 
             $qrcodeService->qrcode($checkpoint);
 
@@ -95,7 +109,7 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/{id}/modifier", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, QrcodeService $qrcodeService): Response
+    public function edit(Request $request, Checkpoint $checkpoint, EntityManagerInterface $entityManager, QrcodeService $qrcodeService, MySlugger $mySlugger): Response
     {
         // Organizer or Admin can modify this game
         $this->denyAccessUnlessGranted('IS_MY_GAME', $checkpoint);
@@ -104,6 +118,14 @@ class CheckpointController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form['successImage']->getData();
+            if($file !== null)
+            {
+                $filename = $game->getSlug().'-'.$checkpoint->getId().'.'.$file->guessExtension();
+                $file->move($this->paramBag->get('app.checkpoint_images_directory'), $filename);
+                $checkpoint->setSuccessImage($filename);
+            }
             
             $entityManager->flush();
 
@@ -158,7 +180,6 @@ class CheckpointController extends AbstractController
             
         $entityManager->flush();
         
-    
         return $this->redirectToRoute('app_backoffice_game_show', [
             'slug' => $game->getSlug()
         ], Response::HTTP_SEE_OTHER);

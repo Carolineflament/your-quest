@@ -10,7 +10,13 @@
 
         {% if enigma is same as null %}
             <section class="w-100 p-4 text-center pb-4">
-                <div class="pb-4">{{message}}</div>
+                <div class="pb-4">
+                    {{message}}
+                    <br />
+                    {% if checkpoint.successImage is not same as null %}
+                        <a href="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" data-lightbox="{{checkpoint.title}}"><img src="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" alt="{{checkpoint.title}}" style="max-width: 400px;max-height: 400px;"/></a>
+                    {% endif %}
+                </div>
                 <div>
                     <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary btn-sm me-3">Voir la dernière position des joueurs</a>
                     <a href="{{ path('front_checkpoint') }}" class="btn btn-primary btn-sm me-3">Retour au scanner de QR codes</a>

@@ -28,10 +28,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class CheckpointController extends AbstractController
 {
     private UrlGeneratorInterface $urlGenerator;
+    private $breadcrumb;
    
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->breadcrumb = array(array('libelle' => 'Accueil', 'libelle_url' => 'front_main', 'url' => $this->urlGenerator->generate('front_main')));
     }
     
     /**
@@ -39,8 +41,10 @@ class CheckpointController extends AbstractController
      */
     public function index(): Response
     {
+        array_push($this->breadcrumb, array('libelle' => 'Scanner', 'libelle_url' => 'front_checkpoint', 'url' => $this->urlGenerator->generate('front_checkpoint')));
+
         return $this->render('front/checkpoint/index.html.twig', [
-            'controller_name' => 'CheckpointController',
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
@@ -49,6 +53,7 @@ class CheckpointController extends AbstractController
      */
     public function check(Checkpoint $checkpointScan, string $token, SessionInterface $session, CheckpointRepository $checkpointRepos, RoundRepository $roundRepos, EntityManagerInterface $entityManager, ScanQRRepository $scanQRRepos, UserAnswerRepository $userAnswerRepository) : Response
     {
+        array_push($this->breadcrumb, array('libelle' => 'Checkpoint '.$checkpointScan->getTitle(), 'libelle_url' => 'front_checkpoint_check', 'url' => $this->urlGenerator->generate('front_checkpoint_check', ['id' => $checkpointScan->getId(), 'token' => $token])));
         /* This is a way to check if the user is trying to cheat. */
         if(sha1($checkpointScan->getTitle()) !== $token)
         {
@@ -209,7 +214,6 @@ class CheckpointController extends AbstractController
         }
         $entityManager->flush();
 
-        
         $enigmas = $checkpointScan->getUnTrashedEnigmas();
         $enigma_non_response = null;
         foreach($enigmas AS $enigma)
@@ -229,12 +233,12 @@ class CheckpointController extends AbstractController
             }
         }
 
-
         return $this->render('front/checkpoint/check.html.twig', [
             'enigma' => $enigma_non_response,
             'message' => $checkpointScan->getSuccessMessage(),
             'checkpoint' => $checkpointScan,
-            'instance' => $current_instance
+            'instance' => $current_instance,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
