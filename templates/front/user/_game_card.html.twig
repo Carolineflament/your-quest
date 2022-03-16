@@ -33,7 +33,7 @@
                                 {% elseif "now"|date('c') > round.instance.startAt|date('c') and "now"|date('Y-m-d') < round.instance.endAt|date('c') and round.endAt is same as null %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
-                                            <p class="card-text">La partie est en cours, tu n'as pas encore terminé, tu peux revoir ton dernier indicie <a href="{{ path('front_checkpoint_check', {'id': round.lastScanAt.checkpoint.id , 'token': round.lastScanAt.checkpoint.title  }) }}">ici</a></p>
+                                            <p class="card-text">La partie est en cours, tu n'as pas encore terminé, tu peux revoir ton dernier indicie <a href="{{ path('front_checkpoint_check', {'id': round.lastScanAt.checkpoint.id , 'token': round.lastScanAt.checkpoint.title | sha1 }) }}">ici</a></p>
                                         </address>
                                     </div>
                                     <p>{{ round.instance.game.summary|u.truncate(80, '...', false)}}</p>
