@@ -1,42 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ instance.title }}{% endblock %}
+{% block title %}Score - {{ instance.title }}{% endblock %}
 
 {% block body %}
 
     {{ include('_header_start.html.twig', {'title': instance.title}) }}
 
-    <!-- Feature Start -->
     <div class="container-fluid bg-light px-lg-0" style="margin: 3rem 0;">
         <div class="container-xl mb-5">
             <div class="section-title text-center mt-4">
-                <h1 class="display-5 mb-2">Classement pour la session {{instance.title}}<br>terminée le {{ instance.endAt|date('d-m-Y') }}</h1> 
+                <h1 class="display-5 mb-2">Classement</h1>
+                <h2>{{instance.title}}</h2>
+                <h6>Session terminée le {{ instance.endAt|date('d-m-Y') }}</h6>
             </div> 
-        </div>    
+        </div>
+        {# scores display #}
         <div class="container m-auto">
-                <div class="table-responsive">
-                    <table class="table text-nowrap mb-5">
-                        <thead>
-                            <tr>
-                                <th scope="col">Classement</th>
-                                <th scope="col">Pseudo du joueur</th>
-                                <th scope="col">Temps réalisé</th>
-                            </tr>
-                        </thead>
+            <div class="table-responsive">
+                <table class="table text-nowrap mb-5">
+                    <thead>
+                        <tr>
+                            <th scope="col">Classement</th>
+                            <th scope="col">Pseudo du joueur</th>
+                            <th scope="col">Temps réalisé</th>
+                        </tr>
+                    </thead>
 
-                        <tbody>
-                            {% for key, duration in orderedDurations %}
-                            <tr scope="row">
-                                <td>{{ loop.index }}</td>
-                                <td>{{ roundsList[key].user.pseudo }}</td>                   
-                                <td>{{ duration }}</td>
-                            {% endfor %} 
-                            </tr>  
-                        </tbody> 
-                    </table>          
-                </div>
+                    <tbody>
+                        {% for key, duration in orderedDurations %}
+                        <tr scope="row">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ roundsList[key].user.pseudo }}</td>                   
+                            <td>{{ duration }}</td>
+                        {% endfor %} 
+                        </tr>  
+                    </tbody> 
+                </table>          
+            </div>
         </div>  
-
+        {# players for not finished rounds display #}
+        {% if notFinishedRounds %}
         <div class="container m-auto">
             <div class="table-responsive">
                 <table class="table text-nowrap mb-5">
@@ -47,16 +50,15 @@
                     </thead>
 
                     <tbody>
-                        {% for round in roundsList %}
+                        {% for round in notFinishedRounds %}
                         <tr scope="row">
-                        {% if round.endAt is same as(null) %}
                             <td>{{ round.user.pseudo }}</td>                   
-                        {% endif %} 
                         </tr>
                         {% endfor %}   
                     </tbody> 
                 </table>
             </div>             
         </div> 
-  </div>                
+        {% endif %} 
+    </div>                
 {% endblock %}
