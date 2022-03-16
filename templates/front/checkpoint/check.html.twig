@@ -4,11 +4,9 @@
 
 {% block body %}
 
-
-<div class="row mt-5">
-    <div class="col">
-        <h1 class=" text-center">Checkpoint {{ checkpoint.title }}</h1>
-        {{ include('front/_notice_message.html.twig') }}
+{{ include('_header_start.html.twig', {'title': 'Checkpoint '~checkpoint.title }) }}
+<div class="container-xxl pb-5">
+    <div class="container">
 
         {% if enigma is same as null %}
             <section class="w-100 p-4 text-center pb-4">
