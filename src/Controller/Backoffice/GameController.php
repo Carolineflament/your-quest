@@ -111,20 +111,44 @@ class GameController extends AbstractController
         $date = $date->getTimestamp();
 
         $instances_now = array();
+        $instances_futur = array();
+        $instances_past = array();
         foreach($instances AS $key=> $instance)
         {
-            if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
+            if($date >= $instance->getStartAt()->getTimestamp() && $date <= $instance->getEndAt()->getTimestamp())
             {
                 unset($instances[$key]);
                 $instances_now[] = $instance;
             }
+            elseif($date < $instance->getStartAt()->getTimestamp())
+            {
+                unset($instances[$key]);
+                $instances_futur[] = $instance;
+            }
+            else
+            {
+                unset($instances[$key]);
+                $instances_past[] = $instance;
+            }
         }
 
         $instances_now = array_reverse($instances_now);
+        $instances_futur = array_reverse($instances_futur);
+        $instances_past = array_reverse($instances_past);
         
-        foreach($instances_now AS $instace_now)
+        foreach($instances_now AS $instance_now)
         {
-            array_unshift($instances, $instace_now);
+            array_push($instances, $instance_now);
+        }
+
+        foreach($instances_futur AS $instance_futur)
+        {
+            array_push($instances, $instance_futur);
+        }
+
+        foreach($instances_past AS $instance_past)
+        {
+            array_push($instances, $instance_past);
         }
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
