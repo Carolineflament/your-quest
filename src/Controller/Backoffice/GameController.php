@@ -109,13 +109,22 @@ class GameController extends AbstractController
         $instances = $game->getUnTrashedInstances()->getValues();
         $date = new DateTime();
         $date = $date->getTimestamp();
+
+        $instances_now = array();
         foreach($instances AS $key=> $instance)
         {
             if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
             {
                 unset($instances[$key]);
-                array_unshift($instances, $instance);
+                $instances_now[] = $instance;
             }
+        }
+
+        $instances_now = array_reverse($instances_now);
+        
+        foreach($instances_now AS $instace_now)
+        {
+            array_unshift($instances, $instace_now);
         }
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
