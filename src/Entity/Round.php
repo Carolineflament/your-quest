@@ -51,9 +51,15 @@ class Round
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserAnswer::class, mappedBy="round")
+     */
+    private $userAnswers;
+
     public function __construct()
     {
         $this->scanQRs = new ArrayCollection();
+        $this->userAnswers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,5 +149,35 @@ class Round
     {
         $scanQRs = $this->scanQRs;
         return $scanQRs[0];
+    }
+
+    /**
+     * @return Collection<int, UserAnswer>
+     */
+    public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswer $userAnswer): self
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers[] = $userAnswer;
+            $userAnswer->setRound($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): self
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getRound() === $this) {
+                $userAnswer->setRound(null);
+            }
+        }
+
+        return $this;
     }
 }

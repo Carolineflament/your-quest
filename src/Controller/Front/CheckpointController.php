@@ -220,7 +220,7 @@ class CheckpointController extends AbstractController
         $enigma_non_response = null;
         foreach($enigmas AS $enigma)
         {
-            $userAnswer = $userAnswerRepository->findBy(['user' => $user, 'enigma' => $enigma, 'isGood' => true]);
+            $userAnswer = $userAnswerRepository->findBy(['user' => $user, 'enigma' => $enigma, 'round' => $round, 'isGood' => true]);
             if(count($userAnswer) === 0)
             {
                 $enigma_non_response = $enigma;
@@ -275,6 +275,7 @@ class CheckpointController extends AbstractController
             $current_instance = $this->getCurrentInstance($checkpoint->getGame());
             
             $round = $roundRepos->findOneBy(['user' => $this->getUser(), 'instance' => $current_instance]);
+            $userAnswer->setRound($round);
             $checkpoints = $checkpointRepos->findBy(['game' => $checkpoint->getGame()], ['orderCheckpoint' => 'ASC']);
             $key_checkpointScan = array_keys($checkpoints, $checkpoint);
 

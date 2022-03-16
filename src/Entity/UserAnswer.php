@@ -59,6 +59,12 @@ class UserAnswer
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Round::class, inversedBy="userAnswers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $round;
+
     public function __construct()
     {
         $this->isGood = false;
@@ -156,5 +162,17 @@ class UserAnswer
     public function setUpdatedAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getRound(): ?Round
+    {
+        return $this->round;
+    }
+
+    public function setRound(?Round $round): self
+    {
+        $this->round = $round;
+
+        return $this;
     }
 }
