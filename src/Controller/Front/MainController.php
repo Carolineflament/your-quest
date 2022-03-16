@@ -77,6 +77,14 @@ class MainController extends AbstractController
     }
 
     /**
+     * @Route("/mentions-legales", name="mentions_legales", methods={"GET"})
+     */
+    public function mentions_legales(): Response
+    {
+        return $this->render('front/main/mentions_legales.html.twig', []);
+    }
+
+    /**
      * @Route("/contact", name="contact", methods={"GET", "POST"})
      *
      * @return Response
