@@ -183,7 +183,7 @@ class CheckpointController extends AbstractController
         else
         {
             /* This is a way to get the last checkpoint scanned by the user. */
-            $lastScanAt = $scanQRRepos->findOneBy(['round' => $round], ['scanAt' => 'DESC']);
+            //$lastScanAt = $scanQRRepos->findOneBy(['round' => $round], ['scanAt' => 'DESC']);
             //$checkpointScan = $lastScanAt->getCheckpoint();
             $has_already_flash = true;
             $this->addFlash(
@@ -198,6 +198,8 @@ class CheckpointController extends AbstractController
             if(count($checkpointScan->getUnTrashedEnigmas()) == 0)
             {
                 $round->setEndAt(new \DateTimeImmutable());
+                $session->set('last_scan_id', '');
+                $session->set('last_scan_token', '');
                 $entityManager->persist($round);
                 $this->addFlash(
                     'notice-success',
@@ -233,6 +235,9 @@ class CheckpointController extends AbstractController
             }
         }
 
+        $session->set('last_scan_id', $checkpointScan->getId());
+        $session->set('last_scan_token', sha1($checkpointScan->getTitle()));
+
         return $this->render('front/checkpoint/check.html.twig', [
             'enigma' => $enigma_non_response,
             'message' => $checkpointScan->getSuccessMessage(),
@@ -245,7 +250,7 @@ class CheckpointController extends AbstractController
     /**
      * @Route("/checkpoint/enigma/{id}", name="_response", methods={"POST"}, requirements={"id"="\d+"})
      */
-    public function response(Enigma $enigma, AnswerRepository $answerRepository, EntityManagerInterface $entityManager, CheckpointRepository $checkpointRepos, RoundRepository $roundRepos): Response
+    public function response(Enigma $enigma, AnswerRepository $answerRepository, EntityManagerInterface $entityManager, CheckpointRepository $checkpointRepos, RoundRepository $roundRepos, SessionInterface $session): Response
     {
         $checkpoint = $enigma->getCheckpoint();
         $good_answer = $answerRepository->findOneBy(['enigma' => $enigma, 'status' => true, 'isTrashed' => false]);
@@ -278,6 +283,8 @@ class CheckpointController extends AbstractController
                 $round->setEndAt(new \DateTimeImmutable());
                 $entityManager->persist($round);
             }
+            $session->set('last_scan_id', '');
+            $session->set('last_scan_token', '');
         }
         else
         {
