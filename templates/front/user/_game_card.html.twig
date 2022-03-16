@@ -36,6 +36,8 @@
                 </div>
                 {% endif %}
                 {# END GAMES IN PROGRESSS #}
+            {% else %}
+                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez pas de session en cours.</div>
             {% endfor %}
             </div>
             {{ include('_paginate.html.twig') }}
@@ -97,7 +99,9 @@
                     </div>
                 {% endif %}
                 {# END GAMES PAST #}
-                {% endfor %}
+            {% else %}
+                <div class="d-flex align-items-center p-2 bd-highlight">Vous n'avez joué à aucun jeu pour le moment !</div>
+            {% endfor %}
             </div>
             {{ include('_paginate.html.twig') }}
         </div>
