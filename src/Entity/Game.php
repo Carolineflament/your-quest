@@ -324,10 +324,12 @@ class Game
     {
         $date = new DateTime();
         $date = $date->getTimestamp();
+
+        $instances = array_reverse($this->instances->toArray());
             
-        foreach($this->instances AS $instance)
+        foreach($instances AS $instance)
         {
-            if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
+            if($date >= $instance->getStartAt()->getTimestamp() && $date <= $instance->getEndAt()->getTimestamp())
             {
                 return $instance;
             }
