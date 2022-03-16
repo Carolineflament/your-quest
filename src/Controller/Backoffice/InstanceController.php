@@ -220,11 +220,15 @@ class InstanceController extends AbstractController
         // Je récupére la liste des rounds terminés et non-terminés d'une instance
         $roundsList = $roundRepository->findBy(['instance' => $instance]);
 
-        // Pour chaque round terminé, je calcule la durée de celui-ci, et je l'inscris dans un tableau
+        // Je prépare un tableau pour les rounds non términés
+        $notFinishedRoundsArray = [];
+
+        // Je prépare un tableau pour y ranger les rounds terminés et leurs durées
         $DurationsArray = [];
 
+        // Pour chaque round terminé, je calcule la durée de celui-ci, et je l'inscris dans un tableau
         foreach ($roundsList as $key => $round) {
-            // Work only on finished rounds (endAt is not null)
+            // Process only the finished rounds (endAt is not null)
             if ($round->getEndAt()) {
 
                 // Convert to seconds
@@ -236,6 +240,11 @@ class InstanceController extends AbstractController
                 
                 // Send to array
                 $DurationsArray[$key] = $roundDuration;
+
+             // Send the not finished rounds in a dedicated array    
+            } else {
+                // Send to array
+                $notFinishedRoundsArray[] = $round;
             }
         }
 
@@ -283,6 +292,7 @@ class InstanceController extends AbstractController
             'game' => $game,
             'roundsList' => $roundsList,
             'orderedDurations' => $formatedDurationsArray,
+            'notFinishedRounds' => $notFinishedRoundsArray,
             'breadcrumbs' => $this->breadcrumb,
         ]);
     }

@@ -12,8 +12,8 @@
             <section class="w-100 p-4 text-center pb-4">
                 <div class="pb-4">{{message}}</div>
                 <div>
-                    <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary btn-sm me-3">Voir la dernière position des joueurs</a>
-                    <a href="{{ path('front_checkpoint') }}" class="btn btn-primary btn-sm me-3">Retour au scanner de QR codes</a>
+                    <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary btn-sm me-3 mb-3">Voir la dernière position des joueurs</a>
+                    <a href="{{ path('front_checkpoint') }}" class="btn btn-primary btn-sm me-3 mb-3">Retour au scanner de QR codes</a>
                 </div>
             </section>
         {% else %}
