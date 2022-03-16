@@ -48,7 +48,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         {
             $request->getSession()->getFlashBag()->add(
                 'notice-danger',
-                'Votre utilisateur a été désactivé par un administrateur, vous pouvez nous conctacter en suivant le lien dans le pied de page'
+                'Votre utilisateur a été désactivé par un administrateur, vous pouvez nous conctacter en suivant le lien du formulaire dans le pied de page'
             );
             
             return new Passport(new UserBadge(''), new PasswordCredentials(''));
