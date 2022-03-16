@@ -45,7 +45,6 @@
     }
 }
 
-
 /*** Spinner ***/
 #spinner {
     opacity: 0;
@@ -169,7 +168,7 @@
 
 
 /*** Header ***/
-@media (max-width: 768px) {
+@media (max-width: 1400px) {
     .header-carousel .owl-carousel-item {
         position: relative;
         min-height: 500px;
