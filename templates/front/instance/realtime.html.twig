@@ -1,47 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ instance.title }}{% endblock %}
-
 {% block body %}
-<div class="container-xl p-5">
-      <div class="row">
-        <h1 class="text-muted fw-bold mb-4 text-center h1"> {{game.title}}</h1>
-        <h2 class="text-muted fw-bold mb-4 text-center h2"> Instance {{ instance.title }}</h2>
-          {{ include('front/_notice_message.html.twig') }}
-      </div>
-      <h4 class="text-dark fw-bold">Dernière position des joueurs</h4>
-    <div class="card-list mt-2">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Checkpoint</th>
-              <th scope="col">Joueurs</th>
-            </tr>
-          </thead>
-         <tbody> 
 
-        {# Boucle sur les checkpoints du jeu #}
+    {{ include('_header_start.html.twig', {'title': game.title}) }}
 
-        {% for key, value in checkpointsDatas %}     
-                <tr>
-                    <td>N° {{ loop.index }} - {{ key }}</td>
+    <!-- Feature Start -->
+    <div class="container-fluid bg-light px-lg-0" style="margin: 3rem 0;">
+        <div class="container-xl p-5">
+          <div class="section-title text-center mt-4">
+            <h1 class="display-5 mb-2"> Dernière position des joueurs de la session {{ instance.title }}<br> débutée le {{ instance.startAt|date('d-m-Y')}} à {{instance.startAt|date('H:i')}}</h1>
+{#             <h2 class="display-7 mb-2"> Session {{ instance.title }}, débutée le {{ instance.startAt|date('d-m-Y')}} à {{instance.startAt|date('H:i')}}</h2> #}
+          </div>
+        </div>
+        <div class="container m-auto">
+                <h3 class="display-7 ms-2 ">Derniére position des joueurs</h3>
+                <div class="table-responsive">
+                    <table class="table text-nowrap mmb-5">
+                    <thead>
+                        <tr>
+                            <th scope="col pe-5 me-5">Checkpoint</th>
+                            <th scope="col">Joueurs</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
 
-                           {% if value %}
-                            <td>                          
+                    {# Boucle sur les checkpoints du jeu #}
+                    
+                    {% for key, value in checkpointsDatas %}     
+                        <tr>
+                            <td class="pe-5 me-5">N° {{ loop.index }} - {{ key }}</td>
+                            <td> 
+                            {% if value %}
+                                                        
                                 {% for player in value %}
-                                     
+                                        
                                 <ul class="list-unstyled">
                                     <li>{{ player.pseudo }}</li>
                                 </ul>
-                           
-                               {% endfor %}
-                            </td>
+                            
+                                {% endfor %}
+                            
+                             
                             {% endif %}                       
-                </tr>    
-        {% endfor %}       
-            </tbody>
-        </table> 
+                            </td>
+                    {% endfor %}
+                    </tr>       
+                    </tbody>
+                </table> 
+            </div>    
+        </div>
     </div>
-</div>
-
 {% endblock %}

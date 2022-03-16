@@ -87,7 +87,7 @@ class GameController extends AbstractController
                 'Le jeu '.$game->getTitle().' a été créé !'
             );
 
-            return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => 'Nouveau jeu', 'libelle_url' => 'app_backoffice_game_new', 'url' => $this->urlGenerator->generate('app_backoffice_game_new')));
@@ -109,13 +109,46 @@ class GameController extends AbstractController
         $instances = $game->getUnTrashedInstances()->getValues();
         $date = new DateTime();
         $date = $date->getTimestamp();
+
+        $instances_now = array();
+        $instances_futur = array();
+        $instances_past = array();
         foreach($instances AS $key=> $instance)
         {
-            if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
+            if($date >= $instance->getStartAt()->getTimestamp() && $date <= $instance->getEndAt()->getTimestamp())
             {
                 unset($instances[$key]);
-                array_unshift($instances, $instance);
+                $instances_now[] = $instance;
             }
+            elseif($date < $instance->getStartAt()->getTimestamp())
+            {
+                unset($instances[$key]);
+                $instances_futur[] = $instance;
+            }
+            else
+            {
+                unset($instances[$key]);
+                $instances_past[] = $instance;
+            }
+        }
+
+        $instances_now = array_reverse($instances_now);
+        $instances_futur = array_reverse($instances_futur);
+        $instances_past = array_reverse($instances_past);
+        
+        foreach($instances_now AS $instance_now)
+        {
+            array_push($instances, $instance_now);
+        }
+
+        foreach($instances_futur AS $instance_futur)
+        {
+            array_push($instances, $instance_futur);
+        }
+
+        foreach($instances_past AS $instance_past)
+        {
+            array_push($instances, $instance_past);
         }
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
@@ -156,7 +189,7 @@ class GameController extends AbstractController
                 'Le jeu '.$game->getTitle().' a été modifié !'
             );
 
-            return $this->redirectToRoute('app_backoffice_game_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_edit', 'url' => $this->urlGenerator->generate('app_backoffice_game_edit', ['slug' => $game->getSlug()])));
@@ -250,37 +283,51 @@ class GameController extends AbstractController
         // Organizer or Admin can modify this game
         $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
         
-        /***** On prépare les données à insérer dans le PDF *****/
-
-        // Titre des pages
-        $title = $game->getTitle();
-        // On converti de utf-8 vers ISO-8859-1 pour gérer les accents
-        $title = utf8_decode($title);
-
         /***** On génére le document PDF *****/
 
-        // On récupère la liste des checkpoints dans l'ordre de l'utilisateur
+        // On récupère la liste des checkpoints non mis à la poubelle
+        // et dans l'ordre choisi par l'utilisateur grâce à @ORM\OrderBy({"orderCheckpoint" = "ASC"}) sur la propriété dans l'entité.
         $checkpointsList = $game->getUnTrashedCheckpoints();
 
         // Création d'un nouvel objet (document PDF)
         $pdf = new \FPDF();
+
+        $i = 1;
 
         // On boucle sur la liste des checkpoints
         foreach ($checkpointsList as $checkpoint) {
             // Ajout d'une nouvelle page, avec ses header et footer
             $pdf->AddPage();
 
-            // Réglage de la police
-            $pdf->SetFont('Arial', 'B', 60);
-
+            // Réglage de la police du titre
+            $pdf->SetFont('Arial', 'B', 30);
             // Titre en haut de page, dans une cellule avec passage à la ligne et création d'une nouvelle cellule si trop long (MultiCell)
-            $pdf->MultiCell(0, 20, $title, 0, 'C');
+            // On converti les strings utilisés de utf-8 vers ISO-8859-1 pour gérer les accents
+            $pdf->MultiCell(0, 10, utf8_decode($game->getTitle()), 0, 'C');
             // Saut de ligne
-            $pdf->Ln();
+            $pdf->Ln(10);
+
+            // Réglage de la police du numéro d'ordre du checkpoint
+            $pdf->SetFont('Arial', 'B', 45);
+            // Numéro d'ordre du checkpoint
+            $pdf->MultiCell(0, 10, 'CHECKPOINT '.$i , 0, 'C');
+            // Saut de ligne
+            $pdf->Ln(25);
+            // Increment
+            $i++;
+
             // Déplacement du curseur sur axe X pour centrage du QR code
             $pdf->SetX(45);
             // Insertion du QR code
             $pdf->Image($this->paramBag->get('app.game_qrcode_directory').$checkpoint->getId().'qrcode.png', null, null, 120);
+            // Saut de ligne
+             $pdf->Ln(25);
+
+            // Réglage de la police du nom du checkpoint
+            $pdf->SetFont('Arial', 'B', 30);
+            // Nom du checkpoint
+            $pdf->MultiCell(0, 10, utf8_decode($checkpoint->getTitle()), 0, 'C');
+            
         }
 
         /***** On traite le document PDF généré *****/
@@ -293,7 +340,7 @@ class GameController extends AbstractController
             'Content-Type' => 'application/pdf'));
 
         // On retourne le PDF en forçant son téléchargement 
-        return new Response($pdf->Output('D', 'YourQuest-'.$game->getSlug().'.pdf'), 200, array(
-            'Content-Type' => 'application/pdf'));
+        // return new Response($pdf->Output('D', 'YourQuest-'.$game->getSlug().'.pdf'), 200, array(
+        //     'Content-Type' => 'application/pdf'));
     }
 }

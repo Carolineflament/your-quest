@@ -1,11 +1,17 @@
-{% extends 'backoffice/back_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Modifier l'énigme du checkpoint{{checkpoint.title}}{% endblock %}
 
-{% block back_body %}
-    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
-        <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
-     </div> 
+{% block body %}
+    {{ include('_header_start.html.twig', {'title': 'Edition de l\'énigme '~enigma.orderEnigma }) }}
 
-    {{ include('backoffice/enigma/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    <div class="container-xxl pb-5">
+        <div class="container">
+            <div class="d-flex flex-row-reverse bd-highlight align-items-start">
+                <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-outline-secondary btn-sm">Retourner au checkpoint</a>
+            </div> 
+
+            {{ include('backoffice/enigma/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        </div>
+    </div>
 {% endblock %}

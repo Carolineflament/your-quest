@@ -1,4 +1,4 @@
-<div class="container-xxl {% if label is same as "prev" %}py-5 {% else %}pb-5{% endif %}">
+<div class="container-xxl {% if label is same as "prev" %}py-5 mb-5 {% else %}pb-5{% endif %}">
     <div class="container">
         <div class="section-title text-center">
             <h3 class="display-5 mb-5">{{title}}</h3>
@@ -10,11 +10,11 @@
                     <div class="instances-{{label}}-text text-center p-4">
                         <h6>
                             <a href="{{ path('app_front_instance_show', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}">{{instance.title}}</a>
-                            {% if "now"|date('Y-m-d') > instance.startAt|date('Y-m-d') and "now"|date('Y-m-d') < instance.endAt|date('Y-m-d') %}
+                            {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
                                 <span class="badge bg-danger ms-2">En cours</span>
                             {% endif %}
                         </h6>
-                        <span class="small">De {{instance.startAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} à {{instance.endAt|format_datetime(pattern="EEEE dd LLLL", locale='{{app_default_local}}')}} : {{ game.address~' '~game.postalCode~' '~game.city }}</span>
+                        <span class="small">De {{instance.startAt|format_datetime(pattern="EEEE dd LLLL yyyy", locale='fr')}} à {{instance.endAt|format_datetime(pattern="EEEE dd LLLL yyyy", locale='fr')}} : {{ game.postalCode~' '~game.city }}</span>
                     </div>
                 </div>
             {% endfor %}

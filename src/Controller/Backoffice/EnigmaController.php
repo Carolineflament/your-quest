@@ -32,30 +32,7 @@ class EnigmaController extends AbstractController
     }
 
     /**
-     * @Route("/checkpoint/{id}", name="index", methods={"GET"})
-     */
-    public function index($id,Checkpoint $checkpoint, EnigmaRepository $enigmaRepository, CheckpointRepository $checkpointRepository): Response
-    {
-        $checkpoint = $checkpointRepository->findOneBy(['id' => $id]);
-        $game = $checkpoint->getGame();
-
-
-        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
-
-        array_push($this->breadcrumb, array('libelle' => $checkpoint->getTitle(), 'libelle_url' => 'app_backoffice_checkpoint_show', 'url' => $this->urlGenerator->generate('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()])));
-
-       array_push($this->breadcrumb, array('libelle' => 'Enigme' , 'libelle_url' => 'app_backoffice_enigma_index', 'url' => $this->urlGenerator->generate('app_backoffice_enigma_index', ['id' => $checkpoint->getId()])));
-
-        return $this->render('backoffice/enigma/index.html.twig', [
-            'enigmas' => $enigmaRepository->findBy(['checkpoint' => $checkpoint, 'isTrashed' => false]),
-            'checkpoint' => $checkpoint,
-            'game' => $game,
-            'breadcrumbs' => $this->breadcrumb,
-        ]);
-    }
-
-    /**
-     * @Route("/checkpoint/{id}/nouveau", name="new", methods={"GET", "POST"})
+     * @Route("/checkpoint/{id}/nouveau", name="new", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
     public function new($id,Request $request,EntityManagerInterface $entityManager, CheckpointRepository $checkpointRepository): Response
     {
@@ -77,7 +54,7 @@ class EnigmaController extends AbstractController
                 'notice-success',
                 'L\'énigme a été ajoutée !');
 
-            return $this->redirectToRoute('app_backoffice_checkpoint_show', ['id' => $checkpoint->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_enigma_show', ['id' => $enigma->getId()], Response::HTTP_SEE_OTHER);
         }
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
@@ -95,7 +72,7 @@ class EnigmaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Enigma $enigma): Response
     {
@@ -118,7 +95,7 @@ class EnigmaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/modifier", name="edit", methods={"GET", "POST"})
+     * @Route("/{id}/modifier", name="edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
     public function edit(Request $request, Enigma $enigma, EntityManagerInterface $entityManager): Response
     {
@@ -138,8 +115,8 @@ class EnigmaController extends AbstractController
                 'notice-success',
                 'L\'énigme a été modifiée !');
             
-            return $this->redirectToRoute('app_backoffice_checkpoint_show', [
-                'id' => $checkpoint->getId()
+            return $this->redirectToRoute('app_backoffice_enigma_show', [
+                'id' => $enigma->getId()
             ], Response::HTTP_SEE_OTHER);
         }
 
@@ -158,7 +135,7 @@ class EnigmaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="trash", methods={"POST"})
+     * @Route("/{id}", name="trash", methods={"POST"}, requirements={"id"="\d+"})
      */
     public function trash(Request $request, Enigma $enigma, EntityManagerInterface $entityManager, CascadeTrashed $cascadeTrashed): Response
     {

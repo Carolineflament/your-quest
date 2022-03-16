@@ -1,15 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modification de l'utilisateur {{ user.email }}{% endblock %}
+{% block title %}Edition de l\'utilisateur {{ user.email }}{% endblock %}
 
 {% block body %}
-    <div class="container-fluid mb-3">
-        <h1>Modification de l'utilisateur {{ user.email }}</h1>
+    {{ include('_header_start.html.twig', {'title': 'Edition de l\'utilisateur '~user.email}) }}
+    <div class="container-xxl pb-5">
+        <div class="container">
 
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a href="{{ path('app_admin_user_index') }}"  class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+            <div class="d-md-flex justify-content-md-end me-3">
+                <a href="{{ path('app_admin_user_index') }}"  class="btn btn-outline-secondary btn-sm">Retourner à la liste</a>
+            </div>
+
+            {{ include('admin/user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
         </div>
-
-        {{ include('admin/user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
     </div>
 {% endblock %}

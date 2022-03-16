@@ -4,12 +4,12 @@
 
 {% block body %}
 
+{{ include('_header_start.html.twig', {'title': 'Scanner un QR Code'}) }}
+
 <script src="{{ asset('assets/js/html5-qrcode.min.js') }}"></script>
 
-<div class="row mt-5">
-    <div class="col text-center">
-        <h1>Veuillez scanner le QR code du checkpoint</h1>
-        {{ include('front/_notice_message.html.twig') }}
+<div class="container-xxl pb-5">
+    <div class="container">
 
         {# Scanner #}        
         <div style="width: 300px; margin: 50px auto;" id="reader"></div>     
@@ -24,44 +24,43 @@
 
 <script>
         
-        function onScanSuccess(decodedText, decodedResult) {
-            // Handle on success condition with the decoded text or result.
-            console.log(`Decoded QR code : ${decodedText}`, decodedResult);
-            
-            var url = window.location.href.replace(window.location.pathname, '');
-            
-            // A décommenter dès qu'on utilisera nos QR codes générés par l'appli
-            // TRAITEMENT APRES DECODAGE DU QR CODE (et message d'erreur si un QR code "étranger" à l'appli est scanné)
-            // On vérifie que la string retournée commence par "URL:https://yourquest.fr/checkpoint/"
-            if (decodedText.startsWith('URL:'+url)) {
-                // Si vrai on retire "URL:" du début de la chaine de caractères
-                const checkpointUrl = decodedText.substring(4);
-                // On redirige l'utilisateur vers l'URL du checkpoint
-                window.location = checkpointUrl;
-            } else {
-                // Si faux on indique le problème
-                // On récupère l'élément div ayant l'id #message
-                const messageElement = document.getElementById('message');
-                // On écrit dans l'élément
-                messageElement.textContent = `ERREUR : le QR code que vous venez de scanner n'a pas été généré par notre application YourQuest ( le décodage du QR code indique : ${decodedText} )`;
-            }
-            
-
-            // This will stop the scanner (video feed) and clear the scan area.
-            html5QrcodeScanner.clear();
-        }
-
-        function onScanError(errorMessage) {
-            // handle on error condition, with error message
+    function onScanSuccess(decodedText, decodedResult) {
+        // Handle on success condition with the decoded text or result.
+        console.log(`Decoded QR code : ${decodedText}`, decodedResult);
+        
+        var url = window.location.href.replace(window.location.pathname, '');
+        
+        // A décommenter dès qu'on utilisera nos QR codes générés par l'appli
+        // TRAITEMENT APRES DECODAGE DU QR CODE (et message d'erreur si un QR code "étranger" à l'appli est scanné)
+        // On vérifie que la string retournée commence par "URL:https://yourquest.fr/checkpoint/"
+        if (decodedText.startsWith('URL:'+url)) {
+            // Si vrai on retire "URL:" du début de la chaine de caractères
+            const checkpointUrl = decodedText.substring(4);
+            // On redirige l'utilisateur vers l'URL du checkpoint
+            window.location = checkpointUrl;
+        } else {
+            // Si faux on indique le problème
             // On récupère l'élément div ayant l'id #message
             const messageElement = document.getElementById('message');
             // On écrit dans l'élément
-            messageElement.textContent = `Erreur de lecture : ${errorMessage}`;
+            messageElement.textContent = `ERREUR : le QR code que vous venez de scanner n'a pas été généré par notre application YourQuest ( le décodage du QR code indique : ${decodedText} )`;
         }
+        
 
-        var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 200 });
-        html5QrcodeScanner.render(onScanSuccess);
+        // This will stop the scanner (video feed) and clear the scan area.
+        html5QrcodeScanner.clear();
+    }
+
+    function onScanError(errorMessage) {
+        // handle on error condition, with error message
+        // On récupère l'élément div ayant l'id #message
+        const messageElement = document.getElementById('message');
+        // On écrit dans l'élément
+        messageElement.textContent = `Erreur de lecture : ${errorMessage}`;
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 200 });
+    html5QrcodeScanner.render(onScanSuccess);
 </script>
-
 
 {% endblock %}

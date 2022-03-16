@@ -33,7 +33,7 @@ class GameRepository extends ServiceEntityRepository
     public function findNextGame()
     {
         $entityManagerConnexion = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT g.id FROM `game` g 
+        $sql = 'SELECT i.id FROM `game` g 
                     INNER JOIN instance i ON i.game_id = g.id AND (
                     (
                         (
@@ -46,7 +46,7 @@ class GameRepository extends ServiceEntityRepository
                         AND i.end_at >= cast(now() as date)
                     )
                 )
-                WHERE g.is_trashed = 0 AND g.status = 1 GROUP BY g.id;';
+                WHERE g.is_trashed = 0 AND g.status = 1 GROUP BY g.id ORDER BY i.start_at;';
         $query = $entityManagerConnexion->executeQuery($sql); 
         $results = $query->fetchAllAssociative();
 
@@ -59,8 +59,7 @@ class GameRepository extends ServiceEntityRepository
             }
             
             $entityManager = $this->getEntityManager();
-            $query = $entityManager->createQuery('SELECT g FROM App\Entity\Game g WHERE g.id IN('.implode(',', $ids).')');
-
+            $query = $entityManager->createQuery('SELECT g FROM App\Entity\Game g JOIN g.instances i WHERE i.id IN('.implode(',', $ids).') ORDER BY i.startAt' );
             return $query->getResult();
 
         } else {

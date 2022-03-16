@@ -1,10 +1,17 @@
-{% extends 'backoffice/back_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Créer un nouveau jeu{% endblock %}
 
-{% block back_body %}
-    <div class="d-flex flex-row-reverse bd-highlight align-items-start">
-        <a href="{{ path('app_backoffice_game_index') }}" class="btn btn-primary">Mes jeux</a>
+{% block body %}
+    {{ include('_header_start.html.twig', {'title': 'Nouveau jeu'}) }}
+
+    <div class="container-xxl pb-5">
+        <div class="container">
+            <div class="d-flex flex-row-reverse bd-highlight align-items-start">
+                <a href="{{ path('app_backoffice_game_index') }}" class="btn btn-primary">Mes jeux</a>
+            </div>
+
+            {{ include('backoffice/game/_form.html.twig') }}
+        </div>
     </div>
-    {{ include('backoffice/game/_form.html.twig') }}
 {% endblock %}

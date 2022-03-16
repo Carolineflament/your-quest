@@ -30,31 +30,10 @@ class InstanceController extends AbstractController
     }
     
     /**
-     * List all instances that belong to game = {gameSlug}
-     * @Route("/jeux/{gameSlug}", name="index", methods={"GET"})
-     */
-    public function index($gameSlug, GameRepository $gameRepository, InstanceRepository $instanceRepository): Response
-    {
-        // Get parent Game
-        $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
-
-        // Organizer or Admin can modify this game
-        $this->denyAccessUnlessGranted('IS_MY_GAME', $game);
-
-        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
-
-        return $this->render('backoffice/instance/index.html.twig', [
-            'instances' => $instanceRepository->findBy(['game' => $game, 'isTrashed' => false]),
-            'game' => $game,
-            'breadcrumbs' => $this->breadcrumb,
-        ]);
-    }
-
-    /**
      * Create new instance that belongs to game = {gameId}
      * @Route("/jeux/{gameSlug}/nouveau", name="new", methods={"GET", "POST"})
      */
-    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function new($gameSlug, GameRepository $gameRepository, Request $request, EntityManagerInterface $entityManager, InstanceRepository $instanceRepository): Response
     {
         // Get parent Game
         $game = $gameRepository->findOneBy(['slug' => $gameSlug]);
@@ -70,6 +49,23 @@ class InstanceController extends AbstractController
         $instance->setGame($game);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $has_instance = $instanceRepository->findBetweenDates($instance->getStartAt(), $instance->getEndAt(), $instance->getGame());
+            if(count($has_instance) > 0)
+            {
+                // Message
+                $this->addFlash(
+                    'notice-danger',
+                    'Des instances sont déjà plannifiées entre les dates du '.$instance->getStartAt()->format('d/m/Y').' au '.$instance->getEndAt()->format('d/m/Y').' !'
+                );
+                return $this->renderForm('backoffice/instance/new.html.twig', [
+                    'instance' => $instance,
+                    'form' => $form,
+                    'game' => $game,
+                    'breadcrumbs' => $this->breadcrumb,
+                ]);
+            }
+
             $entityManager->persist($instance);
             $entityManager->flush();
 
@@ -209,7 +205,7 @@ class InstanceController extends AbstractController
                 'notice-danger',
                 'Cette instance n\'a pas encore débuté, impossible d\'afficher le classement des joueurs pour l\'instant.'
             );
-            return $this->redirectToRoute('app_backoffice_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
             
         }
 
@@ -277,7 +273,7 @@ class InstanceController extends AbstractController
         // Datas for breadcrumb
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
-        array_push($this->breadcrumb, array('libelle' => $instance->getTitle(), 'libelle_url' => 'app_backoffice_instance_show', 'url' => $this->urlGenerator->generate('app_backoffice_instance_show', ['instanceSlug' => $instance->getSlug()])));
+        array_push($this->breadcrumb, array('libelle' => $instance->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
         array_push($this->breadcrumb, array('libelle' => 'score', 'libelle_url' => 'app_backoffice_instance_score', 'url' => $this->urlGenerator->generate('app_backoffice_instance_score', ['instanceSlug' => $instance->getSlug()])));
 

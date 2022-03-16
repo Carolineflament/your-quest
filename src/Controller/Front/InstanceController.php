@@ -12,9 +12,20 @@ use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class InstanceController extends AbstractController
 {
+
+    private $breadcrumb;
+    private $urlGenerator;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->breadcrumb = array(array('libelle' => 'Accueil', 'libelle_url' => 'front_main', 'url' => $this->urlGenerator->generate('front_main')));
+    }
+
     /**
      * @Route("/jeux/{gameSlug}/instances/{instanceSlug}", name="app_front_instance_show", methods={"GET"})
      */
@@ -26,10 +37,15 @@ class InstanceController extends AbstractController
         // Get Instance from slug
         $instance = $instanceRepository->findOneBy(['slug' => $instanceSlug]);
 
+        // Datas for breadcrumb
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'front_games_show', 'url' => $this->urlGenerator->generate('front_games_show', ['slug' => $game->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => $instance->getTitle(), 'libelle_url' => 'app_front_instance_show', 'url' => $this->urlGenerator->generate('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
 
         return $this->render('front/instance/show.html.twig', [
             'instance' => $instance,
             'game' => $game,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 
@@ -119,11 +135,19 @@ class InstanceController extends AbstractController
             $formatedDurationsArray[$round] = $formatedDuration;
         }
 
+        // Datas for breadcrumb
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'front_games_show', 'url' => $this->urlGenerator->generate('front_games_show', ['slug' => $game->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => $instance->getTitle(), 'libelle_url' => 'app_front_instance_show', 'url' => $this->urlGenerator->generate('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => 'score', 'libelle_url' => 'app_front_instance_score', 'url' => $this->urlGenerator->generate('app_front_instance_score', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
+
         return $this->render('front/instance/score.html.twig', [
             'instance' => $instance,
             'game' => $game,
             'roundsList' => $roundsList,
             'orderedDurations' => $formatedDurationsArray,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
 
     }
@@ -206,11 +230,19 @@ class InstanceController extends AbstractController
                 $checkpointsArray[$lastCheckpoint->getTitle()][] = $round->getUser();
             }
         }
+
+        // Datas for breadcrumb
+        array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'front_games_show', 'url' => $this->urlGenerator->generate('front_games_show', ['slug' => $game->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => $instance->getTitle(), 'libelle_url' => 'app_front_instance_show', 'url' => $this->urlGenerator->generate('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
+
+        array_push($this->breadcrumb, array('libelle' => 'score', 'libelle_url' => 'app_front_instance_realtime', 'url' => $this->urlGenerator->generate('app_front_instance_realtime', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
         
         return $this->render('front/instance/realtime.html.twig', [
             'instance' => $instance,
             'game' => $game,
             'checkpointsDatas' => $checkpointsArray,
+            'breadcrumbs' => $this->breadcrumb,
         ]);
     }
 

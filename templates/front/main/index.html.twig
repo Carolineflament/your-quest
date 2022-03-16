@@ -13,12 +13,12 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 text-center">
-                                {# <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome To WooDY</h5> #}
+                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Vous êtes au point de départ d'un jeu ?</h5>
                                 <h1 class="display-3 text-white animated slideInDown mb-4">Bienvenue sur YourQuest !</h1>
-                                <h2 class="text-white">Vous êtes au point de départ d'un jeu ?</h2>
+                                
                                 <p class="fs-5 fw-medium text-white mb-4 pb-2">Scannez le 1er QR code et suivez les indications. En scannant ensuite le QR code de chaque checkpoint, votre temps sera enregistré et permettra de vous classer !</p>
-                                <a href="{{ path('front_checkpoint') }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Commencer à jouer</a>
-                                {# <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Free Quote</a> #}
+                                <a href="{{ path('front_checkpoint') }}" class="btn btn-primary py-md-3 px-md-5 animated slideInLeft">Commencer à jouer</a>
+                                
                             </div>
                         </div>
                     </div>
@@ -30,10 +30,11 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 text-center">
+                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">Vous souhaitez créer votre propre jeu ?</h5>
                                 <h1 class="display-3 text-white animated slideInDown mb-4">Bienvenue sur YourQuest !</h1>
-                                <h2 class="text-white">Vous souhaitez créer votre propre jeu ?</h2>
+                                {# <h2 class="text-white">Vous souhaitez créer votre propre jeu ?</h2> #}
                                 <p class="fs-5 fw-medium text-white mb-4 pb-2">Organisez votre propre jeu de piste, ses étapes et ses énigmes ! YourQuest va générer des QR codes pour chaque checkpoint, imprimez les et affichez les sur le site de votre jeu.</p>
-                                <a href="{{ path('app_backoffice_game_new')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Créer votre jeu</a>
+                                <a href="{{ path('app_backoffice_game_new')}}" class="btn btn-primary py-md-3 px-md-5 animated slideInLeft">Créer votre jeu</a>
                             </div>
                         </div>
                     </div>
@@ -42,6 +43,9 @@
         </div>
     </div>
     <!-- Carousel End -->
+
+    {# Flash message #}
+    {{ include('front/_notice_message.html.twig') }}
 
     <!-- Service Start -->
     <div class="container-xxl py-5">
@@ -54,7 +58,7 @@
                     {% for game in games %}
                         <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="service-item">
-                                <div class="overflow-hidden">
+                                <div class="overflow-hidden align-img">
                                     <img class="img-fluid" src="{{ asset(app_games_images_directory~game.image) }}" alt="{{game.slug}}">
                                 </div>
                                 <div class="p-4 text-center border border-5 border-light border-top-0">
@@ -75,7 +79,7 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                <p>Aucune future instance de jeu n'est prévue pour l'instant...</p>
+                    <p>Aucune future session de jeu n'est prévue pour l'instant...</p>
                 {% endif %}
 
             </div>
@@ -125,7 +129,7 @@
                 <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                     <div class="team-item">
                         <div class="overflow-hidden position-relative">
-                            <img class="img-fluid" src={{ asset('assets/woodyTPL/img/team-3.jpg') }} alt="">
+                            <img class="img-fluid" src={{ asset('assets/images/Team/Damien.jpg') }} alt="">
                             <div class="team-social">
                                 <a class="btn btn-square" href=""><i class="fab fa-linkedin-in"></i></a>
                             </div>

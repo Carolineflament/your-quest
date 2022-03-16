@@ -3,6 +3,7 @@
 {% block title %}Mon compte{% endblock %}
 
 {% block body %}
+    {{ include('_header_start.html.twig', {'title': 'Votre profil'}) }}
     <div class="d-flex flex-column" >
         <div class="d-flex mobile-profile">
             {% if is_granted('ROLE_ORGANISATEUR') %}
@@ -15,66 +16,65 @@
                 </div>
             {% endif %}
             <div class="col-xl-6 text-center">
-                <h1>Votre profil :</h1>
-                {{ include('front/_notice_message.html.twig') }}
-            {{ form_start(form) }}
-                <div class="form-error mb-3">
-                    {{ form_errors(form.password) }}
-                    {{ form_errors(form.pseudo) }}
-                    {{ form_errors(form.lastname) }}
-                    {{ form_errors(form.firstname) }}
+                {{ form_start(form) }}
+                    <div class="form-error mb-3">
+                        {{ form_errors(form.password) }}
+                        {{ form_errors(form.pseudo) }}
+                        {{ form_errors(form.lastname) }}
+                        {{ form_errors(form.firstname) }}
+                        {% if is_granted('ROLE_ORGANISATEUR') %}
+                            {{ form_errors(form.address) }}
+                            {{ form_errors(form.postalCode) }}
+                            {{ form_errors(form.city) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="profile-informations">
+                        <div class="profile col form-floating mb-3">
+                            {{ form_widget(form.pseudo) }}
+                            {{ form_label(form.pseudo) }}
+                        </div>
+
+                        <div class="profile col form-floating mb-3">
+                            {{ form_widget(form.password) }}
+                            {{ form_label(form.password) }}
+                        </div>
+                    </div>
+
+                    <div class="profile-informations">
+                        <div class="profile col form-floating mb-3">
+                            {{ form_widget(form.lastname) }}
+                            {{ form_label(form.lastname) }}
+                        </div>
+
+                        <div class="profile col form-floating mb-3">
+                            {{ form_widget(form.firstname) }}
+                            {{ form_label(form.firstname) }}
+                        </div>
+                    </div>
+
                     {% if is_granted('ROLE_ORGANISATEUR') %}
-                        {{ form_errors(form.address) }}
-                        {{ form_errors(form.postalCode) }}
-                        {{ form_errors(form.city) }}
+                        <div class="form-floating mb-3">
+                            {{ form_widget(form.address) }}
+                            {{ form_label(form.address) }}
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            {{ form_widget(form.postalCode) }}
+                            {{ form_label(form.postalCode) }}
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            {{ form_widget(form.city) }}
+                            {{ form_label(form.city) }}
+                        </div>
                     {% endif %}
-                </div>
-
-                <div class="profile-informations">
-                    <div class="profile col form-floating mb-3">
-                        {{ form_widget(form.pseudo) }}
-                        {{ form_label(form.pseudo) }}
+                        
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
                     </div>
-
-                    <div class="profile col form-floating mb-3">
-                        {{ form_widget(form.password) }}
-                        {{ form_label(form.password) }}
-                    </div>
-                </div>
-
-                <div class="profile-informations">
-                    <div class="profile col form-floating mb-3">
-                        {{ form_widget(form.lastname) }}
-                        {{ form_label(form.lastname) }}
-                    </div>
-
-                    <div class="profile col form-floating mb-3">
-                        {{ form_widget(form.firstname) }}
-                        {{ form_label(form.firstname) }}
-                    </div>
-                </div>
-
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <div class="form-floating mb-3">
-                        {{ form_widget(form.address) }}
-                        {{ form_label(form.address) }}
-                    </div>
-
-                    <div class="form-floating mb-3">
-                        {{ form_widget(form.postalCode) }}
-                        {{ form_label(form.postalCode) }}
-                    </div>
-
-                    <div class="form-floating mb-3">
-                        {{ form_widget(form.city) }}
-                        {{ form_label(form.city) }}
-                    </div>
-                {% endif %}
-                    
-                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                    <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
-                </div>
-            {{ form_end(form) }}
+                {{ form_end(form) }}
+            </div>
         </div>
     </div>
 

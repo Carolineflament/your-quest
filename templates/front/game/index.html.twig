@@ -2,18 +2,11 @@
 
 {% block body %}
 
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">Les jeux</h1>
-            {{ include('_breadcrumb.html.twig') }}
-        </div>
-    </div>
-    <!-- Page Header End -->
+    {{ include('_header_start.html.twig', {'title': 'Les jeux'}) }}
 
     <!-- Service Start -->
     {% set delay = [0.1, 0.3, 0.5] %}
-    <div class="container-xxl py-5">
+    <div class="container-xxl pb-5">
         <div class="container">
             <div class="row g-4">
                 {% for game in games %}
@@ -23,7 +16,7 @@
                     {% endif %}
                     <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="{{delay[counter]~'s'}}">
                         <div class="service-item">
-                            <div class="overflow-hidden">
+                            <div class="overflow-hidden align-img">
                                 <img class="img-fluid" src="{{ asset(app_games_images_directory~game.image) }}" alt="{{game.slug}}">
                             </div>
                             <div class="p-4 text-center border border-5 border-light border-top-0">
@@ -33,7 +26,7 @@
                                         <i class="bi bi-house-fill me-2"></i><a href="http://maps.google.com/?q={{ game.address }} {{ game.postalCode }} {{ game.city }}" target="_blank">{{ game.address }} {{ game.postalCode }} {{ game.city }}</a>
                                     </address>
                                 </div>
-                                <p>{{ game.summary}}</p>
+                                <p>{{ game.summary|u.truncate(80, '...', false)}}</p>
                                 <a class="fw-medium" href="{{ path('front_games_show', {'slug' : game.slug}) }}">Accéder au jeu<i class="fa fa-arrow-right ms-2"></i></a>
                             </div>
                         </div>

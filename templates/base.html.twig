@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="fr" class="h-100">
 
 <head>
     <meta charset="utf-8">
@@ -34,9 +34,10 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
     <link href="{{ asset('assets/css/table-sortable.css') }}" rel="stylesheet"/>
     <link href="{{ asset('assets/css/postcard.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -44,7 +45,6 @@
         </div>
     </div>
     <!-- Spinner End -->
-
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
@@ -90,16 +90,19 @@
     {% block body %}{% endblock %}
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid bg-dark text-light footer mt-auto pt-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col">
                     <ul class="nav justify-content-center">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">CGU</a>
+                            <a class="nav-link" href="{{ path('front_cgu') }}">CGU</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link" href="{{ path('front_mentions_legales') }}">Mentions légales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('front_contact') }}">Contact</a>
                         </li>
                     </ul>   
                 </div>
@@ -109,7 +112,7 @@
             <div class="copyright">
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">YourQuest</a>, Tous droits réservés.
+                        &copy; <a class="border-bottom" href="#">YourQuest</a>, tous droits réservés.
                     </div>
                     <div class="col-md-6 text-center text-md-end">
                         <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
@@ -141,6 +144,33 @@
     <script src={{ asset('assets/js/main.js') }}></script>
     <script src="{{ asset('assets/js/script.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/table-sortable.js') }}" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+    <script>
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": {
+                "background": "#efefef",
+                "text": "#404040"
+                },
+                "button": {
+                "background": "#ab7442"
+                }
+            },
+            "theme": "classic",
+            "position": "bottom-left",
+            "type": "opt-out",
+            "content": {
+                "message": "Le site utilise des Cookies pour vous assurer de la meilleure expérience utilisateur sur notre site.",
+                "allow": "Accepter",
+                "deny": "Refuser",
+                "link": "Condition générales d'utilisation",
+                "href": window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/cgu"
+            }
+        });
+
+        $('.cc-revoke').addClass('d-none');
+    </script>
 </body>
 
 </html>
