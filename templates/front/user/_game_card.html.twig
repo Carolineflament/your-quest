@@ -36,7 +36,7 @@
                                             <p class="card-text">La partie est en cours, tu n'as pas encore terminé</p>
                                         </address>
                                     </div>
-                                    <p>{{ round.instance.game.summary}}</p>
+                                    <p>{{ round.instance.game.summary|u.truncate(80, '...', false)}}</p>
                                     <a class="fw-medium" href="{{ path('app_front_instance_realtime', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">Voir le classement<i class="fa fa-arrow-right ms-2"></i></a>
                                 {% elseif "now"|date('Y-m-d') > round.instance.endAt|date('c') and round.endAt is same as null %}
                                     <div class="small mb-3">
