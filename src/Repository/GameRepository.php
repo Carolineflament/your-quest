@@ -37,13 +37,13 @@ class GameRepository extends ServiceEntityRepository
                     INNER JOIN instance i ON i.game_id = g.id AND (
                     (
                         (
-                            i.start_at <= cast(now() as date) OR 
+                            i.start_at <= cast(now() as datetime) OR 
                             (
-                                i.start_at > cast(now() as date) 
-                                AND i.start_at < cast((now() + interval 30 day) as date)
+                                i.start_at > cast(now() as datetime) 
+                                AND i.start_at < cast((now() + interval 30 day) as datetime)
                             )
                         )
-                        AND i.end_at >= cast(now() as date)
+                        AND i.end_at >= cast(now() as datetime)
                     )
                 )
                 WHERE g.is_trashed = 0 AND g.status = 1 GROUP BY g.id ORDER BY i.start_at;';
