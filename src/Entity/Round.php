@@ -41,6 +41,7 @@ class Round
 
     /**
      * @ORM\OneToMany(targetEntity=ScanQR::class, mappedBy="round")
+     * @ORM\OrderBy({"scanAt" = "DESC"})
      */
     private $scanQRs;
 
@@ -136,5 +137,11 @@ class Round
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getLastScanAt()
+    {
+        $scanQRs = $this->scanQRs;
+        return $scanQRs[0];
     }
 }

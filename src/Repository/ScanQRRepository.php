@@ -19,6 +19,23 @@ class ScanQRRepository extends ServiceEntityRepository
         parent::__construct($registry, ScanQR::class);
     }
 
+    public function findLastUserScan(int $user_id)
+    {
+        $entityManagerConnexion = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT c.* FROM `checkpoint` c
+                    INNER JOIN `scan_qr` s ON c.id = s.checkpoint_id
+                    INNER JOIN `round` r ON r.id = s.round_id AND r.user_id = '.$user_id.'
+                    INNER JOIN instance i ON i.id = r.instance_id AND (
+                    (
+                        i.start_at <= cast(now() as date)
+                        AND i.end_at >= cast(now() as date)
+                    )
+                )
+                ORDER BY s.scan_at DESC LIMIT 1;';
+        $query = $entityManagerConnexion->executeQuery($sql); 
+        return $query->fetchAssociative();
+    }
+
     // /**
     //  * @return ScanQR[] Returns an array of ScanQR objects
     //  */
