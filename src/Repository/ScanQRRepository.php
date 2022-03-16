@@ -27,8 +27,8 @@ class ScanQRRepository extends ServiceEntityRepository
                     INNER JOIN `round` r ON r.id = s.round_id AND r.user_id = '.$user_id.'
                     INNER JOIN instance i ON i.id = r.instance_id AND (
                     (
-                        i.start_at <= cast(now() as date)
-                        AND i.end_at >= cast(now() as date)
+                        i.start_at <= cast(now() as datetime)
+                        AND i.end_at >= cast(now() as datetime)
                     )
                 )
                 ORDER BY s.scan_at DESC LIMIT 1;';
