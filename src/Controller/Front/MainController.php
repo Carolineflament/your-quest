@@ -91,6 +91,13 @@ class MainController extends AbstractController
      */
     public function contact(Request $request, MailerInterface $mailer): Response
     {
+        $this->addFlash(
+            "notice-danger",
+            "Vous devez être connecté pour nous envoyer un message."
+        );
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $form = $this->createFormBuilder()
             ->add('name', TextType::class, [
                 'required' => true,
