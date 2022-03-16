@@ -70,7 +70,7 @@ class CheckpointController extends AbstractController
         {
             $this->addFlash(
                 'notice-danger',
-                'Merci de vous connecter ou de vous inscrire afin de participer au jeu ;)'
+                'Merci de vous connecter ou de vous inscrire afin de participer au jeu.'
             );
             $session->set('route_redirect', $this->urlGenerator->generate('front_checkpoint_check', ['id' => $checkpointScan->getId(), 'token' => sha1($checkpointScan->getTitle())]));
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
