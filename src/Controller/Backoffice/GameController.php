@@ -64,6 +64,18 @@ class GameController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager, MySlugger $mySlugger): Response
     {
+         // Message if user not logged or has the role "ROLE_JOUEUR"
+         if ($this->getUser() === null || in_array("ROLE_JOUEUR", $this->getUser()->getRoles())) {
+            $this->addFlash(
+                'notice-warning',
+                'Vous devez être connecté en tant qu\'organisateur pour créer un jeu'
+            );
+            
+            return $this->redirectToRoute('app_login');
+        } 
+
+        $this->denyAccessUnlessGranted('ROLE_ORGANISATEUR');
+
         $game = new Game();
         $form = $this->createForm(GameType::class, $game);
         $form->handleRequest($request);
