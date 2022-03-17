@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class GameType extends AbstractType
 {
@@ -40,6 +41,19 @@ class GameType extends AbstractType
             ->add('image', FileType::class, [
                 'required' => false,
                 'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '512k',
+                        'maxSizeMessage' => 'Le poids maximum de l\'image ne doit pas éxéder 512 Ko',
+                        'mimeTypes' => [
+                            'image/gif',
+                            'image/png',
+                            'image/webp',
+                            'image/jpeg'
+                        ],
+                        'mimeTypesMessage' => 'L\'image doit être au format PNG, GIF, JPG ou WEBP',
+                    ])
+                ],
             ])
             ->add('summary', TextareaType::class, [
                 'required' => false,
