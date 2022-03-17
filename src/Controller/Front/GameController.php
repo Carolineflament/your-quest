@@ -36,7 +36,7 @@ class GameController extends AbstractController
         $limit_games_per_page = $this->paramBag->get('app.limit_games_per_page');
         $current_page = $request->query->get('page') ? $request->query->get('page') : 1;
         
-        $games = $gameRepository->findBy(['isTrashed' => 0, 'status' => 1], ['createdAt' => 'ASC'], $limit_games_per_page, ($current_page-1)*$limit_games_per_page);
+        $games = $gameRepository->findBy(['isTrashed' => 0, 'status' => 1], ['createdAt' => 'DESC'], $limit_games_per_page, ($current_page-1)*$limit_games_per_page);
 
         array_push($this->breadcrumb, array('libelle' => 'Les jeux', 'libelle_url' => 'front_games', 'url' => $this->urlGenerator->generate('front_games')));
 
