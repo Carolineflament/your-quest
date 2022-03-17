@@ -18,6 +18,7 @@
                     {{ form_errors(registrationForm.address) }}
                     {{ form_errors(registrationForm.postalCode) }}
                     {{ form_errors(registrationForm.city) }}
+                    {{ form_errors(registrationForm.image) }}
                     {{ form_errors(registrationForm.agreeTerms) }}
                 </div>
                 <div class="form-floating mb-3">
@@ -43,6 +44,11 @@
                 <div class="form-floating mb-3">
                     {{ form_widget(registrationForm.firstname) }}
                     {{ form_label(registrationForm.firstname) }}
+                </div>
+
+                <div class="form-floating mb-3">
+                    {{ form_widget(registrationForm.image) }}
+                    {{ form_label(registrationForm.image) }}
                 </div>
 
                 <div class="mb-3 text-center">
