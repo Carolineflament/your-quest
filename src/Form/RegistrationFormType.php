@@ -78,6 +78,11 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Votre prénom : ',
                 'attr' => ['placeholder' => 'Prénom']
+            ])
+            ->add('image', FileType::class, [
+                'required' => false,
+                'mapped' => false,
+                'label' => 'Votre photo'
             ]);
         if (($current_user !== null && $this->security->isGranted('ROLE_ORGANISATEUR')) || $current_user === null) {
             $builder->add('address', TextareaType::class, [

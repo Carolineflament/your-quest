@@ -34,6 +34,7 @@ class UserType extends AbstractType
             ->add('image', FileType::class, [
                 'required' => false,
                 'mapped' => false,
+                'label' => 'Votre photo'
             ])
             ->add('email', EmailType::class, [
                 'required' => true,
