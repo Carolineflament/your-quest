@@ -263,6 +263,11 @@ class CheckpointController extends AbstractController
         $userAnswer->setAnswer($good_answer);
         $userAnswer->setUser($this->getUser());
 
+        $current_instance = $this->getCurrentInstance($checkpoint->getGame());
+            
+        $round = $roundRepos->findOneBy(['user' => $this->getUser(), 'instance' => $current_instance]);
+        $userAnswer->setRound($round);
+
         if($good_answer->getAnswer() == $_POST['enigma-'.$enigma->getId()])
         {
             $userAnswer->setIsGood(true);
@@ -272,10 +277,6 @@ class CheckpointController extends AbstractController
                 'Bravo c\'était la bonne réponse :) !'
             );
 
-            $current_instance = $this->getCurrentInstance($checkpoint->getGame());
-            
-            $round = $roundRepos->findOneBy(['user' => $this->getUser(), 'instance' => $current_instance]);
-            $userAnswer->setRound($round);
             $checkpoints = $checkpointRepos->findBy(['game' => $checkpoint->getGame()], ['orderCheckpoint' => 'ASC']);
             $key_checkpointScan = array_keys($checkpoints, $checkpoint);
 
