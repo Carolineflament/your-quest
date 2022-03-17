@@ -3,8 +3,9 @@
 {% block title %}L'email de réinitialisation du mot de passe envoyé{% endblock %}
 
 {% block body %}
-    <div class="d-flex justify-content-center align-items-center mt-3 mb-3">
-        <div class="col-xl-6  text-center">
+    {{ include('_header_start.html.twig', {'title': 'Réinitialisation du mot de passe'}) }}
+    <div class="container-fluid bg-light px-lg-0" style="margin: 3rem 0;">
+        <div class="container-xl mb-5">
             <p>
                 Si un compte avec votre e-mail existe, alors un e-mail vient d'être envoyé à votre adresse avec un lien vous permettant de réinitialiser votre mot de passe.
                 Attention le lien expire dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
