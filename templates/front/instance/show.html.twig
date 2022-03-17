@@ -15,7 +15,7 @@
                             <h1 class="display-5 mb-4">{{instance.title}}</h1>
                         </div>
                         <p class="mb-4 pb-2">
-                            {{ instance.message }}
+                            {{ instance.message | nl2br }}
                             {% if  "now"|date('c') > instance.startAt|date('c') and "now"|date('c') > instance.endAt|date('c') %}
                                 <p>Cette instance a débutée le {{ instance.startAt|date('d-m-Y à H:i:s')}} et s'est terminée le {{ instance.endAt|date('d-m-Y à H:i:s')}}
                                 </p>

@@ -11,7 +11,7 @@
         {% if enigma is same as null %}
             <section class="w-100 p-4 text-center pb-4">
                 <div class="pb-4">
-                    {{message}}
+                    {{message | nl2br}}
                     <br />
                     {% if checkpoint.successImage is not same as null %}
                         <a href="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" data-lightbox="{{checkpoint.title}}"><img src="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" alt="{{checkpoint.title}}" style="max-width: 400px;max-height: 400px;"/></a>

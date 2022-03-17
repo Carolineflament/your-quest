@@ -22,6 +22,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -34,7 +35,20 @@ class UserType extends AbstractType
             ->add('image', FileType::class, [
                 'required' => false,
                 'mapped' => false,
-                'label' => 'Votre photo'
+                'label' => 'Votre photo',
+                'constraints' => [
+                    new File([
+                        'maxSize' => '512k',
+                        'maxSizeMessage' => 'Le poids maximum de l\'image ne doit pas éxéder 512 Ko',
+                        'mimeTypes' => [
+                            'image/gif',
+                            'image/png',
+                            'image/webp',
+                            'image/jpeg'
+                        ],
+                        'mimeTypesMessage' => 'L\'image doit être au format PNG, GIF, JPG ou WEBP',
+                    ])
+                ]
             ])
             ->add('email', EmailType::class, [
                 'required' => true,
