@@ -6,18 +6,19 @@
     {{ include('_header_start.html.twig', {'title': 'Votre profil'}) }}
     <div class="d-flex flex-column" >
         <div class="d-flex mobile-profile">
-            {% if is_granted('ROLE_ORGANISATEUR') %}
-                <div>
-                    <img src="{{ asset('assets/images/profilePicture/girl.png') }}" class="img-profile" alt="girl" >
-                </div>
-            {% elseif is_granted('ROLE_JOUEUR') %}
-                <div>
-                    <img src="{{ asset('assets/images/profilePicture/boy.png') }}" class="img-profile" alt="boy" >
-                </div>
-            {% endif %}
+        {% if user.image is same as null %}
+            <div>
+                <img src="{{ asset(app_profile_images_directory~'default.png') }}" class="img-profile" alt="default" >
+            </div>
+        {% else %}
+            <div>
+                <img src="{{ asset(app_profile_images_directory~user.image) }}" class="img-profile" alt="{{ user.image }}" >
+            </div>
+        {% endif %}
             <div class="col-xl-6 text-center">
                 {{ form_start(form) }}
                     <div class="form-error mb-3">
+                        {{ form_errors(form.image) }}
                         {{ form_errors(form.password) }}
                         {{ form_errors(form.pseudo) }}
                         {{ form_errors(form.lastname) }}
@@ -51,6 +52,10 @@
                             {{ form_widget(form.firstname) }}
                             {{ form_label(form.firstname) }}
                         </div>
+                    </div>
+                    <div class="col form-floating mb-3">
+                        {{ form_widget(form.image) }}
+                        {{ form_label(form.image) }}
                     </div>
 
                     {% if is_granted('ROLE_ORGANISATEUR') %}

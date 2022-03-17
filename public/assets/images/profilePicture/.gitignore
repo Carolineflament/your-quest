@@ -1,0 +1,6 @@
+*.png
+*.jpeg
+*.jpg
+*.gif
+
+!default.png

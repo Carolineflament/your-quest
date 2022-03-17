@@ -10,6 +10,7 @@ use App\Security\LoginFormAuthenticator;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -22,7 +23,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/inscription", name="app_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager, RoleRepository $roleRepos): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager, RoleRepository $roleRepos, ParameterBagInterface $paramBag): Response
     {
         $user = new User();
         
@@ -30,6 +31,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             // encode the plain password
             $user->setPassword(
             $userPasswordHasher->hashPassword(
@@ -54,6 +56,20 @@ class RegistrationController extends AbstractController
             
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $file = $form['image']->getData();
+            if($file !== null)
+            {
+                $pseudo = $user->getPseudo();
+                $id = $user->getId();
+                $filename = $pseudo.'-'. $id.'.'.$file->guessExtension();
+                $file->move($paramBag->get('app.profile_images_directory'), $filename);
+                $user->setImage($filename);
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+
             // do anything else you need here, like send an email
             $this->addFlash(
                 'notice-success',

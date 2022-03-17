@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -78,6 +79,11 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Votre prénom : ',
                 'attr' => ['placeholder' => 'Prénom']
+            ])
+            ->add('image', FileType::class, [
+                'required' => false,
+                'mapped' => false,
+                'label' => 'Votre photo'
             ]);
         if (($current_user !== null && $this->security->isGranted('ROLE_ORGANISATEUR')) || $current_user === null) {
             $builder->add('address', TextareaType::class, [

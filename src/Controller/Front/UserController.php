@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
@@ -26,7 +27,7 @@ class UserController extends AbstractController
     /**
      * @Route("profil", name="profile", methods={"GET", "POST"})
      */
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, RoundRepository $roundRepository)
+    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, RoundRepository $roundRepository, ParameterBagInterface $paramBag)
     {
         $user = $this->getUser();
 
@@ -37,6 +38,17 @@ class UserController extends AbstractController
             if ($form->get('password')->getData() !== null) {
                 $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
             }
+
+            $file = $form['image']->getData();
+            if($file !== null)
+            {
+                $pseudo = $user->getPseudo();
+                $id = $user->getId();
+                $filename = $pseudo.'-'. $id.'.'.$file->guessExtension();
+                $file->move($paramBag->get('app.profile_images_directory'), $filename);
+                $user->setImage($filename);
+            }
+
             $entityManager->flush();
 
             $this->addFlash(
