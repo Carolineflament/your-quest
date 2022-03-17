@@ -24,3 +24,6 @@
 
 /config/jwt/private.pem
 /config/jwt/public.pem
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
