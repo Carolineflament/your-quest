@@ -20,7 +20,7 @@ final class Version20220316165413 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user_answer ADD round_id INT NOT NULL');
+        $this->addSql('ALTER TABLE user_answer ADD round_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE user_answer ADD CONSTRAINT FK_BF8F5118A6005CA0 FOREIGN KEY (round_id) REFERENCES round (id)');
         $this->addSql('CREATE INDEX IDX_BF8F5118A6005CA0 ON user_answer (round_id)');
     }
