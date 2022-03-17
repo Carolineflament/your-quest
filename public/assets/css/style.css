@@ -552,7 +552,14 @@
 
 .instances-next-carousel .owl-nav, 
 .instances-prev-carousel .owl-nav {
-    top: 100px;
+    top: 120px;
+}
+
+@media (max-width: 992px) {
+    .instances-next-carousel .owl-nav, 
+    .instances-prev-carousel .owl-nav {
+    top: 145px;
+}
 }
 
 .testimonial-carousel:hover .owl-nav, 
