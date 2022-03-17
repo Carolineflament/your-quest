@@ -62,6 +62,16 @@
                         <th>Modifié le</th>
                         <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                     </tr>
+                    <tr>
+                        <th>Image du profil</th>
+                        <td>
+                            {% if user.image is not same as null %}
+                                <a href="{{ asset(app_profile_images_directory~user.image) }}" data-lightbox="{{user.pseudo}}"><img src="{{ asset(app_profile_images_directory~user.image) }}" alt="{{user.pseudo}}" style="max-width: 200px;max-height: 200px;"/></a>
+                            {% else %}
+                                <i>Aucune image</i>
+                            {% endif %}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-primary mb-2">Modifier</a>
