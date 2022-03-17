@@ -55,6 +55,7 @@
             <div class="row g-4">
                 {% if games %}
                     {% for game in games %}
+                        {% set next_instance = game.nextInstance %}
                         <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="service-item">
                                 <div class="overflow-hidden align-img">
@@ -63,13 +64,13 @@
                                 <div class="p-4 text-center border border-5 border-light border-top-0">
                                     <h4 class="mb-3">
                                         <a href="{{ path('front_games_show', {'slug' : game.slug}) }}">{{ game.title }}</a>
-                                        {% if "now"|date('c') > game.nextInstance.startAt|date('c') and "now"|date('c') < game.nextInstance.endAt|date('c') %}
+                                        {% if "now"|date('c') > next_instance.startAt|date('c') and "now"|date('c') < next_instance.endAt|date('c') %}
                                             <span class="badge bg-danger ms-2">En cours</span>
                                         {% endif %}
                                     </h4>
                                     <p>
-                                        <a href="{{ path('app_front_instance_show', {'gameSlug' : game.slug, 'instanceSlug' : game.nextInstance.slug}) }}">
-                                            {{ game.nextInstance.startAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})
+                                        <a href="{{ path('app_front_instance_show', {'gameSlug' : game.slug, 'instanceSlug' : next_instance.slug}) }}">
+                                            {{ next_instance.startAt|date('d/m/Y') }} - {{ game.city }} ({{ game.postalCode }})
                                         </a>
                                     </p>
                                     {# <a class="fw-medium" href="">Voir le jeu<i class="fa fa-arrow-right ms-2"></i></a> #}

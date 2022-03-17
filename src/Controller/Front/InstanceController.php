@@ -149,7 +149,7 @@ class InstanceController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $instance->getTitle(), 'libelle_url' => 'app_front_instance_show', 'url' => $this->urlGenerator->generate('app_front_instance_show', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
 
-        array_push($this->breadcrumb, array('libelle' => 'score', 'libelle_url' => 'app_front_instance_score', 'url' => $this->urlGenerator->generate('app_front_instance_score', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
+        array_push($this->breadcrumb, array('libelle' => 'Scores', 'libelle_url' => 'app_front_instance_score', 'url' => $this->urlGenerator->generate('app_front_instance_score', ['gameSlug' => $game->getSlug(), 'instanceSlug' => $instance->getSlug()])));
 
         return $this->render('front/instance/score.html.twig', [
             'instance' => $instance,
