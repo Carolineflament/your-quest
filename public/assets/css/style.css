@@ -953,3 +953,8 @@ label.required:after {
     max-height: 155px;
     justify-content: center;
 }
+
+.bi-person-square::before
+{
+    margin-left:4px;
+}
