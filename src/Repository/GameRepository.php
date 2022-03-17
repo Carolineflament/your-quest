@@ -33,7 +33,7 @@ class GameRepository extends ServiceEntityRepository
     public function findNextGame()
     {
         $entityManagerConnexion = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT i.id FROM `game` g 
+        $sql = 'SELECT i.id AS instance_id, g.id as game_id FROM `game` g 
                     INNER JOIN instance i ON i.game_id = g.id AND (
                     (
                         (
@@ -46,20 +46,24 @@ class GameRepository extends ServiceEntityRepository
                         AND i.end_at >= cast(now() as datetime)
                     )
                 )
-                WHERE g.is_trashed = 0 AND g.status = 1 GROUP BY g.id ORDER BY i.start_at;';
+                WHERE g.is_trashed = 0 AND g.status = 1 AND i.is_trashed = 0 ORDER BY i.start_at;';
         $query = $entityManagerConnexion->executeQuery($sql); 
         $results = $query->fetchAllAssociative();
-
+        
         if ($results) {
             
             $ids = array();
+            $ids_game = array();
             foreach($results AS $result)
             {
-                $ids[] = $result['id'];
+                if (!in_array($result['game_id'], $ids_game)) {
+                    $ids[] = $result['instance_id'];
+                    $ids_game[] = $result['game_id'];
+                }
             }
             
             $entityManager = $this->getEntityManager();
-            $query = $entityManager->createQuery('SELECT g FROM App\Entity\Game g JOIN g.instances i WHERE i.id IN('.implode(',', $ids).') ORDER BY i.startAt' );
+            $query = $entityManager->createQuery('SELECT g FROM App\Entity\Game g JOIN g.instances i WHERE i.id IN('.implode(',', $ids).') AND i.isTrashed = 0 AND g.isTrashed = 0 ORDER BY i.startAt' );
             return $query->getResult();
 
         } else {

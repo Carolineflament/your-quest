@@ -34,10 +34,11 @@ class InstanceRepository extends ServiceEntityRepository
     public function findBetweenDates($startAt, $endAt, Game $game)
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('((i.startAt <= :startAt AND i.endAt >= :startAt) OR (i.startAt <= :endAt AND i.endAt >= :endAt)) AND i.game = :id')
+            ->andWhere('((i.startAt <= :startAt AND i.endAt >= :startAt) OR (i.startAt <= :endAt AND i.endAt >= :endAt)) AND i.game = :id AND i.isTrashed = :isTrashed')
             ->setParameter('startAt', $startAt)
             ->setParameter('endAt', $endAt)
             ->setParameter('id', $game)
+            ->setParameter('isTrashed', false)
             ->getQuery()
             ->getResult()
         ;

@@ -325,7 +325,11 @@ class Game
         $date = new DateTime();
         $date = $date->getTimestamp();
 
-        $instances = array_reverse($this->instances->toArray());
+        $criteria = Criteria::create()
+        ->andWhere(Criteria::expr()->eq('isTrashed', false));
+        $instances = $this->instances->matching($criteria);
+
+        $instances = array_reverse($instances->toArray());
             
         foreach($instances AS $instance)
         {
