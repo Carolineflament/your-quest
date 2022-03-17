@@ -53,6 +53,7 @@ security:
         - { path: ^/api/users,       roles: ROLE_ADMIN }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/back/jeux/nouveau, roles: PUBLIC_ACCESS }
         - { path: ^/back, roles: ROLE_ORGANISATEUR }
         - { path: ^/user, roles: ROLE_JOUEUR, methods: [GET,POST] }
         - { path: ^/checkpoint, roles: ROLE_JOUEUR, methods: [GET,POST] }
