@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Checkpoint {{ checkpoint.title }} du jeu {{ checkpoint.game.title }}{% endblock %}
+{% block title %}Checkpoint - {{ checkpoint.title }} {% endblock %}
 
 {% block body %}
 
-{{ include('_header_start.html.twig', {'title': 'Checkpoint '~checkpoint.title~' du jeu '~checkpoint.game.title }) }}
+{{ include('_header_start.html.twig', {'title': 'Checkpoint '~checkpoint.title~' }) }}
 
 <div class="container-xxl pb-5">
     <div class="container">
