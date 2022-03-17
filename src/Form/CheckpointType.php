@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\File;
 
 class CheckpointType extends AbstractType
 {
@@ -29,6 +30,19 @@ class CheckpointType extends AbstractType
                 'required' => false,
                 'label' => 'Image prochain checkpoint :',
                 'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '512k',
+                        'maxSizeMessage' => 'Le poids maximum de l\'image ne doit pas éxéder 512 Ko',
+                        'mimeTypes' => [
+                            'image/gif',
+                            'image/png',
+                            'image/webp',
+                            'image/jpeg'
+                        ],
+                        'mimeTypesMessage' => 'L\'image doit être au format PNG, GIF, JPG ou WEBP',
+                    ])
+                ],
             ])
             ->add('orderCheckpoint', NumberType::class, [
                 'label' => 'Ordre du checkpoint :',
