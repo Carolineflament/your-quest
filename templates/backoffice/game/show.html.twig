@@ -15,7 +15,7 @@
                     <div class="section-title text-start">
                         <h1 class="display-5 mb-4">{{ game.title }}</h1>
                     </div>
-                        <p class="mb-2 pb-2">{{ game.summary }}</p>
+                        <p class="mb-2 pb-2">{{ game.summary | nl2br }}</p>
                         <p class="mb-4 pb-2"><small class="text-muted">Lieu: {{ game.address }} - {{ game.postalCode }} {{ game.city }}</small></p>
  
                     <div class="d-flex justify-content-start">
@@ -72,7 +72,7 @@
                     <div id="instances-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="instance-head-{{loop.index}}" data-bs-parent="#ac-instances">
                         <div class="accordion-body">
                             <div class="mb-3">
-                                <strong>{{instance.message}}</strong>
+                                <strong>{{instance.message | nl2br}}</strong>
                             </div>
                             <div class="d-flex bd-highlight align-items-start">
                                 {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
@@ -112,7 +112,7 @@
                     <div id="checkpoints-{{loop.index}}" class="accordion-collapse collapse" aria-labelledby="checkpoint-head-{{loop.index}}" data-bs-parent="#ac-checkpoints">
                         <div class="accordion-body">
                             <div class="mb-3">
-                                <strong>{{checkpoint.successMessage}}</strong>
+                                <strong>{{checkpoint.successMessage | nl2br}}</strong>
                             </div>
                             <div class="d-flex bd-highlight align-items-start">
                                 <a href="{{ path('app_backoffice_checkpoint_show', {'id': checkpoint.id}) }}" class="btn btn-primary btn-sm me-3">Voir</a>
