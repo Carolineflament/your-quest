@@ -316,7 +316,7 @@ class CheckpointController extends AbstractController
         $current_instance = new Instance();
         $date = new DateTime();
         $date = $date->getTimestamp();
-        foreach($game->getInstances() AS $instance)
+        foreach($game->getUnTrashedInstances() AS $instance)
         {
             if($date > $instance->getStartAt()->getTimestamp() && $date < $instance->getEndAt()->getTimestamp())
             {
