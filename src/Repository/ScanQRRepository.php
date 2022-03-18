@@ -31,6 +31,7 @@ class ScanQRRepository extends ServiceEntityRepository
                         AND i.end_at >= cast(now() as datetime)
                     )
                 )
+                WHERE r.end_at IS NOT NULL 
                 ORDER BY s.scan_at DESC LIMIT 1;';
         $query = $entityManagerConnexion->executeQuery($sql); 
         return $query->fetchAssociative();

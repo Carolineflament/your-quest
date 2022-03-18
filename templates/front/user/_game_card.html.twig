@@ -19,7 +19,7 @@
                             <h4><a class="fw-medium" href="{{ path('app_front_instance_show', {'gameSlug': round.instance.game.slug , 'instanceSlug': round.instance.slug}) }}">{{ round.instance.title }}</a></h4>
                     
                                 {% if round.endAt is same as null and "now"|date('c') > round.instance.startAt|date('c') and "now"|date('c') < round.instance.endAt|date('c') and round.endAt is same as null %}
-                                    <span class="badge bg-danger ms-2">Session cours</span>
+                                    <span class="badge bg-danger ms-2">Session en cours</span>
                                 {% endif %}
 
                                 {% if round.endAt is not same as null %}
@@ -33,7 +33,7 @@
                                 {% elseif "now"|date('c') > round.instance.startAt|date('c') and "now"|date('c') < round.instance.endAt|date('c') and round.endAt is same as null %}
                                     <div class="small mb-3">
                                         <address class="mb-0">
-                                            <p class="card-text">La partie est en cours, tu n'as pas encore terminé, tu peux revoir ton dernier indicie <a href="{{ path('front_checkpoint_check', {'id': round.lastScanAt.checkpoint.id , 'token': round.lastScanAt.checkpoint.title | sha1 }) }}">ici</a></p>
+                                            <p class="card-text">La partie est en cours, tu n'as pas encore terminé, tu peux revoir ton dernier indice <a href="{{ path('front_checkpoint_check', {'id': round.lastScanAt.checkpoint.id , 'token': round.lastScanAt.checkpoint.title | sha1 }) }}">ici</a></p>
                                         </address>
                                     </div>
                                     <p>{{ round.instance.game.summary|u.truncate(80, '...', false)}}</p>
