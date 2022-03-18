@@ -18,21 +18,21 @@ class InstanceType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Nom de votre instance :',
+                'label' => 'Nom de votre session :',
             ])
             ->add('message', TextareaType::class, [
-                'label' => 'Description de votre instance :',
+                'label' => 'Description de votre session :',
             ])
             ->add('startAt', DateTimeType::class, [
                 // renders it as a single text box
                 'widget' => 'single_text',
-                'label' => 'Cette instance débute le :',
+                'label' => 'Cette session débute le :',
                 'input' => 'datetime_immutable',
             ])
             ->add('endAt', DateTimeType::class, [
                 // renders it as a single text box
                 'widget' => 'single_text',
-                'label' => 'Cette instance se termine le :',
+                'label' => 'Cette session se termine le :',
                 'input' => 'datetime_immutable',
             ])
         ;
