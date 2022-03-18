@@ -14,7 +14,7 @@
                     {{message | nl2br}}
                     <br />
                     {% if checkpoint.successImage is not same as null %}
-                        <a href="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" data-lightbox="{{checkpoint.title}}"><img src="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" alt="{{checkpoint.title}}" style="max-width: 400px;max-height: 400px;"/></a>
+                        <a href="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" data-lightbox="{{checkpoint.title}}"><img src="{{ asset(app_checkpoints_images_directory~checkpoint.successImage) }}" alt="{{checkpoint.title}}" class="img-fluid"/></a>
                     {% endif %}
                 </div>
                 <div>
