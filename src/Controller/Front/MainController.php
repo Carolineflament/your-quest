@@ -129,7 +129,7 @@ class MainController extends AbstractController
                 $data = $form->getData();
                 $email = (new TemplatedEmail())
                 ->from(new Address($data['email'], 'Your Quest'))
-                ->to('yourquest@gmail.com')
+                ->to('contact.yourquest@gmail.com')
                 ->subject('Demande de contact YourQuest')
                 ->htmlTemplate('front/main/_contact_email.html.twig')
                 ->context([
