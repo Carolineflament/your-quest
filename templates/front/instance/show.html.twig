@@ -17,15 +17,15 @@
                         <p class="mb-4 pb-2">
                             {{ instance.message | nl2br }}
                             {% if  "now"|date('c') > instance.startAt|date('c') and "now"|date('c') > instance.endAt|date('c') %}
-                                <p>Cette instance a débutée le {{ instance.startAt|date('d-m-Y à H:i:s')}} et s'est terminée le {{ instance.endAt|date('d-m-Y à H:i:s')}}
+                                <p>Cette session a débutée le {{ instance.startAt|date('d/m/Y à H:i:s')}} et s'est terminée le {{ instance.endAt|date('d-m-Y à H:i:s')}}
                                 </p>
 
                             {% else %}
-                                <p>Cette instance débute le {{ instance.startAt|date('d-m-Y à H:i:s')}} et se termine le {{ instance.endAt|date('d-m-Y à H:i:s')}}
+                                <p>Cette session débute le {{ instance.startAt|date('d/m/Y à H:i:s')}} et se termine le {{ instance.endAt|date('d-m-Y à H:i:s')}}
 
                             {% endif %}
 
-                            <div class="d-grid gap-2 justify-content-md-center">
+                            <div class="d-grid gap-2 justify-content-md-start">
                                 {% if "now"|date('c') > instance.startAt|date('c') and "now"|date('c') < instance.endAt|date('c') %}
                                     <a href="{{ path('app_front_instance_realtime', {'gameSlug' : instance.game.slug, 'instanceSlug' : instance.slug}) }}" class="btn btn-primary mb-4">Voir les positions des joueurs</a>
                             
