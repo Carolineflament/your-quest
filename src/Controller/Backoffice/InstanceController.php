@@ -56,7 +56,7 @@ class InstanceController extends AbstractController
                 // Message
                 $this->addFlash(
                     'notice-danger',
-                    'Des instances sont déjà plannifiées entre les dates du '.$instance->getStartAt()->format('d/m/Y').' au '.$instance->getEndAt()->format('d/m/Y').' !'
+                    'Des sessions sont déjà plannifiées entre les dates du '.$instance->getStartAt()->format('d/m/Y').' au '.$instance->getEndAt()->format('d/m/Y').' !'
                 );
                 return $this->renderForm('backoffice/instance/new.html.twig', [
                     'instance' => $instance,
@@ -72,7 +72,7 @@ class InstanceController extends AbstractController
             // Message
             $this->addFlash(
                 'notice-success',
-                'L\'instance '.$instance->getTitle().' a bien été créée !'
+                'La session '.$instance->getTitle().' a bien été créée !'
             );
 
             return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $gameSlug], Response::HTTP_SEE_OTHER);
@@ -80,7 +80,7 @@ class InstanceController extends AbstractController
 
         array_push($this->breadcrumb, array('libelle' => $game->getTitle(), 'libelle_url' => 'app_backoffice_game_show', 'url' => $this->urlGenerator->generate('app_backoffice_game_show', ['slug' => $game->getSlug()])));
 
-        array_push($this->breadcrumb, array('libelle' => 'Nouvelle instance', 'libelle_url' => 'app_backoffice_instance_new', 'url' => $this->urlGenerator->generate('app_backoffice_instance_new', ['gameSlug' => $game->getSlug()])));
+        array_push($this->breadcrumb, array('libelle' => 'Nouvelle session', 'libelle_url' => 'app_backoffice_instance_new', 'url' => $this->urlGenerator->generate('app_backoffice_instance_new', ['gameSlug' => $game->getSlug()])));
 
         return $this->renderForm('backoffice/instance/new.html.twig', [
             'instance' => $instance,
@@ -139,7 +139,7 @@ class InstanceController extends AbstractController
             // Message
             $this->addFlash(
                 'notice-success',
-                'L\'instance '.$instance->getTitle().' a bien été modifiée !'
+                'La session '.$instance->getTitle().' a bien été modifiée !'
             );
 
             return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
@@ -172,7 +172,7 @@ class InstanceController extends AbstractController
             // Message
             $this->addFlash(
                 'notice-success',
-                'L\'instance '.$instance->getTitle().' a bien été supprimée !'
+                'La session '.$instance->getTitle().' a bien été supprimée !'
             );
         }
 
@@ -203,7 +203,7 @@ class InstanceController extends AbstractController
             // + flash message
             $this->addFlash(
                 'notice-danger',
-                'Cette instance n\'a pas encore débuté, impossible d\'afficher le classement des joueurs pour l\'instant.'
+                'Cette session n\'a pas encore débuté, impossible d\'afficher le classement des joueurs pour l\'instant.'
             );
             return $this->redirectToRoute('app_backoffice_game_show', ['slug' => $game->getSlug()], Response::HTTP_SEE_OTHER);
             
