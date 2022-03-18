@@ -52,7 +52,7 @@
                     </thead>
 
                     <tbody>
-                        {% for round in roundsList %}
+                        {% for round in notFinishedRounds %}
                         <tr scope="row">
                             <td>{{ round.user.firstname }} {{ round.user.lastname }} - {{ round.user.email }}</td>                   
                         {% endfor %} 
