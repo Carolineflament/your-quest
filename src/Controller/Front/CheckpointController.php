@@ -284,9 +284,9 @@ class CheckpointController extends AbstractController
             {
                 $round->setEndAt(new \DateTimeImmutable());
                 $entityManager->persist($round);
+                $session->set('last_scan_id', '');
+                $session->set('last_scan_token', '');
             }
-            $session->set('last_scan_id', '');
-            $session->set('last_scan_token', '');
         }
         else
         {
