@@ -8,7 +8,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -27,15 +26,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     private UrlGeneratorInterface $urlGenerator;
     private UserRepository $userRepository;
-    private SessionInterface $session;
     private JWTTokenManagerInterface $JWTManager;  
     private ScanQRRepository $scanQRRepository;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, SessionInterface $session, JWTTokenManagerInterface $JWTManager, ScanQRRepository $scanQRRepository)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository, JWTTokenManagerInterface $JWTManager, ScanQRRepository $scanQRRepository)
     {
         $this->urlGenerator = $urlGenerator;
         $this->userRepository = $userRepository;
-        $this->session = $session;
         $this->JWTManager = $JWTManager;
         $this->scanQRRepository = $scanQRRepository;
     }
@@ -75,16 +72,16 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $lastScan = $this->scanQRRepository->findLastUserScan($token->getUser()->getId());
         if($lastScan != null)
         {
-            $this->session->set('last_scan_id', $lastScan['id']);
-            $this->session->set('last_scan_token', sha1($lastScan['title']));
+            $request->getSession()->set('last_scan_id', $lastScan['id']);
+            $request->getSession()->set('last_scan_token', sha1($lastScan['title']));
         }
 
         $jwttoken = $this->JWTManager->create($token->getUser());
-        $this->session->set('token', $jwttoken);
+        $request->getSession()->set('token', $jwttoken);
 
-        if($this->session->get('route_redirect') !== null)
+        if($request->getSession()->get('route_redirect') !== null)
         {
-            return new RedirectResponse($this->session->get('route_redirect'));
+            return new RedirectResponse($request->getSession()->get('route_redirect'));
         }
         elseif ($token->getUser()->getRole()->getSlug() === "ROLE_ADMIN")
         {
