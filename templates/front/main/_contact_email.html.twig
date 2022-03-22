@@ -2,20 +2,19 @@
 
     <img height="64" src="{{ absolute_url(asset('assets/images/logo-h64-AB7442.png')) }}" alt="YourQuest" />
 
-    <h1>Bonjour,</h1>
+    <p>Bonjour,</p>
 
-    <p>Un utilisateur a cherché à vous contacter : 
+    <p>Un utilisateur a utilisé le formulaire de contact :</p>
+
         <ul>
             <li>Nom : {{name}}</li>
             <li>Email : {{contact_email}}</li>
             <li>Sujet : {{subject}}</li>
-            <li>Message : 
-                <p>
-                {{message}}
-                </p>
-            </li>
+            <li>Message :</li>
         </ul>
-    
-    </p>
-    <p>Cordialement</p>
+
+    <p>{{message}}</p>
+
+
+
 </div>
